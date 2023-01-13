@@ -1,0 +1,62 @@
+using System.Drawing;
+using System.IO;
+
+using  System.Drawing;
+
+
+
+namespace Moteur;
+
+public class Level
+{
+    protected Bitmap[,] levelMatrice ;
+    protected int[,] CollisionMatrice;
+    
+    private  int ID; 
+    public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
+    private Palette palette;
+    public static int blocH;
+    public Level(int id)
+    {
+        palette = new Palette(blocH);
+        this.ID = id;
+        if (currentLevel == null)
+            currentLevel = this;
+        setupMatrice(findFilenameByID(id));
+    }
+
+    private string findFilenameByID(int id)
+    {
+        return @$"C:/Users/zache/source/repos/Moteur/Moteur/Assets/ROOMS/ROOM_{id}.png";
+    }
+
+    public Bitmap[,]getLevelMatrice()
+    {
+        return levelMatrice;
+    }
+    public int[,] getCollisonMatrice()
+    {
+        return CollisionMatrice;
+    }
+    
+    private void setupMatrice(string filename)
+    {
+        Bitmap rawLevel = new Bitmap(Image.FromFile(filename));
+
+        levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
+        CollisionMatrice = new int[rawLevel.Width, rawLevel.Height];
+        for (int i = 0; i < rawLevel.Width; i++)
+        for (int j = 0; j < rawLevel.Height; j++)
+        {
+            Color color = rawLevel.GetPixel(i, j);
+                if (color.R == 1)
+                    CollisionMatrice[i, j] = 1; // setup de la Matrice de Collision
+            levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
+
+
+        }
+    }
+
+    
+    
+}
