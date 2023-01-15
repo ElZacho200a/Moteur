@@ -18,7 +18,8 @@ namespace Moteur
         public static Player player;
         public Camera(int Widht):base()
         {
-            DoubleBuffered= true; // Extrêmemznt important permet d'avoir une image fluide 
+           
+            DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
             player= new Player();
             blocH = Widht / FOV;
             Level.blocH = blocH;
@@ -31,7 +32,7 @@ namespace Moteur
 
            private  void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            Refresh();
+           Invalidate();
             player.Update();
         }
 
@@ -60,15 +61,13 @@ namespace Moteur
         {
             base.OnPaint(e);
             var g = e.Graphics;
-            var decalY =  Screen.FromControl(this).Bounds.Height;
-            
-            
-
             var levelMatrice = Level.currentLevel.getLevelMatrice();
+            // Cette décal permet de mettre le bas du niveau en bas de l'écran cette utilité est voué à disparaitre
+            var decalY =  Screen.FromControl(this).Bounds.Height;
             decalY -= levelMatrice.GetLength(1) * Level.blocH;
+            // translation des tout les élement
             g.TranslateTransform(0.0F, (float)decalY, MatrixOrder.Append);
-            g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.Coordonates.x, player.Coordonates.y, player.Hitbox.Width, player.Hitbox.Height));
-
+            // Dessin du niveau
             for (int i = 0; i < levelMatrice.GetLength(0); i++)
             {
                 for(int j =0; j < levelMatrice.GetLength(1); j++)
@@ -77,6 +76,9 @@ namespace Moteur
                     g.DrawImage(levelMatrice[i,j] ,new Point(i*Level.blocH,j* Level.blocH));
                 }
             }
+            //Dessin du joueur
+            g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(player.Coordonates.x, player.Coordonates.y, player.Hitbox.Width, player.Hitbox.Height));
+
         }
 
     }

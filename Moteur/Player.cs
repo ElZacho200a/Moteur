@@ -25,5 +25,14 @@ namespace Moteur
         {
             Acceleration.ax = sens * MaxSpeed;
         }
+
+        public void jump()
+        {
+            
+            // une vitesse négative est dirigée vers le haut tout du moins en Y
+            if(Acceleration.ay == 0)
+            Speed.vy = (-MaxSpeed - Speed.vx) ;
+        }
+
     }
 }

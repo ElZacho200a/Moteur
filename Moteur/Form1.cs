@@ -19,10 +19,29 @@ namespace Moteur
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            camera.mvPl(e.KeyCode);
+           switch(e.KeyCode)
+            {
+                case Keys.Left:
+                    Camera.player.KeyPressed(-1);
+                    break;
+                case Keys.Right:
+                    Camera.player.KeyPressed(1);
+                    break;
+                case Keys.Space:
+                    Camera.player.jump();
+                    break;
+                case Keys.T:
+                    if(Camera.player.IsCollided(Camera.player.Coordonates));
+                    MessageBox.Show("The Player is in a block !!!");
+                    break;
+            }
             
         }
 
-        
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Left || e.KeyCode == Keys.Right )
+                Camera.player.KeyPressed(0);
+        }
     }
 }

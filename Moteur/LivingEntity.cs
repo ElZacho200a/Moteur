@@ -26,44 +26,58 @@ namespace Moteur
                 Acceleration.ax = 0;
 
             }
-            nextCoord.nextY += (int)Speed.vy;
-            //Test pour Y
-            if (IsCollided(nextCoord))
-            {
-               
-                nextCoord.nextY -= (int)Speed.vy;
-                Acceleration.ay = 0;
-               
-            }
-            else { Acceleration.ay += Gravity; } // Dans le cas ou l'entité  ne touche pas le sol, elle subit la gravité 
-            Coordonates = nextCoord;
-            //Fin de la mise à jour de coordonné de l'entité
-            //Mise à jour de la vitesse avec l'accélération
-            if(Acceleration.ay == 0)
-            Speed.vx = (Acceleration.ax + Speed.vx )  / 2; // Sur le sol
-            else
-            Speed.vx= (Acceleration.ax + Speed.vx) /  4; // Dans les airs
-            // Faire une moyenne permet de simuler un frottement ou un frein pour empécher que l'entité de prenne trop de vitesse
+            
+                nextCoord.nextY += (int)Speed.vy; // On ajoute alors le Y pour checker une potentielle collision vertical
+                
+                //Test pour Y
+                if (IsCollided(nextCoord))
+                {
+                    
+                    nextCoord.nextY -= (int)Speed.vy;
+                    Acceleration.ay = 0;
 
-            Speed.vy += Acceleration.ay;
-            return toReturn;
+                }
+                else 
+                { 
+                Acceleration.ay = Gravity; // Dans le cas ou l'entité  ne touche pas le sol, elle subit la gravité 
+                } 
+                
+                Coordonates = nextCoord; // Une fois le traitement des nouvelles coordonnées on les substitut au coord actuelles
+                
+                //Fin de la mise à jour de coordonné de l'entité
+                //Mise à jour de la vitesse avec l'accélération
+                if (Acceleration.ay == 0)
+                    Speed.vx = (Acceleration.ax + Speed.vx) / 2; // Sur le sol
+                else
+                    Speed.vx = (Acceleration.ax + Speed.vx) / 4; // Dans les airs
+                                                                 // Faire une moyenne permet de simuler un frottement ou un frein pour empécher que l'entité de prenne trop de vitesse
+                
+                // on Ajoute la force gravitationnel à la vitesse en Y 
+                
+                Speed.vy += Acceleration.ay;
+                return toReturn;
+            
         }
 
 
-    protected bool IsCollided((int x, int y)Coord)
+    public bool IsCollided((int x, int y)Coord)
         {
             int blocH = Level.blocH; // Récupération de la taille en pixel des blocs
             var CollisionMatrice = Level.currentLevel.getCollisonMatrice();
-            if(Coord.y+Hitbox.Height >blocH * CollisionMatrice.GetLength(1))
+            
+            // Check de sortie de Bounds
+            if(Coord.y+Hitbox.Height >blocH * CollisionMatrice.GetLength(1) )
                 return true;
-            Rectangle toCheck  = new Rectangle(Coord.x/blocH, Coord.y / blocH, Hitbox.Width / blocH, Hitbox.Height / blocH);
+            if (Coord.x < 0 || Coord.y > blocH * CollisionMatrice.GetLength(0))
+                return true;
+            Rectangle toCheck  = new Rectangle(Coord.x, Coord.y , Hitbox.Width , Hitbox.Height );
             // Mise à l'échelle de la Hitbox par rapport à la grille de collisions
             
-            for (int i = toCheck.X; i < toCheck.Width +toCheck.X ; i++)
+            for (int i = toCheck.X; i < toCheck.Width +toCheck.X   ; i ++)
             {
-                for(int j = toCheck.Y;j < toCheck.Height+ toCheck.Y +1; j++)
+                for(int j = toCheck.Y;j < toCheck.Height+ toCheck.Y   ; j ++ )
                 {
-                    if (CollisionMatrice[i, j] == 1)
+                    if (CollisionMatrice[i /blocH, j /blocH] == 1)
                         return true;
                 }
             }

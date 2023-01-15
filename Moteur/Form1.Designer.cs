@@ -29,25 +29,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+           
             this.SuspendLayout();
             // 
-            // camera
+            // panel1
             // 
             this.camera.Location = new System.Drawing.Point(0, 0);
-            this.camera.Name = "camera";
+            this.camera.Name = "panel1";
             this.camera.Size = new System.Drawing.Size(3840, 2160);
             this.camera.TabIndex = 0;
-            this.camera.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.camera_PreviewKeyDown);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(3840, 2130);
+            this.ClientSize = new System.Drawing.Size(3840, 2160);
             this.Controls.Add(this.camera);
             this.Name = "Form1";
             this.Text = "Form1";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.ResumeLayout(false);
 
         }
@@ -56,5 +57,6 @@
         #endregion
 
         private Camera camera;
+       
     }
 }
