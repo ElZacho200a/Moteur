@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace Moteur
 {
-    internal abstract class Entity
+    public abstract class Entity
     {
         public (int x, int y) Coordonates { get; set; }
-        public Rectangle Hitbox { get; set; }
+        public Rectangle Hitbox;
 
         public abstract void Update();
+
+        public override string ToString()
+        {
+            return $"{this.GetType().Name}";
+        }
+
     }
 }

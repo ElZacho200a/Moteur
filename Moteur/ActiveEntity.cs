@@ -19,10 +19,14 @@ namespace Moteur
         
         protected (double vx, double vy) Speed;
         protected (double ax, double ay) Acceleration;
+        public int sensX => Speed.vx > 0 ? 1 : -1;
         protected Image Sprite { get; }
         protected abstract bool Moove();
         
-
+        public (double vx, double vy) GetSpeed()
+        {
+            return Speed;
+        }
 
 
 

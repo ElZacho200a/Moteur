@@ -12,13 +12,14 @@ namespace Moteur
 
         public Player(): base()
         { 
-        Coordonates = (0,0);
+        Coordonates = (200,0);
         this.MaxSpeed= 20;
-            Hitbox = new Rectangle(0, 0, 50, 100);
+            Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
         }
         public override void Update()
         {
-            
+            Hitbox.X = Coordonates.x;
+            Hitbox.Y = Coordonates.y;
             Moove();
         }
         public void KeyPressed(int sens)
@@ -31,7 +32,7 @@ namespace Moteur
             
             // une vitesse négative est dirigée vers le haut tout du moins en Y
             if(Acceleration.ay == 0)
-            Speed.vy = (-MaxSpeed - Speed.vx) ;
+            Speed.vy = (-MaxSpeed *2 - Speed.vx / 3) ;
         }
 
     }

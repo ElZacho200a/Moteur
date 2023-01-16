@@ -49,7 +49,7 @@ namespace Moteur
                 if (Acceleration.ay == 0)
                     Speed.vx = (Acceleration.ax + Speed.vx) / 2; // Sur le sol
                 else
-                    Speed.vx = (Acceleration.ax + Speed.vx) / 4; // Dans les airs
+                    Speed.vx = (Acceleration.ax + Speed.vx) / 3; // Dans les airs
                                                                  // Faire une moyenne permet de simuler un frottement ou un frein pour empécher que l'entité de prenne trop de vitesse
                 
                 // on Ajoute la force gravitationnel à la vitesse en Y 
@@ -77,8 +77,17 @@ namespace Moteur
             {
                 for(int j = toCheck.Y;j < toCheck.Height+ toCheck.Y   ; j ++ )
                 {
-                    if (CollisionMatrice[i /blocH, j /blocH] == 1)
-                        return true;
+                    try
+                    { 
+                        if (CollisionMatrice[i /blocH, j /blocH] == 1)
+                            return true;
+                    }
+                    catch (Exception)
+                    {
+                      return false;
+                    }
+                   
+                        
                 }
             }
             return false;

@@ -4,7 +4,7 @@ namespace Moteur
     {
         public Form1()
         {
-            camera = new Camera(3840);
+            camera = new Camera(3840 , 2160);
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
