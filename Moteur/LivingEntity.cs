@@ -34,6 +34,7 @@ namespace Moteur
                 {
                     
                     nextCoord.nextY -= (int)Speed.vy;
+                    Speed.vy = 0;
                     Acceleration.ay = 0;
 
                 }
@@ -79,7 +80,7 @@ namespace Moteur
                 {
                     try
                     { 
-                        if (CollisionMatrice[i /blocH, j /blocH] == 1)
+                        if (CollisionMatrice[i /blocH, j /blocH])
                             return true;
                     }
                     catch (Exception)

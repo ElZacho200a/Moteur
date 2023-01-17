@@ -31,7 +31,7 @@ namespace Moteur
         {
             
             // une vitesse négative est dirigée vers le haut tout du moins en Y
-            if(Acceleration.ay == 0)
+            if(IsCollided((Coordonates.x , Coordonates.y +1)))
             Speed.vy = (-MaxSpeed *2 - Speed.vx / 3) ;
         }
 

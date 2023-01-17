@@ -16,19 +16,20 @@ namespace Moteur
         int blocH;
         int FOV = 30;
         public static Player player;
-        private static (int X , int Y , int Widht , int Height )  Scope ;
-       
+        private static (int X , int Y , int Width , int Height )  Scope ;
+        public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Height):base()
         {
            
             DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
              Scope = (0, 0, Widht , Height);
+            
             blocH = Widht / FOV;
             
             Level.blocH = blocH;
             player = new Player();
-            new Level(9);
-            
+            new Level(5);
+            ResetScope();
             Timer timer= new Timer();
             timer.Interval= 10;
             timer.Elapsed += OnTimedEvent;
@@ -51,24 +52,44 @@ namespace Moteur
             var speedDouble = player.GetSpeed();
             (int vx , int vy ) speedInt = ((int)speedDouble.vx, (int)speedDouble.vy);
             var levelWidht = Level.currentLevel.getCollisonMatrice().GetLength(0) * Level.blocH;
-            if ((Scope.X + Scope.Widht) / 3 > ( player.Coordonates.x ) || Scope.X +(Scope.Widht / 3 *2) < player.Coordonates.x )
+            var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
+            if (((Scope.X + Scope.Width) / 2 > ( player.Coordonates.x ) && player.sensX == -1 )|| (Scope.X +(Scope.Width /2) < player.Coordonates.x && player.sensX == 1) )
             { // Changement de la caméra en X
-                if ((Scope.X + Scope.Widht ) + (speedInt.vx) >= levelWidht)
-                    Scope.X = levelWidht - Scope.Widht;
-                else if (Scope.X + speedInt.vx <= 0)
-                    Scope.X = 0;
-                else
+                
+             
                     Scope.X += speedInt.vx ;
             }
+            if (((Scope.Y + Scope.Height) / 2 > (player.Coordonates.y) && player.sensY == -1) || (Scope.Y + (Scope.Height / 2 ) < player.Coordonates.y && player.sensY == 1 ))
+            { // Changement de la caméra en X
+
+
+                Scope.Y += speedInt.vy;
+            }
+
+
+
+            if ((Scope.X + Scope.Width) + (speedInt.vx) >= levelWidht)
+            {
+               Scope.X = levelWidht - Scope.Width;
+                
+            }
+            else if (Scope.X + speedInt.vx <= 0)
+            {
+                Scope.X = 0;
+            }
+
+            if ((Scope.Y + Scope.Height) + (speedInt.vy) >= levelHeight)
+                Scope.Y = levelHeight - Scope.Height;
+            else if (Scope.Y + speedInt.vy <= 0)
+                Scope.Y = 0;
+
         }
 
         public static void ResetScope()
         {
             var levelWidht = Level.currentLevel.getCollisonMatrice().GetLength(0) * Level.blocH;
-            if (player.Coordonates.x > levelWidht / 2)
-                Scope.X = levelWidht - player.Coordonates.x;
-            else
-                Scope.X = player.Coordonates.x;
+            Scope.X = player.Coordonates.x;
+            Scope.Y = player.Coordonates.y;
         }
 
         public void mvPl(Keys k)
@@ -96,11 +117,12 @@ namespace Moteur
             var g = e.Graphics;
             var levelMatrice = Level.currentLevel.getLevelMatrice();
             var pCoord = player.Coordonates;
-            // Cette décal permet de mettre le bas du niveau en bas de l'écran cette utilité est voué à disparaitre
+           
             var decalY =  Screen.FromControl(this).Bounds.Height;
             decalY -= levelMatrice.GetLength(1) * Level.blocH;
-            // translation des tout les élement
-            g.TranslateTransform(0.0F, (float)decalY, MatrixOrder.Append);
+            // translation des tout les élement 
+            // Cette décal permet de mettre le bas du niveau en bas de l'écran cette utilité est voué à disparaitre
+           //g.TranslateTransform(0.0F, (float)decalY, MatrixOrder.Append);
             //Translation des sprites en fonction des coord du joueur
             
 
@@ -109,12 +131,15 @@ namespace Moteur
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
             
             // Dessin du niveau
-            for (int i = 0; i < levelMatrice.GetLength(0); i++)
+            for (int i = Scope.X / blocH; i < levelMatrice.GetLength(0); i++)
             {
-                for(int j =0; j < levelMatrice.GetLength(1); j++)
+                for(int j = Scope.Y / blocH; j < levelMatrice.GetLength(1); j++)
                 {
-                    if (levelMatrice[i,j] != null)
-                    g.DrawImage(levelMatrice[i,j] ,new Point(i*Level.blocH,j* Level.blocH));
+                    if (levelMatrice[i, j] != null  && i  * blocH < Scope.Width + Scope.X )
+                    {
+                        g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));
+
+                    }
                 }
             }
             //Dessin du joueur

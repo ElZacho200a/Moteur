@@ -10,7 +10,7 @@ namespace Moteur;
 public class Level
 {
     protected Bitmap[,] levelMatrice ;
-    protected int[,] CollisionMatrice;
+    protected bool[,] CollisionMatrice;
     
     public  int ID; 
     public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
@@ -36,7 +36,7 @@ public class Level
     {
         return levelMatrice;
     }
-    public int[,] getCollisonMatrice()
+    public bool[,] getCollisonMatrice()
     {
         return CollisionMatrice;
     }
@@ -50,13 +50,13 @@ public class Level
         Bitmap rawLevel = new Bitmap(Image.FromFile(filename));
 
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
-        CollisionMatrice = new int[rawLevel.Width, rawLevel.Height];
+        CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
         for (int i = 0; i < rawLevel.Width; i++)
             for (int j = 0; j < rawLevel.Height; j++)
             {
                 Color color = rawLevel.GetPixel(i, j);
-                if (color.R == 1)
-                    CollisionMatrice[i, j] = 1;// setup de la Matrice de Collision
+               
+                    CollisionMatrice[i, j] = color.R == 1;// setup de la Matrice de Collision
                 if (color.R <= 2)
                     levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
                 if (color.R == 5)
@@ -69,10 +69,13 @@ public class Level
 
     public void Update()
     {
+       var scope = Camera.GetScope();
+       Rectangle scopCam = new Rectangle(scope.X , scope.Y , scope.Width , scope.Height);
         try
         {
             foreach (var entity in entities)
         {
+           
             entity.Update();
         }
 
