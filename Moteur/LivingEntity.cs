@@ -13,7 +13,7 @@ namespace Moteur
         protected int Life;
         double Gravity = 1 ;
         protected int MaxSpeed;
-
+        protected SpriteManager spriteManager;
         protected override bool Moove()
         {
             bool toReturn = false;

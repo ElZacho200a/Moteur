@@ -36,6 +36,7 @@
             // 
             this.camera.Location = new System.Drawing.Point(0, 0);
             this.camera.Name = "panel1";
+            this.camera.BackColor = Color.DarkGray;
             this.camera.Size = new System.Drawing.Size(3840, 2160);
             this.camera.TabIndex = 0;
             // 

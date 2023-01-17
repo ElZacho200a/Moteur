@@ -20,6 +20,7 @@ namespace Moteur
             this.nextLevel = nextLevel;
             this.Coordonates = (x, y);
             var blocH = Level.blocH;
+            Hitbox = new Rectangle(x, y, 1, 1);
            trigger = new Point( x  + (blocH / 2) ,y + blocH/2 );
         }
 

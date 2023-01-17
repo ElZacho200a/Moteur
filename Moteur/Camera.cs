@@ -20,12 +20,9 @@ namespace Moteur
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Height):base()
         {
-           
             DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
-             Scope = (0, 0, Widht , Height);
-            
+            Scope = (0, 0, Widht , Height);
             blocH = Widht / FOV;
-            
             Level.blocH = blocH;
             player = new Player();
             new Level(5);
@@ -46,6 +43,15 @@ namespace Moteur
             UpdateScope();
             
         }
+
+        public static bool isInScope(Rectangle rect)
+        {
+            if(Scope.X <= rect.X &&  rect.Right <= Scope.Width + Scope.X )
+                if(Scope.Y <= rect.Bottom && rect.Y <= Scope.Height + Scope.Y )
+                    return true; 
+            return false;
+        }
+
 
         public void UpdateScope()
         {
@@ -143,10 +149,19 @@ namespace Moteur
                 }
             }
             //Dessin du joueur
-            g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(pCoord.x, pCoord.y, player.Hitbox.Width, player.Hitbox.Height));
+            try
+            {
+                g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));
+            }
+            catch (Exception)
+            {
+
+              
+            }
+            
             //Dessin des Entités
             foreach (var entity in Level.currentLevel.GetEntities())
-            {
+            { if(isInScope(entity.Hitbox))
                 g.FillRectangle(new SolidBrush(Color.BlanchedAlmond), entity.Hitbox);
             }
         }

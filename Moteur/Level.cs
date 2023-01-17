@@ -75,8 +75,8 @@ public class Level
         {
             foreach (var entity in entities)
         {
-           
-            entity.Update();
+            if(Camera.isInScope(entity.Hitbox))
+                entity.Update();
         }
 
         }
