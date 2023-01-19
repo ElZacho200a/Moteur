@@ -23,10 +23,11 @@ namespace Moteur
         }
         public Bitmap GetImage(byte toGet , int sens)
         {
+            cursor = toGet;
             if (sens < 0)
-                toGet += (byte)(Sprite.Length / 2);
-            cursor= toGet;
-            return Sprite[cursor];
+                toGet += (byte)(Sprite.Length / 2 );
+            
+            return Sprite[toGet];
         }
 
         public void fillSprite(Bitmap img)

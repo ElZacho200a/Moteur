@@ -1,7 +1,10 @@
+using Moteur.Entites;
+
 namespace Moteur
 {
     public partial class Form1 : Form
     {
+        public static String RootDirectory = "C:\\Users\\zache\\source\\repos\\Moteur\\Moteur\\";
         public Form1()
         {
             camera = new Camera(3840 , 2160);
@@ -30,10 +33,7 @@ namespace Moteur
                 case Keys.Space:
                     Camera.player.jump();
                     break;
-                case Keys.T:
-                    if(Camera.player.IsCollided(Camera.player.Coordonates));
-                    MessageBox.Show("The Player is in a block !!!");
-                    break;
+               
             }
             
         }

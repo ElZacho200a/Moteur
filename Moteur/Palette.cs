@@ -14,7 +14,7 @@ public class Palette
     {
         ColorIndex = new Dictionary<Color, Bitmap>();
        
-        var filename = @"C:\Users\zache\source\repos\Moteur\Moteur\Assets\BlocsImage\";
+        var filename = Form1.RootDirectory + @"Assets\BlocsImage\";
         var allBlockFile = Directory.EnumerateFiles(filename);
         foreach (var file in allBlockFile)
         {
@@ -23,7 +23,7 @@ public class Palette
             chrominance = chrominance[0].Split(",");
             var chrominanceBY = new []{byte.Parse(chrominance[0]),byte.Parse(chrominance[1]),byte.Parse(chrominance[2])};
             Bitmap img = new Bitmap(file);
-            img = new Bitmap(img, new Size(blocH +1, blocH +1));
+            img = new Bitmap(img, new Size(blocH  + blocH/50, blocH + blocH / 50));
             ColorIndex.Add( Color.FromArgb(chrominanceBY[0],chrominanceBY[1],chrominanceBY[2]) ,img );
         }
     }

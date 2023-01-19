@@ -12,9 +12,9 @@ namespace Moteur
 
         public Player(): base()
         {
-            spriteManager = new SpriteManager(@"C:\Users\zache\source\repos\Moteur\Moteur\Assets\Sprite\PlayerSprite.png", 100 , 50); 
+            spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (200,0);
-        this.MaxSpeed= 20;
+        this.MaxSpeed= 30;
         Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
         }
         public override void Update()
@@ -22,14 +22,14 @@ namespace Moteur
             Hitbox.X = Coordonates.x;
             Hitbox.Y = Coordonates.y;
             Moove();
-            AnimationUpdate();
+           UpdateAnimation();
         }
         public void KeyPressed(int sens)
         {
             Acceleration.ax = sens * MaxSpeed;
         }
 
-        private  void AnimationUpdate()
+        protected  override void UpdateAnimation()
         {
             if (IsCollided((Coordonates.x, Coordonates.y + 1)))// Equivalent de le joueur est sur le sol
             {
@@ -58,7 +58,7 @@ namespace Moteur
             
             // une vitesse négative est dirigée vers le haut tout du moins en Y
             if(IsCollided((Coordonates.x , Coordonates.y +1)))
-            Speed.vy = (-MaxSpeed *2 - Speed.vx / 3) ;
+            Speed.vy = (-MaxSpeed * 1.2  - Speed.vx / 6) ;
         }
 
     }

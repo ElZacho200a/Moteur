@@ -13,7 +13,7 @@ namespace Moteur
         protected int Life;
         double Gravity = 1 ;
         protected int MaxSpeed;
-        protected SpriteManager spriteManager;
+        
         protected override bool Moove()
         {
             bool toReturn = false;
@@ -69,7 +69,9 @@ namespace Moteur
             // Check de sortie de Bounds
             if(Coord.y+Hitbox.Height >blocH * CollisionMatrice.GetLength(1) )
                 return true;
-            if (Coord.x < 0 || Coord.y > blocH * CollisionMatrice.GetLength(0))
+            if (Coord.x < 0 )
+                return true;
+            if(Coord.x + Hitbox.Width > blocH * CollisionMatrice.GetLength(0))
                 return true;
             Rectangle toCheck  = new Rectangle(Coord.x, Coord.y , Hitbox.Width , Hitbox.Height );
             // Mise à l'échelle de la Hitbox par rapport à la grille de collisions

@@ -22,8 +22,9 @@ namespace Moteur
         public int sensX => Speed.vx > 0 ? 1 : -1;
         public int sensY => Speed.vy > 0 ? 1 : -1;
         public Bitmap Sprite;
+        protected SpriteManager spriteManager;
         protected abstract bool Moove();
-        
+        protected abstract void UpdateAnimation();
         public (double vx, double vy) GetSpeed()
         {
             return Speed;

@@ -25,7 +25,7 @@ namespace Moteur
             blocH = Widht / FOV;
             Level.blocH = blocH;
             player = new Player();
-            new Level(5);
+            new Level(0);
             ResetScope();
             Timer timer= new Timer();
             timer.Interval= 10;
@@ -162,7 +162,13 @@ namespace Moteur
             //Dessin des Entités
             foreach (var entity in Level.currentLevel.GetEntities())
             { if(isInScope(entity.Hitbox))
-                g.FillRectangle(new SolidBrush(Color.BlanchedAlmond), entity.Hitbox);
+                    if(entity is ActiveEntity)
+                    {
+                        var active = entity as ActiveEntity;
+                       if (active != null)
+                            g.DrawImage(active.Sprite,active.Hitbox.Location);
+                    }
+               
             }
         }
 
