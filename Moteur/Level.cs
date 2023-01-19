@@ -2,8 +2,7 @@ using System.Drawing;
 using System.IO;
 
 using  System.Drawing;
-
-
+using Moteur.Entites;
 
 namespace Moteur;
 
@@ -29,7 +28,7 @@ public class Level
 
     private string findFilenameByID(int id)
     {
-        return @$"C:/Users/zache/source/repos/Moteur/Moteur/Assets/ROOMS/ROOM_{id}.png";
+        return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.png";
     }
 
     public Bitmap[,]getLevelMatrice()
@@ -63,14 +62,18 @@ public class Level
                 {
                     entities.Add(new Sortie(color.B, i * blocH, j * blocH));
                    
+                }else if(color.R == 3)
+                {
+                   
+                    entities.Add(new Pigeon(i*blocH, j*blocH));
                 }
+
             }
     }
 
     public void Update()
     {
-       var scope = Camera.GetScope();
-       Rectangle scopCam = new Rectangle(scope.X , scope.Y , scope.Width , scope.Height);
+      
         try
         {
             foreach (var entity in entities)
@@ -82,7 +85,7 @@ public class Level
         }
         catch (Exception)
         {
-
+           
             return;
         }
         
