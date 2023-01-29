@@ -71,6 +71,12 @@ public class Level
             }
     }
 
+
+    public void removeEntity(Entity entity)
+    {
+        entities.Remove(entity);
+    }
+
     public void Update()
     {
       
@@ -99,7 +105,8 @@ public class Level
 
             case 0:
                  return  new Pigeon(x,y); // 0 -> Pigeon
-
+            case 1:
+                return new ElRatz(x,y);
 
 
 
