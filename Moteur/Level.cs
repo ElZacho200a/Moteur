@@ -99,6 +99,8 @@ public class Level
 
             case 0:
                  return  new Pigeon(x,y); // 0 -> Pigeon
+            case 1:
+                return new ElRatz(x, y); // 1 -> Rat
 
 
 
@@ -108,7 +110,11 @@ public class Level
                 return null;
         }
 
+    }
 
+    public void RemoveEntity(Entity entity)
+    {
+        entities.Remove(entity);
     }
 
 }
