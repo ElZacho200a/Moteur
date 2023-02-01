@@ -1,54 +1,54 @@
-﻿namespace Moteur.Entites
+﻿using System.Security.Cryptography;
+
+namespace Moteur.Entites
 {
-    internal class Zombie : LivingEntity
+    internal class Zombie : TriggerEntity
     {
         protected bool trigered = false;
-        protected ushort triggerRange = 15;
-        public Zombie(int x, int y)
+        Random random = new Random();
+        public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
-            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 25, 39);
+            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
             Coordonates = (x, y);
             this.MaxSpeed = 15;
-            Hitbox = new Rectangle(x, y, Level.blocH / 2, (Level.blocH * 39) / 50); // J'ai modif , le rect doit prendre x,y en premier arg
+            Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
-            this.Speed = (5, 5); // A modif , Plutot changé l'acceleration
+            Sprite = spriteManager.GetImage(0, sensX);
+            Acceleration.ax = (random.Next(3) == 1 ? 1 : -1) * MaxSpeed;
         }
 
         public override void Update()
         {
-            if (!trigered && Math.Abs(Camera.player[0] - this.Hitbox.X)  < Level.blocH * triggerRange)
-            {
-                trigered = true;
-            }
-            if (trigered)
-            {
-                Moove(); // Ne sers à rien car L31 il bouge dans tout les cas
-            }                       
-            Hitbox.X = Coordonates.x;
-            Hitbox.Y = Coordonates.y;
-            // On voit le copier collé du Piegon XD
             
-            Moove();
+            if(!trigered)
+            {
+                trigered = is_triggered();
+                
+            }
+            else
+            {
+                Acceleration.ax = MaxSpeed * sensPlayer;
+            }
+            if (Moove())
+            {
+                Acceleration.ax *= -1;
+            }
             UpdateAnimation();
         }
 
-        protected override bool Moove() // Faut absolument pas override ça , la il bougera plus
-        {
-            Speed = (MaxSpeed, MaxSpeed); 
-            return true;
-        }
-
+       
         protected override void UpdateAnimation()
         {
-            if (IsCollided((Coordonates.x, Coordonates.y + 1)))  // Ya pas le cas dans lequels il est en l'air
-            {
-                if (((int)(Speed.vx)) * sensX < 3)
-                    Sprite = spriteManager.GetImage(0, sensX);
+            Hitbox.X = Coordonates.x;
+            Hitbox.Y = Coordonates.y;
+            
+                if (spriteManager.cursor !=0 )
+                    Sprite = spriteManager.GetImage(0, -sensX);
                 else if (spriteManager.cursor != 1)
-                    Sprite = spriteManager.GetImage(1, sensX);
+                    Sprite = spriteManager.GetImage(1, -sensX);
                 else
-                    Sprite = spriteManager.GetImage(2, sensX);// pour les frames
-            }
+                    Sprite = spriteManager.GetImage(2, -sensX);// pour les frames
+            
         }
     }
 }

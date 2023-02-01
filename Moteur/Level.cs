@@ -101,6 +101,9 @@ public class Level
                  return  new Pigeon(x,y); // 0 -> Pigeon
             case 1:
                 return new ElRatz(x, y); // 1 -> Rat
+            case 2:
+                return new Zombie(x, y); // 2 -> Zombie
+
 
 
 
