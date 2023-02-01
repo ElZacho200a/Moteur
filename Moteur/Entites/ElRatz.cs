@@ -3,7 +3,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace Moteur.Entites;
 
-public class ElRatz : LivingEntity
+internal class ElRatz : LivingEntity
 {
     public ElRatz(int x, int y)
     {
