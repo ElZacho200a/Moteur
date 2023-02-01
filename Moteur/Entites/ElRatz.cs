@@ -13,6 +13,7 @@ internal class ElRatz : LivingEntity
         Sprite = spriteManager.GetImage(0, sensX);
         MaxSpeed = 10;
         Acceleration.ax = MaxSpeed;
+        Life = 10;
     }
 
     public override void Update()
@@ -25,6 +26,11 @@ internal class ElRatz : LivingEntity
         Acceleration.ax = MaxSpeed * sensX;
 
         if (Camera.player.Hitbox.IntersectsWith(Hitbox))
+        {
+            this.Life -= 1;
+        }
+
+        if (this.Life == 0)
         {
             var level = Level.currentLevel;
             level.RemoveEntity(this);
