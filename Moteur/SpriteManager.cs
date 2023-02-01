@@ -9,7 +9,7 @@ namespace Moteur
     public class SpriteManager
     {
         Bitmap[] Sprite;
-        int Height , Width ;
+        public int Height , Width ;
         public byte cursor = 0;
         public SpriteManager(String filename , int h , int w)
         { 
