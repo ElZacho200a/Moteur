@@ -11,7 +11,7 @@
             this.MaxSpeed = 15;
             Hitbox = new Rectangle(x, y, Level.blocH / 2, (Level.blocH * 39) / 50); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
-            this.Speed = (5, 5); // A modif
+            this.Speed = (5, 5); // A modif , Plutot changé l'acceleration
         }
 
         public override void Update()
