@@ -9,9 +9,9 @@
             spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 25, 39);
             Coordonates = (x, y);
             this.MaxSpeed = 15;
-            Hitbox = new Rectangle(0, 0, Level.blocH / 2, (Level.blocH * 39) / 50); // a modifier ptet
+            Hitbox = new Rectangle(x, y, Level.blocH / 2, (Level.blocH * 39) / 50); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
-            this.Speed = (5, 5);
+            this.Speed = (5, 5); // A modif
         }
 
         public override void Update()
@@ -22,23 +22,25 @@
             }
             if (trigered)
             {
-                Moove();
-            }
+                Moove(); // Ne sers à rien car L31 il bouge dans tout les cas
+            }                       
             Hitbox.X = Coordonates.x;
             Hitbox.Y = Coordonates.y;
+            // On voit le copier collé du Piegon XD
+            
             Moove();
             UpdateAnimation();
         }
 
-        protected override bool Moove()
+        protected override bool Moove() // Faut absolument pas override ça , la il bougera plus
         {
-            Speed = (MaxSpeed, MaxSpeed);
+            Speed = (MaxSpeed, MaxSpeed); 
             return true;
         }
 
         protected override void UpdateAnimation()
         {
-            if (IsCollided((Coordonates.x, Coordonates.y + 1)))
+            if (IsCollided((Coordonates.x, Coordonates.y + 1)))  // Ya pas le cas dans lequels il est en l'air
             {
                 if (((int)(Speed.vx)) * sensX < 3)
                     Sprite = spriteManager.GetImage(0, sensX);
