@@ -35,18 +35,16 @@ public class Palette
         try
         {
             Bitmap img;
-            if (color.R == 1)
-            {
+          
                 int blue = color.B;
                 color = Color.FromArgb(color.R, color.G, 0);
                 return turnMultipleTime( ColorIndex[color] , blue);
                 
                     
                 
-            }
+            
 
-             img = ColorIndex[color];
-            return img;
+            
         }
         catch (Exception e)
         {
