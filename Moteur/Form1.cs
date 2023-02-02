@@ -4,10 +4,10 @@ namespace Moteur
 {
     public partial class Form1 : Form
     {
-        public static String RootDirectory = "C:\\Users\\zache\\source\\repos\\Moteur\\Moteur\\";
+        public static String RootDirectory = @"C:\Users\berna\OneDrive\Bureau\Epita\PROJET S2\Moteur\Moteur\";
         public Form1()
         {
-            camera = new Camera(3840 , 2160);
+            camera = new Camera(1920 , 1080);
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;

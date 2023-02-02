@@ -103,6 +103,8 @@ public class Level
                 return new ElRatz(x, y); // 1 -> Rat
             case 2:
                 return new Zombie(x, y); // 2 -> Zombie
+            case 3:
+                return new Skeletton(x, y); // 3 -> Squelette
 
 
 
