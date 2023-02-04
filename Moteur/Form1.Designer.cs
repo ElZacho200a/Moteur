@@ -37,14 +37,14 @@
             this.camera.Location = new System.Drawing.Point(0, 0);
             this.camera.Name = "panel1";
             this.camera.BackColor = Color.DarkGray;
-            this.camera.Size = new System.Drawing.Size(size.Width, size.Height);
+            this.camera.Size = new System.Drawing.Size(1920 * 2, 1080 * 2);
             this.camera.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(size.Width, size.Height);
+            this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.camera);
             this.Name = "Form1";
             this.Text = "Form1";

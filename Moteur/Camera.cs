@@ -17,9 +17,12 @@ namespace Moteur
         int FOV = 30;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
+        private  static int Height, Width;
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Height):base()
         {
+            Height = Height;
+            Width = Widht;
             DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
             blocH = Widht / FOV;
@@ -97,7 +100,7 @@ namespace Moteur
             if(Scope.Width> levelWidht)
                 Scope.Width = levelWidht;
             else
-                Scope.Width = 3840;
+                Scope.Width = Width ;
             Scope.X = player.Coordonates.x - Scope.Width/2;
             Scope.Y = player.Coordonates.y ;
         }
@@ -153,9 +156,9 @@ namespace Moteur
                 debX = 0;
 
             // Dessin du niveau
-            for (int i = debX; i < levelMatrice.GetLength(0); i++)
+            for (int i = 0; i < levelMatrice.GetLength(0); i++)
             {
-                for(int j = debY; j < levelMatrice.GetLength(1); j++)
+                for(int j = 0; j < levelMatrice.GetLength(1); j++)
                 {
                    
                     
@@ -175,15 +178,7 @@ namespace Moteur
                 }
             }
             //Dessin du joueur
-            try
-            {
-                g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));
-            }
-            catch (Exception)
-            {
-
-              
-            }
+            
             
             //Dessin des Entités
             foreach (var entity in Level.currentLevel.GetEntities())
@@ -194,13 +189,22 @@ namespace Moteur
                        if (active != null)
                             g.DrawImage(active.Sprite,active.Hitbox.Location);
                     }
-                    else if (entity is Porte)
+                     if (entity is Porte)
                     {
                         var porte = entity as Porte;
                         if(porte != null)
                             g.DrawImage(porte.texture , porte.Hitbox.Location);
                     }
                
+            }
+            try
+            {
+                g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));
+            }
+            catch (Exception)
+            {
+
+              
             }
         }
 

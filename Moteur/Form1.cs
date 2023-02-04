@@ -28,6 +28,9 @@ namespace Moteur
         {
            switch(e.KeyCode)
             {
+                case Keys.Up :
+                    Camera.player.KeyUp();
+                    break;
                 case Keys.Left:
                     Camera.player.KeyPressed(-1);
                     break;
