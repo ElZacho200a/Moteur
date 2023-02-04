@@ -106,6 +106,11 @@ namespace Moteur
         {
             switch (k)
             {
+                case Keys.Up:
+                {
+                    player.KeyUp();
+                    break;
+                }
                 case Keys.Left:
                     {
                         player.KeyPressed(-1);
@@ -188,6 +193,12 @@ namespace Moteur
                         var active = entity as ActiveEntity;
                        if (active != null)
                             g.DrawImage(active.Sprite,active.Hitbox.Location);
+                    }
+                    else if (entity is Porte)
+                    {
+                        var porte = entity as Porte;
+                        if(porte != null)
+                            g.DrawImage(porte.texture , porte.Hitbox.Location);
                     }
                
             }

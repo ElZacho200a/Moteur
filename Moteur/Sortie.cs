@@ -12,7 +12,7 @@ namespace Moteur
     {
 
         public int nextLevel = Level.currentLevel.ID;
-        Point trigger;
+         protected Point trigger;
         bool Used = false;
        
         public Sortie(int nextLevel , int x , int y) { 
@@ -30,36 +30,42 @@ namespace Moteur
             if (!Used && isInside  )
             {
                 Used = true;
-                var ID = Level.currentLevel.ID;
-                var nLevel = new Level(nextLevel);
-                foreach (var entity in nLevel.GetEntities())
-                {
-                    if(entity is Sortie )
-                    {
-                       
-                        var sortie = (Sortie)entity;
-                        
-                        if (sortie.nextLevel == ID)
-                        {
-
-
-                            Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
-                            Camera.ResetScope();
-                            Level.currentLevel.GetEntities().Clear();
-                            Level.currentLevel = nLevel;
-                           sortie.Used = true;
-                            return;
-                        }
-                       
-                    }
-
-                }
+                LoadNextLevel();
 
 
             }
             else
             {
                 Used= isInside;
+            }
+        }
+
+
+        protected void LoadNextLevel()
+        {
+            var ID = Level.currentLevel.ID;
+            var nLevel = new Level(nextLevel);
+            foreach (var entity in nLevel.GetEntities())
+            {
+                if(entity is Sortie )
+                {
+                       
+                    var sortie = (Sortie)entity;
+                        
+                    if (sortie.nextLevel == ID)
+                    {
+
+
+                        Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
+                        Camera.ResetScope();
+                        Level.currentLevel.GetEntities().Clear();
+                        Level.currentLevel = nLevel;
+                        sortie.Used = true;
+                        return;
+                    }
+                       
+                }
+
             }
         }
     }

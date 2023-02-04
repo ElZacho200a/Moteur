@@ -28,7 +28,28 @@ namespace Moteur
         {
             Acceleration.ax = sens * MaxSpeed;
         }
+        
+        
+        
+        
+        public delegate void MyEventHandler();
+        public event MyEventHandler MyEvent;
+       
 
+        public void KeyUp()
+        {
+            MyEvent();
+        }
+        public void AddSubscriber(MyEventHandler sub)
+        {
+            MyEvent += sub;
+        }
+ 
+        public void DelSubscriber(MyEventHandler sub)
+        {
+            MyEvent -= sub;
+        }
+        
         protected  override void UpdateAnimation()
         {
             if (IsCollided((Coordonates.x, Coordonates.y + 1)))// Equivalent de le joueur est sur le sol

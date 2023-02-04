@@ -60,7 +60,10 @@ public class Level
                     levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
                 if (color.R == 5)
                 {
+                    if(color.G == 0)
                     entities.Add(new Sortie(color.B, i * blocH, j * blocH));
+                    else
+                        entities.Add((new Porte(color.B,i*blocH, j *blocH,palette.getImageByColor(Color.FromArgb(2,color.G,0)))));
                    
                 }else if(color.R == 3)
                 {
