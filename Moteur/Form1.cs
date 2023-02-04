@@ -4,15 +4,17 @@ namespace Moteur
 {
     public partial class Form1 : Form
     {
-        public static String RootDirectory = @"C:\Users\zache\source\repos\Moteur\Moteur\";
+        public static String RootDirectory;
         public Rectangle size;
+        private string currentDirectory = Directory.GetCurrentDirectory();
         public Form1()
         {
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+            RootDirectory = currentDirectory.Split("bin")[0];
             size = Screen.FromControl(this).Bounds;
             camera = new Camera(size.Width, size.Height);
             InitializeComponent();
-            FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
         }
 
         private void camera_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
