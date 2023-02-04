@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace Moteur
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (200,0);
-        this.MaxSpeed= 30;
+            this.MaxSpeed = Level.blocH/3;
         Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
         }
         public override void Update()
@@ -38,7 +39,9 @@ namespace Moteur
 
         public void KeyUp()
         {
-            MyEvent();
+            
+            if(MyEvent != null)
+                MyEvent();
         }
         public void AddSubscriber(MyEventHandler sub)
         {

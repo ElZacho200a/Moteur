@@ -54,22 +54,27 @@ public class Level
             for (int j = 0; j < rawLevel.Height; j++)
             {
                 Color color = rawLevel.GetPixel(i, j);
-               
-                    CollisionMatrice[i, j] = color.R == 1;// setup de la Matrice de Collision
-                if (color.R <= 2)
-                    levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
-                if (color.R == 5)
+                switch (color.R)
                 {
-                    if(color.G == 0)
-                    entities.Add(new Sortie(color.B, i * blocH, j * blocH));
-                    else
-                        entities.Add((new Porte(color.B,i*blocH, j *blocH,palette.getImageByColor(Color.FromArgb(2,color.G,0)))));
-                   
-                }else if(color.R == 3)
-                {
-                   
-                    entities.Add(GetActiveEntityFromGreen(color.G,color.B,i*blocH, j*blocH));
+                    case 1 : case 2 :
+                        palette.loadBloc(color);
+                        CollisionMatrice[i, j] = color.R == 1;// setup de la Matrice de Collision
+                        levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
+                        break;
+                    case 3 :
+                        entities.Add(GetActiveEntityFromGreen(color.G,color.B,i*blocH, j*blocH));
+                        break;
+                    case 5:
+                        if(color.G == 0)
+                            entities.Add(new Sortie(color.B, i * blocH, j * blocH));
+                        else
+                        {
+                            palette.loadBloc(color);
+                            entities.Add((new Porte(color.B, i * blocH, j * blocH, palette.getImageByColor(color))));
+                        }
+                        break;
                 }
+                
 
             }
     }
