@@ -23,4 +23,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\Sprite\Squelette.png" />
+  </ItemGroup>
+
 </Project>
