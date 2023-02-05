@@ -27,4 +27,8 @@
     <None Remove="Assets\Sprite\Squelette.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\Textures" />
+  </ItemGroup>
+
 </Project>

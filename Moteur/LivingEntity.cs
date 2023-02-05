@@ -13,7 +13,11 @@ namespace Moteur
         protected int Life;
         double Gravity = 100/Level.blocH ;
         protected int MaxSpeed;
-        
+
+        public LivingEntity()
+        {
+            Camera.AddSubscriberTenTick(UpdateAnimation);
+        }
         protected override bool Moove()
         {
             bool toReturn = false;

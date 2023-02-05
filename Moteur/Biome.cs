@@ -1,6 +1,6 @@
 namespace Moteur;
 
-public class Biome
+public abstract class Biome
 {
     
 }
