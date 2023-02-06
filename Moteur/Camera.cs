@@ -163,9 +163,10 @@ namespace Moteur
             
 
             
-
+           
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
-            
+            if (Level.currentLevel.getBackground() != null)
+                g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
             var debX = Scope.X / blocH;
             var debY = Scope.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))
@@ -178,9 +179,7 @@ namespace Moteur
             {
                 for(int j = 0; j < levelMatrice.GetLength(1); j++)
                 {
-                   
-                    
-                        try
+                    try
                         {
                         if (levelMatrice[i, j] != null && i * blocH < Scope.Width + Scope.X)
                             g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));

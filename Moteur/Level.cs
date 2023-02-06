@@ -2,6 +2,7 @@ using System.Drawing;
 using System.IO;
 
 using  System.Drawing;
+using System.Windows.Forms.VisualStyles;
 using Moteur.Entites;
 
 namespace Moteur;
@@ -16,6 +17,7 @@ public class Level
     private Palette palette;
     public static int blocH;
     private List<Entity> entities = new List<Entity>();
+    private Bitmap? Background;
     public Level(int id)
     {
         palette = new Palette(blocH);
@@ -26,9 +28,18 @@ public class Level
      
     }
 
+    public Bitmap getBackground()
+    {
+        return Background;
+    }
     private string findFilenameByID(int id)
     {
         return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.png";
+    }
+
+    private string findDataFilenamebyID(int id)
+    {
+        return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.ROOM";
     }
 
     public Bitmap[,]getLevelMatrice()
@@ -47,9 +58,10 @@ public class Level
     private void setupMatrice(string filename)
     {
         Bitmap rawLevel = new Bitmap(Image.FromFile(filename));
-
+       
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
+        //Construction à partir de l'image ROOM_ID.png
         for (int i = 0; i < rawLevel.Width; i++)
             for (int j = 0; j < rawLevel.Height; j++)
             {
@@ -77,6 +89,31 @@ public class Level
                 
 
             }
+        // Construction à partir du ROOM_ID.ROOM
+
+        try
+        {
+            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
+            lines[0] = lines[0].Split("..")[1];
+            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
+           
+            for (int i = 1; i < lines.Length; i++)
+            {
+                entities.Add(getEncodedEntity(lines[i]));
+            }
+    
+            Background = new Bitmap(lines[0]);
+            var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
+            Background = new Bitmap(Background,size);
+        }
+        catch (Exception e)
+        {
+           
+        }
+           
+            
+        
+        
     }
 
     public void Update()
@@ -128,6 +165,45 @@ public class Level
     public void RemoveEntity(Entity entity)
     {
         entities.Remove(entity);
+    }
+
+    //ElRatz|748!517!:
+    private Entity getEncodedEntity(string line)
+    {
+        
+        var split1 = line.Split('|');
+        Type t = Type.GetType("Moteur.Entites." + split1[0]);
+        object[] argument;
+        var split2 = split1[1].Split('!');
+        var coord = new int[]
+        {
+            Int32.Parse(split2[0]) * blocH,
+            Int32.Parse(split2[1]) * blocH
+        };
+
+        object[] arg = new object[0];
+        if (split2.Length > 2 && split2[2] != "")
+        {
+            string[] split3 = split2[2].Split(',');
+             arg = new object[split3.Length];
+            for (int i = 0; i < split3.Length; i++)
+                try
+                {
+                    arg[i] = Int32.Parse(split3[i]);
+                }
+                catch (Exception e)
+                {
+                    arg[i] = split3[i];
+                }
+        }
+
+        argument = new object[2 + arg.Length];
+        for (int i = 0; i < coord.Length; i++)
+            argument[i] = coord[i];
+        for (int i = 2; i < 2 + arg.Length; i++)
+            argument[i] = arg[i - 2];
+
+        return Activator.CreateInstance(t, argument) as Entity; 
     }
 
 }
