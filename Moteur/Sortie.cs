@@ -14,7 +14,8 @@ namespace Moteur
 
         public int nextLevel = Level.currentLevel.ID;
          protected Point trigger;
-        bool Used = false;
+        bool Used = true;
+        public bool LevelLoad = false;
        
         public Sortie(int nextLevel , int x , int y) { 
         
@@ -27,25 +28,29 @@ namespace Moteur
 
         public override void Update()
         {
-            bool isInside = Camera.player.Hitbox.Contains(trigger);
-            if (!Used && isInside  )
+           
+            if (Camera.player.Hitbox.IntersectsWith(Hitbox))
             {
+                
+                if (!Used)
+                    LoadNextLevel();
                 Used = true;
-                LoadNextLevel();
-
 
             }
             else
             {
-                Used= isInside;
+                Used= false;
             }
         }
 
 
         protected void LoadNextLevel()
         {
+            LevelLoad= true;
+            Level.currentLevel.Deactivate();
             var ID = Level.currentLevel.ID;
-            var nLevel = new Level(nextLevel);
+            
+            var nLevel = new Level(nextLevel , Level.currentLevel.getPalette);
             Type t = this.GetType();
             foreach (var entity in nLevel.GetEntities())
             {
@@ -56,14 +61,17 @@ namespace Moteur
                         
                     if (sortie.nextLevel == ID)
                     {
-
-
+                        
                         Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
+                        Camera.player.Hitbox.Location = new Point(Camera.player[0], Camera.player[1]);
                         Camera.ResetScope();
-                        Level.currentLevel.GetEntities().Clear();
+
+
+                        Level.currentLevel.destroy();
+                       
                         Level.currentLevel = nLevel;
-                        sortie.Used = true;
-                        System.GC.Collect();
+                        Level.currentLevel.Activate();
+                        
                         return;
                     }
                        

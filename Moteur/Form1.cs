@@ -50,5 +50,10 @@ namespace Moteur
             if(e.KeyCode == Keys.Left || e.KeyCode == Keys.Right )
                 Camera.player.KeyPressed(0);
         }
+
+        private void Form1_Scroll(object sender, ScrollEventArgs e)
+        {
+          
+        }
     }
 }

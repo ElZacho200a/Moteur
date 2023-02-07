@@ -86,9 +86,10 @@ public class Palette
     }
     public Bitmap turnMultipleTime(Bitmap img, int n)
     {
-        n = n % 4;
+       
         if (n == 0)
             return img;
+        n = n % 4;
         Bitmap ne = img;
         for (int i = 0; i < n; i++)
         {

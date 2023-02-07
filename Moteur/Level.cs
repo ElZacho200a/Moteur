@@ -4,6 +4,8 @@ using System.IO;
 using  System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Moteur.Entites;
+using System.Security.Policy;
+using System.Collections.Concurrent;
 
 namespace Moteur;
 
@@ -15,19 +17,35 @@ public class Level
     public  int ID; 
     public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
     private Palette palette;
-    public static int blocH;
-    private List<Entity> entities = new List<Entity>();
+    public static int blocH => Camera.blocH ;
+    private ConcurrentBag<Entity> entities = new ConcurrentBag<Entity>();
     private Bitmap? Background;
+    public static int LevelLoaded = 0;
+    private bool fullLoaded = false;
+    public Palette getPalette => palette;
     public Level(int id)
     {
+        LevelLoaded++;
         palette = new Palette(blocH);
+        this.ID = id;
+        if (currentLevel == null)
+            currentLevel = this;
+        setupMatrice(findFilenameByID(id));
+        fullLoaded= true;
+    }
+
+    public Level(int id , Palette palette)
+    {
+        if (Level.currentLevel.ID == id)
+            throw new Exception();
+        LevelLoaded++;
+        this.palette = palette;
         this.ID = id;
         if (currentLevel == null)
             currentLevel = this;
         setupMatrice(findFilenameByID(id));
      
     }
-
     public Bitmap getBackground()
     {
         return Background;
@@ -44,13 +62,14 @@ public class Level
 
     public Bitmap[,]getLevelMatrice()
     {
+
         return levelMatrice;
     }
     public bool[,] getCollisonMatrice()
     {
         return CollisionMatrice;
     }
-    public List<Entity> GetEntities()
+    public ConcurrentBag<Entity> GetEntities()
     {
         return entities;
     }
@@ -73,9 +92,7 @@ public class Level
                         CollisionMatrice[i, j] = color.R == 1;// setup de la Matrice de Collision
                         levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
                         break;
-                    case 3 :
-                        entities.Add(GetActiveEntityFromGreen(color.G,color.B,i*blocH, j*blocH));
-                        break;
+                   
                     case 5:
                         if(color.G == 0)
                             entities.Add(new Sortie(color.B, i * blocH, j * blocH));
@@ -103,8 +120,8 @@ public class Level
             }
     
             Background = new Bitmap(lines[0]);
-            var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
-            Background = new Bitmap(Background,size);
+            ////var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
+            //Background = new Bitmap(Background,size);
         }
         catch (Exception e)
         {
@@ -112,12 +129,23 @@ public class Level
         }
            
             
-        
+       
         
     }
 
+    public void Activate()
+    {
+        fullLoaded= true;
+
+    }
+    public void Deactivate()
+    {
+        fullLoaded = false;
+    }
     public bool Update()
     {
+        if (!fullLoaded)
+            return false;
       
         try
         {
@@ -125,7 +153,7 @@ public class Level
         {
             if(entity.IsDead)
                 {
-                    entities.Remove(entity);
+                    entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
                     continue;
                 }
             if(Camera.isInScope(entity.Hitbox))
@@ -135,6 +163,7 @@ public class Level
         }
         catch (Exception e)
         {
+           
             return false;
 
         }
@@ -146,6 +175,12 @@ public class Level
         entities.Add(entity);
     }
     
+    public void destroy()
+    {
+        entities.Clear();
+        Background = null;
+
+    }
     public  Entity GetActiveEntityFromGreen(int green, int blue, int x, int y)
     {
         switch (green)
@@ -173,7 +208,7 @@ public class Level
 
     public void RemoveEntity(Entity entity)
     {
-        entities.Remove(entity);
+        entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
     }
 
     //ElRatz|748!517!:

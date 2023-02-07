@@ -38,6 +38,10 @@ namespace Moteur
         {
             return name;
         }
+        public void setSprite(Bitmap b)
+        {
+            Sprite[cursor] = b;
+        }
 
         public void fillSprite(Bitmap img)
         {

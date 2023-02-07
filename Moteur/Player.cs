@@ -17,6 +17,7 @@ namespace Moteur
             Coordonates = (200,0);
             this.MaxSpeed = Level.blocH/3;
         Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
+            Camera.AddSubscriberTenTick(UpdateAnimation);
         }
         public override void Update()
         {
