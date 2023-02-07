@@ -108,7 +108,7 @@ public class Level
         }
         catch (Exception e)
         {
-           
+            throw e;
         }
            
             
@@ -128,15 +128,19 @@ public class Level
         }
 
         }
-        catch (Exception)
+        catch (Exception e)
         {
-           
-            return;
+
+
         }
         
     }
 
-
+    public void addEntity(Entity entity)
+    {
+        entities.Add(entity);
+    }
+    
     public  Entity GetActiveEntityFromGreen(int green, int blue, int x, int y)
     {
         switch (green)

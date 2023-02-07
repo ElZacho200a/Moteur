@@ -11,14 +11,18 @@ namespace Moteur
         Bitmap[] Sprite;
         public int Height , Width ;
         public byte cursor = 0;
+        private String name;
         public SpriteManager(String filename , int h , int w)
         { 
             Bitmap img = new Bitmap(filename);
-            
-            img = new Bitmap(img, new Size(img.Width / 50 * Level.blocH , img.Height / 50 * Level.blocH));
-            Height = h / 50 * Level.blocH;
-            Width = w / 50 * Level.blocH;
-            Sprite = new Bitmap[img.Width / Width * 2];
+            int nmbSprite = img.Width / w;
+                img = new Bitmap(img, new Size(img.Width * Level.blocH / 50, img.Height * Level.blocH / 50 ));
+                Height = img.Height;
+                Width = img.Width / nmbSprite ;
+                Sprite = new Bitmap[img.Width  * 2/ Width];
+                name = Path.GetFileName(filename) + $"X{Sprite.Length / 2}";
+          
+
             fillSprite(img);
         }
         public Bitmap GetImage(byte toGet , int sens)
@@ -28,6 +32,11 @@ namespace Moteur
                 toGet += (byte)(Sprite.Length / 2 );
             
             return Sprite[toGet];
+        }
+
+        public override string ToString()
+        {
+            return name;
         }
 
         public void fillSprite(Bitmap img)

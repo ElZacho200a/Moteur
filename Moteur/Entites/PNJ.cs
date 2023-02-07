@@ -1,21 +1,16 @@
+using System.Net.Mime;
+
 namespace Moteur.Entites;
 
-internal class PNJ:TriggerEntity
+internal abstract class PNJ:TriggerEntity
 {
-    public PNJ() : base(8)
+    protected string Text;
+    public PNJ(string text) : base(8)
     {
+        Text = text;
     }
 
-    public override void Update()
-    {
-        if (is_triggered())
-        {
-            
-        }
-    }
+    
 
-    protected override void UpdateAnimation()
-    {
-      
-    }
+   
 }
