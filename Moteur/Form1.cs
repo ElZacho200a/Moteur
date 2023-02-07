@@ -4,13 +4,17 @@ namespace Moteur
 {
     public partial class Form1 : Form
     {
-        public static String RootDirectory = @"C:\Users\berna\OneDrive\Bureau\Epita\PROJET S2\Moteur\Moteur\";
+        public static String RootDirectory;
+        public Rectangle size;
+        private string currentDirectory = Directory.GetCurrentDirectory();
         public Form1()
         {
-            camera = new Camera(1920 , 1080);
-            InitializeComponent();
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
+            RootDirectory = currentDirectory.Split("bin")[0];
+            size = Screen.FromControl(this).Bounds;
+            camera = new Camera(size.Width, size.Height);
+            InitializeComponent();
         }
 
         private void camera_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -24,6 +28,9 @@ namespace Moteur
         {
            switch(e.KeyCode)
             {
+                case Keys.Up :
+                    Camera.player.KeyUp();
+                    break;
                 case Keys.Left:
                     Camera.player.KeyPressed(-1);
                     break;

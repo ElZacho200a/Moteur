@@ -9,23 +9,16 @@ namespace Moteur;
 public class Palette
 {
     protected Dictionary<Color, Bitmap> ColorIndex;
+    private string filename;
+    private int blocH;
 
     public Palette(int blocH)
     {
+        this.blocH = blocH;
         ColorIndex = new Dictionary<Color, Bitmap>();
        
-        var filename = Form1.RootDirectory + @"Assets\BlocsImage\";
-        var allBlockFile = Directory.EnumerateFiles(filename);
-        foreach (var file in allBlockFile)
-        {
-            var name = Path.GetFileName(file);
-            var chrominance = name.Split(".p");
-            chrominance = chrominance[0].Split(",");
-            var chrominanceBY = new []{byte.Parse(chrominance[0]),byte.Parse(chrominance[1]),byte.Parse(chrominance[2])};
-            Bitmap img = new Bitmap(file);
-            img = new Bitmap(img, new Size(blocH  + blocH/50, blocH + blocH / 50));
-            ColorIndex.Add( Color.FromArgb(chrominanceBY[0],chrominanceBY[1],chrominanceBY[2]) ,img );
-        }
+         filename = Form1.RootDirectory + @"Assets\BlocsImage\";
+       
     }
 
     public Bitmap getImageByColor(Color color)
@@ -38,13 +31,16 @@ public class Palette
           
                 int blue = color.B;
                 color = Color.FromArgb(color.R, color.G, 0);
-                return turnMultipleTime( ColorIndex[color] , blue);
-                
-                    
-                
-            
+                if (color.R <= 2)
+                    return turnMultipleTime(ColorIndex[color], blue);
+                else
+                    return ColorIndex[color];
 
-            
+
+
+
+
+
         }
         catch (Exception e)
         {
@@ -52,6 +48,29 @@ public class Palette
         }
     }
 
+    public void loadBloc(Color color)
+    {
+        if (color.R == 255)
+            return;
+        color = Color.FromArgb(color.R, color.G, 0);
+
+        if(ColorIndex.Keys.Contains(color))
+            return;
+        string file = $"{color.R},{color.G},0.png";
+       
+        try
+        {
+            Bitmap img = new Bitmap(filename +file);
+            img = new Bitmap(img, new Size(blocH  + blocH/50, blocH + blocH / 50));
+            ColorIndex.Add(color,img);
+            return;
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+       
+    }
     public Bitmap turn(Bitmap img)
     {
         Bitmap ne = new Bitmap(img);
