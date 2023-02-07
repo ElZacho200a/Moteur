@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using static Moteur.Entites.BubbleText;
 using Timer = System.Timers.Timer;
 
 namespace Moteur
@@ -15,6 +16,7 @@ namespace Moteur
     {
         int blocH;
         int FOV = 30;
+        private byte frameCounter = 0;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
         private  static int Height, Width;
@@ -31,13 +33,16 @@ namespace Moteur
             new Level(0);
             ResetScope();
             Timer timer= new Timer();
-            timer.Interval= 10;
+            timer.Interval= 1000 /60;
             timer.Elapsed += OnTimedEvent;
             timer.Start();
         }
 
            private  void OnTimedEvent(Object source, ElapsedEventArgs e)
-        {
+           {
+               frameCounter = (byte)((frameCounter + 1) % 60);
+               if (frameCounter % 10 == 0 && OnTenTick != null)
+                   OnTenTick();
            Invalidate();
             player.Update();
             Level.currentLevel.Update();
@@ -47,6 +52,20 @@ namespace Moteur
             
         }
 
+           public delegate void MyEventHandler();
+           public static event MyEventHandler OnTenTick; 
+           
+           public static void AddSubscriberTenTick(MyEventHandler sub)
+           {
+               OnTenTick += sub;
+           }
+ 
+           public static void DelSubscriberTenTick(MyEventHandler sub)
+           {
+               OnTenTick -= sub;
+           }
+           
+           
         public static bool isInScope(Rectangle rect)
         {
             if(Scope.X <= rect.X &&  rect.Right <= Scope.Width + Scope.X )
@@ -145,9 +164,10 @@ namespace Moteur
             
 
             
-
+           
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
-            
+            if (Level.currentLevel.getBackground() != null)
+                g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
             var debX = Scope.X / blocH;
             var debY = Scope.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))
@@ -160,9 +180,7 @@ namespace Moteur
             {
                 for(int j = debY; j < levelMatrice.GetLength(1); j++)
                 {
-                   
-                    
-                        try
+                    try
                         {
                         if (levelMatrice[i, j] != null && i * blocH < Scope.Width + Scope.X)
                             g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));

@@ -22,8 +22,10 @@ namespace Moteur
         {
             Hitbox.X = Coordonates.x;
             Hitbox.Y = Coordonates.y;
+            AdaptAnimation();
             Moove();
-           UpdateAnimation();
+            
+          
         }
         public void KeyPressed(int sens)
         {
@@ -52,7 +54,21 @@ namespace Moteur
         {
             MyEvent -= sub;
         }
-        
+
+        private void AdaptAnimation()
+        {
+            if (!IsCollided((Coordonates.x, Coordonates.y + 1))) // Equivalent de le joueur est sur le sol
+            {
+                if (sensY > 0)
+                {
+                    Sprite = spriteManager.GetImage(4, sensX);
+                }
+                else
+                {
+                    Sprite = spriteManager.GetImage(3, sensX);
+                }
+            }
+        }
         protected  override void UpdateAnimation()
         {
             if (IsCollided((Coordonates.x, Coordonates.y + 1)))// Equivalent de le joueur est sur le sol
@@ -64,17 +80,8 @@ namespace Moteur
                 else
                     Sprite = spriteManager.GetImage(2, sensX);
             }
-            else
-            {
-                if(sensY > 0 )
-                {
-                    Sprite = spriteManager.GetImage(4 , sensX);
-                }
-                else
-                {
-                    Sprite = spriteManager.GetImage(3, sensX);
-                }
-            }
+           
+            
         }
 
         public void jump()

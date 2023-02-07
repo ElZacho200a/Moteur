@@ -63,6 +63,7 @@ namespace Moteur
                         Level.currentLevel.GetEntities().Clear();
                         Level.currentLevel = nLevel;
                         sortie.Used = true;
+                        System.GC.Collect();
                         return;
                     }
                        
