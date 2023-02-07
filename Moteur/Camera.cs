@@ -156,9 +156,9 @@ namespace Moteur
                 debX = 0;
 
             // Dessin du niveau
-            for (int i = 0; i < levelMatrice.GetLength(0); i++)
+            for (int i = debX; i < levelMatrice.GetLength(0); i++)
             {
-                for(int j = 0; j < levelMatrice.GetLength(1); j++)
+                for(int j = debY; j < levelMatrice.GetLength(1); j++)
                 {
                    
                     
