@@ -50,7 +50,10 @@ public class Palette
 
     public void loadBloc(Color color)
     {
+        if (color.R == 255)
+            return;
         color = Color.FromArgb(color.R, color.G, 0);
+
         if(ColorIndex.Keys.Contains(color))
             return;
         string file = $"{color.R},{color.G},0.png";
@@ -64,8 +67,7 @@ public class Palette
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw ;
+            return;
         }
        
     }

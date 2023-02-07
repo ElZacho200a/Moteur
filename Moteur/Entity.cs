@@ -11,7 +11,8 @@ namespace Moteur
     {
         public (int x, int y) Coordonates;
         public Rectangle Hitbox;
-
+        protected bool isDead = false;
+        public bool IsDead => isDead;
         public abstract void Update();
 
         public override string ToString()

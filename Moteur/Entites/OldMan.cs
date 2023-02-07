@@ -28,20 +28,22 @@ internal class OldMan : PNJ
 
     public override void Update()
     {
-        trigger = is_triggered();
-        if (trigger)
+        
+        if (is_triggered())
         {
-
-            if (bubbleText == null)
+           
+            if (!trigger)
             {
-                bubbleText = new BubbleText("Je suis si seul ...", Hitbox);
+                bubbleText = new BubbleText("Je suis si seul ...", Hitbox, TriggerRange);
                 Level.currentLevel.addEntity(bubbleText);
                 UpdateAnimation();
+                trigger = true;
             }
+
         }
-        else if (!(bubbleText == null))
+        else 
         {
-            bubbleText.destroy();
+            trigger= false;
             bubbleText = null;
         }
     }

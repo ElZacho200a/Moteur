@@ -38,15 +38,24 @@ namespace Moteur
             timer.Start();
         }
 
-           private  void OnTimedEvent(Object source, ElapsedEventArgs e)
+           private  async void OnTimedEvent(Object source, ElapsedEventArgs e)
            {
                frameCounter = (byte)((frameCounter + 1) % 60);
-               if (frameCounter % 10 == 0 && OnTenTick != null)
-                   OnTenTick();
-           Invalidate();
-            player.Update();
+               if (frameCounter % 10 == 0)
+            {
+                
+                if (OnTenTick != null)
+                    OnTenTick();
+            }
+
+            
             Level.currentLevel.Update();
 
+            player.Update();
+            Invalidate();
+            
+           
+           
             // ajustement de la cam 
             UpdateScope();
             
@@ -196,25 +205,42 @@ namespace Moteur
                 }
             }
             //Dessin du joueur
-            
-            
+
+
             //Dessin des Entités
-            foreach (var entity in Level.currentLevel.GetEntities())
-            { if(isInScope(entity.Hitbox))
-                    if(entity is ActiveEntity)
-                    {
-                        var active = entity as ActiveEntity;
-                       if (active != null)
-                            g.DrawImage(active.Sprite,active.Hitbox.Location);
-                    }
-                     if (entity is Porte)
-                    {
-                        var porte = entity as Porte;
-                        if(porte != null)
-                            g.DrawImage(porte.texture , porte.Hitbox.Location);
-                    }
+           
+
+
+                for (int i  = 0 ; i < Level.currentLevel.GetEntities().Count; i ++)
+            {
+
+                try
+                {
+                    var entity = Level.currentLevel.GetEntities()[i];
+                    if (isInScope(entity.Hitbox))
+                        if(entity is ActiveEntity)
+                        {
+                            var active = entity as ActiveEntity;
+                           if (active != null)
+                                g.DrawImage(active.Sprite,active.Hitbox.Location);
+                        }
+                         else if (entity is Porte)
+                        {
+                            var porte = entity as Porte;
+                            if(porte != null)
+                                g.DrawImage(porte.texture , porte.Hitbox.Location);
+                        }
+                   
+                    
                
+                }
+                catch (Exception)
+                {
+
+
+                }
             }
+            
             try
             {
                 g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));

@@ -1,11 +1,11 @@
 namespace Moteur.Entites;
 
-internal class BubbleText:ActiveEntity
+internal class BubbleText:TriggerEntity
 {
     private int time = 0;
     private String Text = "";
     private Rectangle origin;
-    public  BubbleText(String Text ,Rectangle rect)
+    public BubbleText(String Text, Rectangle rect , int range ) : base(range)
     {
         var filename = Form1.RootDirectory + "Assets\\Textures\\DialogBox.png";
         spriteManager = new SpriteManager( filename, 94, 100);
@@ -22,17 +22,10 @@ internal class BubbleText:ActiveEntity
       
     public override void Update()
     {
-        time = (time + 1) % 60;
-        
-        Hitbox.X = origin.X - Sprite.Width ;
-        Hitbox.Y = origin.Y - Sprite.Height;
+        return;
     }
 
-    public void destroy()
-    {
-        Camera.OnTenTick -= UpdateAnimation;
-        Level.currentLevel.RemoveEntity(this);
-    }
+   
     protected override bool Moove()
     {
         throw new NotImplementedException();
@@ -40,6 +33,17 @@ internal class BubbleText:ActiveEntity
 
     protected override void UpdateAnimation()
     {
-       return;
+        time = (time + 1) % 60;
+        if (Sprite == null)
+            return;
+        Hitbox.X = origin.X - Hitbox.Width;
+        Hitbox.Y = origin.Y - Hitbox.Height;
+        if(!is_triggered())
+        {
+            //Destroy itself
+            Camera.OnTenTick -= UpdateAnimation;
+            isDead = true;
+            System.GC.Collect();
+        }
     }
 }

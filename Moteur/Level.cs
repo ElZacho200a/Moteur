@@ -108,7 +108,7 @@ public class Level
         }
         catch (Exception e)
         {
-            throw e;
+           //No Data Pack Found or Data Pack is corrupted
         }
            
             
@@ -116,13 +116,18 @@ public class Level
         
     }
 
-    public void Update()
+    public bool Update()
     {
       
         try
         {
             foreach (var entity in entities)
         {
+            if(entity.IsDead)
+                {
+                    entities.Remove(entity);
+                    continue;
+                }
             if(Camera.isInScope(entity.Hitbox))
                 entity.Update();
         }
@@ -130,10 +135,10 @@ public class Level
         }
         catch (Exception e)
         {
-
+            return false;
 
         }
-        
+        return true;
     }
 
     public void addEntity(Entity entity)
