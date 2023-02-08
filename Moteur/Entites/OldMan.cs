@@ -34,7 +34,7 @@ internal class OldMan : PNJ
            
             if (!trigger)
             {
-                bubbleText = new BubbleText("Je suis si seul...", Hitbox, TriggerRange);
+                bubbleText = new BubbleText(Text, Hitbox, TriggerRange);
                 Level.currentLevel.addEntity(bubbleText);
                
                 trigger = true;

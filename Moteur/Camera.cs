@@ -25,7 +25,8 @@ namespace Moteur
         {
            Height = Heigt;
             Width = Widht;
-            DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
+            this.Size = new System.Drawing.Size(Widht,Height);
+            DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
             blocH = Widht / FOV;
             

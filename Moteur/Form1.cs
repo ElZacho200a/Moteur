@@ -40,6 +40,9 @@ namespace Moteur
                 case Keys.Space:
                     Camera.player.jump();
                     break;
+                case Keys.Down:
+                    LivingEntity.Gravity *= -1;
+                    break;
                
             }
             
