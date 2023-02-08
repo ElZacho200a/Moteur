@@ -29,11 +29,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-           
             this.SuspendLayout();
-            // 
-            // panel1
-            // 
+
+
             this.camera.Location = new System.Drawing.Point(0, 0);
             this.camera.Name = "panel1";
             this.camera.BackColor = Color.DarkGray;
@@ -42,12 +40,14 @@
             // 
             // Form1
             // 
+
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.camera);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Form1_Scroll);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.ResumeLayout(false);

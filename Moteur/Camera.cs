@@ -14,33 +14,35 @@ namespace Moteur
 {
     internal class Camera : Panel
     {
-        int blocH;
+        public static int blocH;
         int FOV = 30;
         private byte frameCounter = 0;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
         private  static int Height, Width;
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
-        public Camera(int Widht , int Height):base()
+        public Camera(int Widht , int Heigt):base()
         {
-            Height = Height;
+           Height = Heigt;
             Width = Widht;
-            DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
+            this.Size = new System.Drawing.Size(Widht,Height);
+            DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
             blocH = Widht / FOV;
-            Level.blocH = blocH;
+            
             player = new Player();
             new Level(0);
             ResetScope();
             Timer timer= new Timer();
-            timer.Interval= 1000 /60;
+            timer.Interval= 1000/60;
             timer.Elapsed += OnTimedEvent;
             timer.Start();
         }
 
+         
            private  async void OnTimedEvent(Object source, ElapsedEventArgs e)
            {
-               frameCounter = (byte)((frameCounter + 1) % 60);
+               frameCounter = (byte)((frameCounter + 1) % 10);
                if (frameCounter % 10 == 0)
             {
                 
@@ -48,17 +50,14 @@ namespace Moteur
                     OnTenTick();
             }
 
-            
-            Level.currentLevel.Update();
 
-            player.Update();
-            Invalidate();
-            
-           
-           
-            // ajustement de la cam 
-            UpdateScope();
-            
+            if (Level.currentLevel.Update())
+            {
+                player.Update();
+                Invalidate();
+                // ajustement de la cam 
+                UpdateScope();
+            }
         }
 
            public delegate void MyEventHandler();
@@ -185,6 +184,7 @@ namespace Moteur
                 debX = 0;
 
             // Dessin du niveau
+            if(levelMatrice != null)
             for (int i = debX; i < levelMatrice.GetLength(0); i++)
             {
                 for(int j = debY; j < levelMatrice.GetLength(1); j++)
@@ -211,12 +211,12 @@ namespace Moteur
            
 
 
-                for (int i  = 0 ; i < Level.currentLevel.GetEntities().Count; i ++)
+                foreach (var entity in  Level.currentLevel.GetEntities())
             {
 
                 try
                 {
-                    var entity = Level.currentLevel.GetEntities()[i];
+                    ;
                     if (isInScope(entity.Hitbox))
                         if(entity is ActiveEntity)
                         {

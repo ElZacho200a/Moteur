@@ -11,13 +11,10 @@ namespace Moteur
     internal abstract class LivingEntity : ActiveEntity
     {
         protected int Life;
-        double Gravity = 200/Level.blocH ;
+        public static double Gravity = 200/Level.blocH ;
         protected int MaxSpeed;
 
-        public LivingEntity()
-        {
-            Camera.AddSubscriberTenTick(UpdateAnimation);
-        }
+      
         protected override bool Moove()
         {
             bool toReturn = false;
