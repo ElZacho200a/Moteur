@@ -194,6 +194,9 @@ public class Level
                 return new Zombie(x, y); // 2 -> Zombie
             case 3:
                 return new Skeletton(x, y); // 3 -> Squelette
+            case 4:
+                return new Bullet(x, y);
+            
 
 
 

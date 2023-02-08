@@ -19,7 +19,10 @@ namespace Moteur.Entites
 
         public override void Update()
         {
-            
+            if (this.Life >= 0)
+            {
+                Level.currentLevel.RemoveEntity(this);
+            }
             while(!trigered)
             {
                 trigered = is_triggered();
@@ -35,7 +38,6 @@ namespace Moteur.Entites
                     Speed.vx = Speed.vx * -1;
                 }
             }
-
             MaxSpeed = 15;
             Acceleration.ax = MaxSpeed * sensPlayer;
             UpdateAnimation();

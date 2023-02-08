@@ -11,10 +11,10 @@ namespace Moteur
     internal abstract class LivingEntity : ActiveEntity
     {
         protected int Life;
-        public static double Gravity = 200/Level.blocH ;
+        public static double Gravity = 80/Level.blocH ;
         protected int MaxSpeed;
 
-      
+
         protected override bool Moove()
         {
             bool toReturn = false;
@@ -98,5 +98,10 @@ namespace Moteur
 
         }
 
+        public int GetLife
+        {
+            get => Life;
+            set => Life = value;
+        }
     }
 }
