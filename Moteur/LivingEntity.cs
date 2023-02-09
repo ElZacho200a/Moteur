@@ -11,7 +11,7 @@ namespace Moteur
     internal abstract class LivingEntity : ActiveEntity
     {
         protected int Life;
-        public static double Gravity = 200/Level.blocH ;
+        public static double Gravity = 1 ;
         protected int MaxSpeed;
 
       

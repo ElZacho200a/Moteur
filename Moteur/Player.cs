@@ -15,7 +15,7 @@ namespace Moteur
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (200,0);
-            this.MaxSpeed = Level.blocH/3;
+            this.MaxSpeed = Level.blocH/4;
         Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
             Camera.AddSubscriberTenTick(UpdateAnimation);
         }
