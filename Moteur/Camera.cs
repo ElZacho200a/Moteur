@@ -152,6 +152,11 @@ namespace Moteur
                         break;
 
                     }
+                case Keys.A:
+                {
+                    player.shoot();
+                    break;
+                }
             }
         }
 
