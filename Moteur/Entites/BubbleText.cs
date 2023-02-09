@@ -14,6 +14,7 @@ internal class BubbleText:TriggerEntity
     {
         var filename = Form1.RootDirectory + "Assets\\Textures\\DialogBox.png";
         spriteManager = new SpriteManager( filename, 94, 100);
+        Coordonates = (rect.X, rect.Y);
         Sprite = spriteManager.GetImage(0, sensX);
         emptySprite = new SpriteManager(filename, 94, 100).GetImage(0, 1);
         g = Graphics.FromImage(Sprite);
@@ -31,7 +32,7 @@ internal class BubbleText:TriggerEntity
         var ret = "";
         var splitted = text.Split(" ");
         int count = 0;
-        int maxOnLine = 20;
+        int maxOnLine = 15;
         for (int i = 0; i < splitted.Length; i++)
         {
             if (ret.Length + splitted[i].Length - count > maxOnLine)
@@ -69,7 +70,7 @@ internal class BubbleText:TriggerEntity
         if(time <= Text.Length)
         {
             Wright(Text.Substring(firstLine,time));
-            time++;
+            time+=1;
         }
 
 
@@ -77,7 +78,7 @@ internal class BubbleText:TriggerEntity
         if (!is_triggered())
         {
             //Destroy itself
-            Camera.OnTenTick -= UpdateAnimation;
+             Camera.OnTenTick -= UpdateAnimation;
             isDead = true;
             g.Dispose();
             System.GC.Collect();
@@ -109,16 +110,20 @@ internal class BubbleText:TriggerEntity
         
         // Configurez la police et la couleur de la police
         Brush brush = new SolidBrush(Color.Black);
-        Font font = new Font("Handel Gothic", Hitbox.Width / 25, FontStyle.Bold);
+        Font font = new Font("Handel Gothic", Hitbox.Width / 20, FontStyle.Bold);
         //On s'assure que le text ne dépasse pas 4 lignes ,sinon on le tronc
 
         // Dessinez le texte sur l'image
 
 
-        g.DrawString(text, font, brush, new PointF(10, 20));
+        g.DrawString(text, font, brush, new PointF(10, 30));
         if (CountLine(text) > 4)
         {
-            Text = removeFirstLine(Text);
+            for (int i = 0; i < 4; i++)
+            {
+                Text = removeFirstLine(Text);
+            }
+           
             g.DrawImage(emptySprite, new Point(0, 0));
         }
        
