@@ -23,7 +23,7 @@ namespace Moteur.Entites
             {
                 Level.currentLevel.RemoveEntity(this);
             }
-            while(!trigered)
+            if(!trigered)
             {
                 trigered = is_triggered();
                 Random rand = Random.Shared;

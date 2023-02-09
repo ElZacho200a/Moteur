@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Moteur.Entites;
 
 namespace Moteur
 {
@@ -93,6 +94,7 @@ namespace Moteur
 
         public bool shoot()
         {
+            Level.currentLevel.addEntity(new Bullet(Coordonates.x,Coordonates.y));
             return true;
         }
 

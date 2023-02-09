@@ -152,7 +152,7 @@ namespace Moteur
                         break;
 
                     }
-                case Keys.A:
+                case Keys.Enter:
                 {
                     player.shoot();
                     break;
