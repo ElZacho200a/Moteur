@@ -68,7 +68,7 @@ namespace Moteur.Entites
             }
             else
             {
-                Sprite = spriteManager.GetImage(2, -sensPlayer);
+                Sprite = spriteManager.GetImage(2, -sensPlayer); // pour pas qu'il lag a cote du perso
             }
         }
     }

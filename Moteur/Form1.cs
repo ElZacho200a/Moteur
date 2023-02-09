@@ -43,7 +43,18 @@ namespace Moteur
                 case Keys.Down:
                     LivingEntity.Gravity *= -1;
                     break;
-               
+                /*case Keys.Enter: // le tir 
+                    try // pour le debug
+                    {
+                        Camera.player.shoot();
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine("t'as merde frero");
+                        throw;
+                    }
+                    break;*/
+
             }
             
         }

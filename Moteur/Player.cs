@@ -92,11 +92,11 @@ namespace Moteur
             Speed.vy = (-MaxSpeed   - Speed.vx / 6) ;
         }
 
-        public bool shoot()
+        /*public bool shoot()
         {
-            Level.currentLevel.addEntity(new Bullet(Coordonates.x,Coordonates.y));
+            Level.currentLevel.addEntity(new Bullet(Coordonates.x,Coordonates.y)); // j'ajoute l'entite au bag
             return true;
-        }
+        }*/
 
     }
 }

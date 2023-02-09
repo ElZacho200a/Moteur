@@ -12,6 +12,7 @@ namespace Moteur
     {
         protected int Life;
         public static double Gravity = 80/Level.blocH ;
+        /* public virtual double Gravity { get; set; } = 80/Level.blocH;*/ ////pour overrider pour modifier la gravite sans toucher celle des autres entites
         protected int MaxSpeed;
 
 
@@ -98,10 +99,16 @@ namespace Moteur
 
         }
 
-        public int GetLife
+        public int GetLife // pour chopper la vie des mobs 
         {
             get => Life;
             set => Life = value;
+        }
+
+        public double GetGravity // pour modifier la gravite de certaines entites
+        {
+            get => Gravity;
+            set => Gravity = value;
         }
     }
 }
