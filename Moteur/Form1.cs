@@ -40,10 +40,8 @@ namespace Moteur
                 case Keys.Space:
                     Camera.player.jump();
                     break;
-                case Keys.Down:
-                    LivingEntity.Gravity *= -1;
-                    break;
-                /*case Keys.Enter: // le tir 
+                
+                case Keys.Enter: // le tir 
                     try // pour le debug
                     {
                         Camera.player.shoot();
@@ -53,7 +51,7 @@ namespace Moteur
                         Console.WriteLine("t'as merde frero");
                         throw;
                     }
-                    break;*/
+                    break;
 
             }
             

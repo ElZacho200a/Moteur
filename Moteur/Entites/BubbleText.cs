@@ -108,7 +108,7 @@ internal class BubbleText:TriggerEntity
     protected void Wright(String text)
     {
         
-        // Configurez la police et la couleur de la police
+        // Configure la police et la couleur de la police
         Brush brush = new SolidBrush(Color.Black);
         Font font = new Font("Handel Gothic", Hitbox.Width / 20, FontStyle.Bold);
         //On s'assure que le text ne dépasse pas 4 lignes ,sinon on le tronc
