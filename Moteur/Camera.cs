@@ -24,7 +24,7 @@ namespace Moteur
             blocH = Widht / FOV;
             
             player = new Player();
-            new Level(0);
+            new Level(9);
             ResetScope();
             Timer timer= new Timer();
             timer.Interval= 1000/60;

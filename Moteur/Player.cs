@@ -13,8 +13,8 @@ namespace Moteur
         public Player(): base()
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
-            Coordonates = (200,0);
-            this.MaxSpeed = Level.blocH/3;
+            Coordonates = (Level.blocH*2,Level.blocH*6);
+            this.MaxSpeed = Level.blocH/4;
         Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
             Camera.AddSubscriberTenTick(UpdateAnimation);
         }
@@ -89,7 +89,7 @@ namespace Moteur
             
             // une vitesse négative est dirigée vers le haut tout du moins en Y
             if(IsCollided((Coordonates.x , Coordonates.y +1)))
-            Speed.vy = (-MaxSpeed   - Speed.vx / 6) ;
+            Speed.vy = (-MaxSpeed   -Math.Abs(Speed.vx) / 6) ;
         }
 
         public bool shoot()

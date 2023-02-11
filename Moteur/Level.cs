@@ -83,8 +83,8 @@ public class Level
                 entities.Add(getEncodedEntity(lines[i]));
             }
             Background = new Bitmap(lines[0]);
-            var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
-            Background = new Bitmap(Background,size);
+            //var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
+            //Background = new Bitmap(Background,size);
         }
         catch (Exception e)
         {
