@@ -7,7 +7,7 @@ namespace Moteur
     internal class Camera : Panel
     {
         public static int blocH;
-        int FOV = 20;
+        int FOV = 30;
         private byte frameCounter = 0;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
@@ -193,16 +193,18 @@ namespace Moteur
                 debY = 0;
             if (debX >= levelMatrice.GetLength(0))
                 debX = 0;
+            var endX = debX + Scope.Width / blocH;
+            var endY = debY + Scope.Height / blocH;
 
             // Dessin du niveau
             if(levelMatrice != null)
-            for (int i = debX; i < levelMatrice.GetLength(0); i++)
+            for (int i = debX; i <= endX; i++)
             {
-                for(int j = debY; j < levelMatrice.GetLength(1); j++)
+                for(int j = debY; j <= endY +1; j++)
                 {
                     try
                         {
-                        if (levelMatrice[i, j] != null && i * blocH < Scope.Width + Scope.X)
+                        if (levelMatrice[i, j] != null )
                             g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));
                         }
                         catch (Exception)
