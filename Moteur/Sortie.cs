@@ -41,7 +41,7 @@
             Level.currentLevel.Deactivate();
             var ID = Level.currentLevel.ID;
             
-            var nLevel = new Level(nextLevel , Level.currentLevel.getPalette);
+            var nLevel = new Level(nextLevel );
             Type t = this.GetType();
             foreach (var entity in nLevel.GetEntities())
             {
@@ -53,14 +53,16 @@
                     if (sortie.nextLevel == ID)
                     {
                         
-                        Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
-                        Camera.player.Hitbox.Location = new Point(Camera.player[0], Camera.player[1]);
-                        Camera.ResetScope();
+                       
 
 
                         Level.currentLevel.destroy();
                        
                         Level.currentLevel = nLevel;
+                        Camera.player.ResetSprite();
+                        Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
+                        Camera.player.Hitbox.Location = new Point(Camera.player[0], Camera.player[1]);
+                        Camera.ResetScope();
                         Level.currentLevel.Activate();
                         
                         return;

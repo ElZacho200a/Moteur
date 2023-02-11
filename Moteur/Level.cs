@@ -11,27 +11,33 @@ public class Level
     public  int ID; 
     public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
     private Palette palette;
-    public static int blocH => Camera.blocH ;
+    public static int blocH => Camera.blocH;
     private ConcurrentBag<Entity> entities = new ConcurrentBag<Entity>();
     private Bitmap? Background;
     public static int LevelLoaded = 0;
     private bool fullLoaded = false;
     public Palette getPalette => palette;
+    public (int w , int h ) GetRealSize => (levelMatrice.GetLength( 0 )  , levelMatrice.GetLength(1) );
     public Level(int id)
     {
+        
+        
         LevelLoaded++;
-        palette = new Palette(blocH);
+       
         this.ID = id;
         if (currentLevel == null)
             currentLevel = this;
         setupMatrice(findFilenameByID(id));
-        fullLoaded= true;
+
+        
+        fullLoaded = true;
     }
 
     public Level(int id , Palette palette)
     {
         if (Level.currentLevel.ID == id)
             throw new Exception();
+       
         LevelLoaded++;
         this.palette = palette;
         this.ID = id;
@@ -72,7 +78,20 @@ public class Level
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
         // Construction à partir du ROOM_ID.ROOM
+       
+       if(levelMatrice.GetLength(0) * blocH  < Camera.Width)
+        {
+             while(levelMatrice.GetLength(0) * blocH < Camera.Width)
+            {
+                Camera.FOV--;
+            }
 
+        }
+        else
+        {
+            Camera.FOV = 30;
+        }
+        palette = new Palette(blocH);
         try
         {
             String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
@@ -88,6 +107,7 @@ public class Level
         }
         catch (Exception e)
         {
+            
             //No Data Pack Found or Data Pack is corrupted
         }
         //Construction à partir de l'image ROOM_ID.png
@@ -150,7 +170,7 @@ public class Level
         }
         catch (Exception e)
         {
-           
+            throw e;
             return false;
 
         }

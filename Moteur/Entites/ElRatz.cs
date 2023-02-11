@@ -2,13 +2,14 @@
 
 internal class ElRatz : LivingEntity
 {
+    protected new int MaxSpeed => 10;
     public ElRatz(int x, int y)
     {
         Coordonates = (x, y);
         Hitbox = new Rectangle(x,y,Level.blocH,Level.blocH);
         spriteManager = new SpriteManager(Form1.RootDirectory + "Assets\\Sprite\\ElRatz.png", 50, 50);
         Sprite = spriteManager.GetImage(0, sensX);
-        MaxSpeed = 10;
+      
         Acceleration.ax = MaxSpeed;
         Life = 10;
        }

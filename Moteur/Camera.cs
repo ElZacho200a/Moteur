@@ -6,12 +6,12 @@ namespace Moteur
 {
     internal class Camera : Panel
     {
-        public static int blocH;
-        int FOV = 30;
+        public static int blocH  => (int)(Width / FOV);
+        public static int FOV = 30;
         private byte frameCounter = 0;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
-        private  static int Height, Width;
+        public  static int Height, Width;
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Heigt):base()
         {
@@ -21,10 +21,11 @@ namespace Moteur
             this.Size = new System.Drawing.Size(Widht,Height);
             DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
-            blocH = Widht / FOV;
+
+           
             
+            new Level(0);
             player = new Player();
-            new Level(9);
             ResetScope();
             Timer timer= new Timer();
             timer.Interval= 1000/60;
@@ -79,6 +80,12 @@ namespace Moteur
         public void UpdateScope()
         {
             var speedDouble = player.GetSpeed();
+            if (Width > Level.currentLevel.GetRealSize.w * blocH)
+                Scope.Width = Level.currentLevel.GetRealSize.w * blocH;
+            else
+            {
+                Scope.Width = Width;
+            }
             (int vx , int vy ) speedInt = ((int)speedDouble.vx, (int)speedDouble.vy);
             var levelWidht = Level.currentLevel.getCollisonMatrice().GetLength(0) * Level.blocH;
             var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
@@ -112,6 +119,19 @@ namespace Moteur
             else if (Scope.Y + speedInt.vy <= 0)
                 Scope.Y = 0;
 
+        }
+
+        public static int BlocSizeSetter( (int w , int h ) size)
+        {
+            
+               
+                if(Width > size.w * Width / FOV)
+                {
+                    return Width / (size.w);
+                }
+
+            
+            return Width / FOV;
         }
 
         public static void ResetScope()
@@ -229,7 +249,7 @@ namespace Moteur
 
                 try
                 {
-                    ;
+                    
                     if (isInScope(entity.Hitbox))
                         if(entity is ActiveEntity)
                         {

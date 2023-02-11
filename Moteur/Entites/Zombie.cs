@@ -4,11 +4,13 @@
     {
         protected bool trigered = false;
         Random random = new Random();
+        protected new int MaxSpeed => 8;
+       
         public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
             spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
             Coordonates = (x, y);
-            this.MaxSpeed = 8;
+            
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);
@@ -36,8 +38,8 @@
                     Speed.vx = Speed.vx * -1;
                 }
             }
-            MaxSpeed = 15;
-            Acceleration.ax = MaxSpeed * sensPlayer;
+             
+        Acceleration.ax = MaxSpeed * sensPlayer;
             UpdateAnimation();
             if (Moove())
             {
