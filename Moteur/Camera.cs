@@ -89,7 +89,7 @@ namespace Moteur
             (int vx , int vy ) speedInt = ((int)speedDouble.vx, (int)speedDouble.vy);
             var levelWidht = Level.currentLevel.getCollisonMatrice().GetLength(0) * Level.blocH;
             var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
-            if (((Scope.X + Scope.Width) / 2 > ( player.Coordonates.x ) && player.sensX == -1 )|| (Scope.X +(Scope.Width /2) < player.Coordonates.x && player.sensX == 1) )
+            if ((Scope.X + Scope.Width / 3 > ( player.Coordonates.x ) && player.sensX == -1 )|| (Scope.X +(Scope.Width /3) < player.Coordonates.x && player.sensX == 1) )
             { // Changement de la caméra en X
                 
              
