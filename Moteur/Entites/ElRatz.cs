@@ -1,7 +1,4 @@
-﻿using System.Formats.Asn1;
-using System.Windows.Forms.VisualStyles;
-
-namespace Moteur.Entites;
+﻿namespace Moteur.Entites;
 
 internal class ElRatz : LivingEntity
 {
@@ -14,7 +11,7 @@ internal class ElRatz : LivingEntity
         MaxSpeed = 10;
         Acceleration.ax = MaxSpeed;
         Life = 10;
-    }
+       }
 
     public override void Update()
     {

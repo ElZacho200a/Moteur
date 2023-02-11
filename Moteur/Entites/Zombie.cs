@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Moteur.Entites
+﻿namespace Moteur.Entites
 {
     internal class Zombie : TriggerEntity
     {

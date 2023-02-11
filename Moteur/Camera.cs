@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing.Drawing2D;
 using System.Timers;
-using static Moteur.Entites.BubbleText;
 using Timer = System.Timers.Timer;
 
 namespace Moteur
@@ -15,7 +7,7 @@ namespace Moteur
     internal class Camera : Panel
     {
         public static int blocH;
-        int FOV = 30;
+        int FOV = 20;
         private byte frameCounter = 0;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
@@ -23,6 +15,7 @@ namespace Moteur
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Heigt):base()
         {
+            
            Height = Heigt;
             Width = Widht;
             this.Size = new System.Drawing.Size(Widht,Height);
@@ -179,8 +172,21 @@ namespace Moteur
             
            
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
-            if (Level.currentLevel.getBackground() != null)
-                g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
+
+
+            if (Level.currentLevel.haveBackground())
+            {
+                this.BackgroundImage = Level.currentLevel.getBackground();
+                
+               
+            }
+            else
+            {
+                this.BackgroundImage = null;
+            }
+            
+                
+            //Variable pour l'optimisation de l'affichage
             var debX = Scope.X / blocH;
             var debY = Scope.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))

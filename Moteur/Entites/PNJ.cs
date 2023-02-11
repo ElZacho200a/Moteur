@@ -1,5 +1,3 @@
-using System.Net.Mime;
-
 namespace Moteur.Entites;
 
 internal abstract class PNJ:TriggerEntity

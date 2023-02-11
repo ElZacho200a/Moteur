@@ -1,10 +1,4 @@
-using System.Drawing;
-using System.IO;
-
-using  System.Drawing;
-using System.Windows.Forms.VisualStyles;
 using Moteur.Entites;
-using System.Security.Policy;
 using System.Collections.Concurrent;
 
 namespace Moteur;
@@ -44,9 +38,8 @@ public class Level
         if (currentLevel == null)
             currentLevel = this;
         setupMatrice(findFilenameByID(id));
-     
     }
-    public Bitmap getBackground()
+    public Bitmap getBackground( )
     {
         return Background;
     }
@@ -54,12 +47,10 @@ public class Level
     {
         return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.png";
     }
-
     private string findDataFilenamebyID(int id)
     {
         return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.ROOM";
     }
-
     public Bitmap[,]getLevelMatrice()
     {
 
@@ -80,6 +71,25 @@ public class Level
        
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
+        // Construction à partir du ROOM_ID.ROOM
+
+        try
+        {
+            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
+            lines[0] = lines[0].Split("..")[1];
+            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                entities.Add(getEncodedEntity(lines[i]));
+            }
+            Background = new Bitmap(lines[0]);
+            var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
+            Background = new Bitmap(Background,size);
+        }
+        catch (Exception e)
+        {
+            //No Data Pack Found or Data Pack is corrupted
+        }
         //Construction à partir de l'image ROOM_ID.png
         for (int i = 0; i < rawLevel.Width; i++)
             for (int j = 0; j < rawLevel.Height; j++)
@@ -106,32 +116,9 @@ public class Level
                 
 
             }
-        // Construction à partir du ROOM_ID.ROOM
-
-        try
-        {
-            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
-            lines[0] = lines[0].Split("..")[1];
-            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
-           
-            for (int i = 1; i < lines.Length; i++)
-            {
-                entities.Add(getEncodedEntity(lines[i]));
-            }
-    
-            Background = new Bitmap(lines[0]);
-            ////var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
-            //Background = new Bitmap(Background,size);
-        }
-        catch (Exception e)
-        {
-           //No Data Pack Found or Data Pack is corrupted
-        }
-           
-            
-       
-        
     }
+    
+    
 
     public void Activate()
     {
@@ -253,4 +240,8 @@ public class Level
         return Activator.CreateInstance(t, argument) as Entity; 
     }
 
+    public bool haveBackground()
+    {
+        return Background != null;
+    }
 }

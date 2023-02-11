@@ -1,9 +1,3 @@
-using Microsoft.VisualBasic.ApplicationServices;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-
 namespace Moteur;
 
 public class Palette
