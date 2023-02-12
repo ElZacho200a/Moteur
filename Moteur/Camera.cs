@@ -195,13 +195,13 @@ namespace Moteur
 
             if(true)//en Fonction du Dark ?
             {
-               
-               
+
+               // redifineScope(player.getRayonRectangle(2f));
 
             }
            
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
-            redifineScope(player.getRayonRectangle(2f));
+            
             // if (Level.currentLevel.getBackground() != null)
             //    g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
             var debX = Scope.X / blocH;
@@ -267,7 +267,7 @@ namespace Moteur
 
                 }
             }
-            g.DrawImage(getDarkFront(), Scope.X - Level.blocH, Scope.Y -Level.blocH);
+           // g.DrawImage(getDarkFront(), Scope.X - Level.blocH, Scope.Y -Level.blocH);
             try
             {
                 g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));
