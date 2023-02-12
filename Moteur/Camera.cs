@@ -20,10 +20,10 @@ namespace Moteur
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
         private  static int Height, Width;
-        public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
-        public Camera(int Widht , int Height):base()
+        public static (int X, int Y, int Width, int Heigth) GetScope() { return Scope; }
+        public Camera(int Widht , int Heigth):base()
         {
-            Height = Height;
+            Height = Heigth;
             Width = Widht;
             DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
@@ -33,14 +33,14 @@ namespace Moteur
             new Level(0);
             ResetScope();
             Timer timer= new Timer();
-            timer.Interval= 1000 /60;
+            timer.Interval= 10;
             timer.Elapsed += OnTimedEvent;
             timer.Start();
         }
 
            private  async void OnTimedEvent(Object source, ElapsedEventArgs e)
            {
-               frameCounter = (byte)((frameCounter + 1) % 60);
+               frameCounter = (byte)((frameCounter + 1) % 10);
                if (frameCounter % 10 == 0)
             {
                 
@@ -133,6 +133,13 @@ namespace Moteur
             Scope.Y = player.Coordonates.y ;
         }
 
+        private void redifineScope(Rectangle rect)
+        {
+            //Scope.X = rect.X;
+           // Scope.Y = rect.Y;
+            Scope.Width = rect.Width;
+            Scope.Height = rect.Height; 
+        }
         public void mvPl(Keys k)
         {
             switch (k)
@@ -156,6 +163,20 @@ namespace Moteur
             }
         }
 
+        public Bitmap getDarkFront()
+        {
+            var front = new Bitmap(Camera.Width + Level.blocH*2, Camera.Height +Level.blocH *2);
+            using var g = Graphics.FromImage(front);
+            {
+                g.Clear(Color.Black);
+                g.CompositingMode = CompositingMode.SourceCopy;
+                var rect = player.getRayonRectangle(1.5f);
+                rect.Offset(-Scope.X + Level.blocH, -Scope.Y + Level.blocH);
+                g.FillEllipse(Brushes.Transparent,rect);
+                g.CompositingMode = CompositingMode.SourceOver;
+            }
+            return front;
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -172,11 +193,17 @@ namespace Moteur
             //Translation des sprites en fonction des coord du joueur
             
 
-            
+            if(true)//en Fonction du Dark ?
+            {
+               
+               
+
+            }
            
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
-            if (Level.currentLevel.getBackground() != null)
-                g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
+            redifineScope(player.getRayonRectangle(2f));
+            // if (Level.currentLevel.getBackground() != null)
+            //    g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
             var debX = Scope.X / blocH;
             var debY = Scope.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))
@@ -240,7 +267,7 @@ namespace Moteur
 
                 }
             }
-            
+            g.DrawImage(getDarkFront(), Scope.X - Level.blocH, Scope.Y -Level.blocH);
             try
             {
                 g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));

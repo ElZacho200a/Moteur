@@ -18,6 +18,7 @@ public class Level
     public static int blocH;
     private List<Entity> entities = new List<Entity>();
     private Bitmap? Background;
+    public Palette getPalette => palette;
     public Level(int id)
     {
         palette = new Palette(blocH);
@@ -28,6 +29,15 @@ public class Level
      
     }
 
+    public Level(int id , Palette palette)
+    {
+        this.palette = palette;
+        this.ID = id;
+        if (currentLevel == null)
+            currentLevel = this;
+        setupMatrice(findFilenameByID(id));
+     
+    }
     public Bitmap getBackground()
     {
         return Background;
@@ -73,9 +83,7 @@ public class Level
                         CollisionMatrice[i, j] = color.R == 1;// setup de la Matrice de Collision
                         levelMatrice[i, j] = palette.getImageByColor(color); // setup des Images
                         break;
-                    case 3 :
-                        entities.Add(GetActiveEntityFromGreen(color.G,color.B,i*blocH, j*blocH));
-                        break;
+                   
                     case 5:
                         if(color.G == 0)
                             entities.Add(new Sortie(color.B, i * blocH, j * blocH));

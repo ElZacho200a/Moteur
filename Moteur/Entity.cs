@@ -15,6 +15,21 @@ namespace Moteur
         public bool IsDead => isDead;
         public abstract void Update();
 
+        public Point getCenter()
+        {
+            return new Point(Hitbox.X  + Hitbox.Width / 2, Hitbox.Y + Hitbox.Height / 2);
+        }
+        public Rectangle getRayonRectangle(float rayon)
+        {
+            int Rayon = (int)(rayon * Level.blocH);
+            var p  = getCenter();
+            var x = p.X - Rayon;
+            var y = p.Y - Rayon;
+            Rayon *= 2;
+           return new Rectangle(x,y,Rayon,Rayon);
+
+            
+        }
         public override string ToString()
         {
             return $"{this.GetType().Name}";

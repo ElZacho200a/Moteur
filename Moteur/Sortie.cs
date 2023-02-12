@@ -45,7 +45,7 @@ namespace Moteur
         protected void LoadNextLevel()
         {
             var ID = Level.currentLevel.ID;
-            var nLevel = new Level(nextLevel);
+            var nLevel = new Level(nextLevel , Level.currentLevel.getPalette);
             Type t = this.GetType();
             foreach (var entity in nLevel.GetEntities())
             {
