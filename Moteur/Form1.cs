@@ -40,7 +40,12 @@ namespace Moteur
                 case Keys.Space:
                     Camera.player.jump();
                     break;
-                
+                case Keys.Z :
+                    Camera.FOV--;
+                    break;
+                case Keys.S :
+                    Camera.FOV++;
+                    break;
                 case Keys.Enter: // le tir 
                     try // pour le debug
                     {
