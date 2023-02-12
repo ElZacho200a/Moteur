@@ -173,6 +173,21 @@ namespace Moteur
             }
         }
 
+        /*  public Bitmap getDarkFront()
+        {
+            var front = new Bitmap(Camera.CWidth + Level.blocH*2, Camera.CHeight +Level.blocH *2);
+            using var g = Graphics.FromImage(front);
+            {
+                g.Clear(Color.Black);
+                g.CompositingMode = CompositingMode.SourceCopy;
+                var rect = player.getRayonRectangle(1.5f);
+                rect.Offset(-Scope.X + Level.blocH, -Scope.Y + Level.blocH);
+                g.FillEllipse(Brushes.Transparent,rect);
+                g.CompositingMode = CompositingMode.SourceOver;
+            }
+            return front;
+        }
+*/
 
         protected override void OnPaint(PaintEventArgs e)
         {
