@@ -23,9 +23,9 @@ namespace Moteur
             Scope = (0, 0, Widht , Height );
 
            
-            
-            new Level(0);
-            player = new Player();
+             player = new Player();
+            new Level(3);
+           
             ResetScope();
             Timer timer= new Timer();
             timer.Interval= 1000/60;

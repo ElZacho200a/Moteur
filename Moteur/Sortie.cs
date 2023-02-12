@@ -59,7 +59,7 @@
                         Level.currentLevel.destroy();
                        
                         Level.currentLevel = nLevel;
-                        Camera.player.ResetSprite();
+                        
                         Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
                         Camera.player.Hitbox.Location = new Point(Camera.player[0], Camera.player[1]);
                         Camera.ResetScope();

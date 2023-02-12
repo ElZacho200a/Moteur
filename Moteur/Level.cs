@@ -85,12 +85,13 @@ public class Level
             {
                 Camera.FOV--;
             }
-
+           
         }
         else
         {
             Camera.FOV = 30;
         }
+        Camera.player.ResetSprite();
         palette = new Palette(blocH);
         try
         {
