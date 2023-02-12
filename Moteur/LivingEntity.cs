@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,7 +12,7 @@ namespace Moteur
     internal abstract class LivingEntity : ActiveEntity
     {
         protected int Life;
-        public  double Gravity = 1 ;
+        public virtual double Gravity => Level.blocH / 90; // Level.blocH / x -> x  ; Plus x  est grand plus la gravité est faible
         /* public virtual double Gravity { get; set; } = 80/Level.blocH;*/ ////pour overrider pour modifier la gravite sans toucher celle des autres entites
         protected virtual int MaxSpeed() { return 10 ; }
 
@@ -63,6 +64,11 @@ namespace Moteur
         }
 
 
+
+   /* private double  PutOnground(int x , int y)
+        {
+            
+        }*/
     public bool IsCollided((int x, int y)Coord)
         {
             int blocH = Level.blocH; // Récupération de la taille en pixel des blocs
@@ -108,7 +114,7 @@ namespace Moteur
         public double GetGravity // pour modifier la gravite de certaines entites
         {
             get => Gravity;
-            set => Gravity = value;
+            
         }
     }
 }

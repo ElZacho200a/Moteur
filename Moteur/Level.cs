@@ -79,7 +79,7 @@ public class Level
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
         // Construction à partir du ROOM_ID.ROOM
        
-       if(levelMatrice.GetLength(0) * blocH  < Camera.Width)
+       if(levelMatrice.GetLength(0) * blocH < Camera.Width)
         {
              while(levelMatrice.GetLength(0) * blocH < Camera.Width)
             {

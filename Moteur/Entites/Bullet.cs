@@ -13,11 +13,12 @@ namespace Moteur.Entites
             Coordonates = (x, y + player.Hitbox.Height / 4); //Setup des coordonnée
             Sprite = img; // Voir la Fonction Image  , elle dis tout
             Hitbox = new Rectangle(x, y, Sprite.Width, Sprite.Height); // Une fois l'image défini on setup la Hitbox
-            this.Gravity = 0; // J'ai enlevé la gravité statique    
+             // J'ai enlevé la gravité statique    
             Speed.vx = 30 * player.sensX;  // la vitesse est défini par le sens du player
             Acceleration.ax = 30 * player.sensX; // manque le sens j'y arrive pas jsuis con wallah 
            
-        } 
+        }
+        public override double Gravity => 0;
         public override void Update()
         {
             
