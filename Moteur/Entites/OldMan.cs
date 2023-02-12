@@ -6,13 +6,14 @@ internal class OldMan : PNJ
 {
     private int time = 0;
     private BubbleText? bubbleText = null;
-    public OldMan(int x , int y ) : base("text")
+    bool somethingTosay = false;
+    public OldMan(int x , int y ) : base("")
     {
         Speed.vx = new Random().Next(2) == 0 ? 1 : -1;
         spriteManager = new SpriteManager(Form1.RootDirectory + "Assets/Sprite/OldMan.png",118,75);
         Sprite = spriteManager.GetImage(0, sensX);
         Hitbox = new Rectangle(x, y, Sprite.Width, Sprite.Height);
-        Camera.OnTenTick += UpdateAnimation;
+        Camera.AddSubscriberTenTick(UpdateAnimation);
     }
     
     
@@ -23,20 +24,22 @@ internal class OldMan : PNJ
         Sprite = spriteManager.GetImage(0, sensX);
         Coordonates = (x, y);
         Hitbox = new Rectangle(x, y, Sprite.Width, Sprite.Height);
-        Camera.OnTenTick += UpdateAnimation;
+        somethingTosay = text != "";   
     }
 
     public override void Update()
     {
-        
+        //UpdateAnimation();
+        if (!somethingTosay)
+            return;
         if (is_triggered())
         {
            
             if (!trigger)
             {
-                bubbleText = new BubbleText("Je suis si seul ...", Hitbox, TriggerRange);
+                
+                bubbleText = new BubbleText(Text, Hitbox, TriggerRange);
                 Level.currentLevel.addEntity(bubbleText);
-                UpdateAnimation();
                 trigger = true;
             }
 
@@ -55,8 +58,8 @@ internal class OldMan : PNJ
             Sprite = spriteManager.GetImage(2, sensX);
             return;
         }
-        time = (time +1 % 40);
-        if (time == 0)
+        time = (time +1) % 30;
+        if (time >= 25)
         {
             Sprite = spriteManager.GetImage(1, sensX);
         }

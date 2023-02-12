@@ -40,7 +40,24 @@ namespace Moteur
                 case Keys.Space:
                     Camera.player.jump();
                     break;
-               
+                case Keys.Z :
+                    Camera.FOV--;
+                    break;
+                case Keys.S :
+                    Camera.FOV++;
+                    break;
+                case Keys.Enter: // le tir 
+                    try // pour le debug
+                    {
+                        Camera.player.shoot();
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine("t'as merde frero");
+                        throw;
+                    }
+                    break;
+
             }
             
         }
@@ -49,6 +66,11 @@ namespace Moteur
         {
             if(e.KeyCode == Keys.Left || e.KeyCode == Keys.Right )
                 Camera.player.KeyPressed(0);
+        }
+
+        private void Form1_Scroll(object sender, ScrollEventArgs e)
+        {
+          
         }
     }
 }

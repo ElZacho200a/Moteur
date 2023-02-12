@@ -1,9 +1,5 @@
-using System.Drawing;
-using System.IO;
-
-using  System.Drawing;
-using System.Windows.Forms.VisualStyles;
 using Moteur.Entites;
+using System.Collections.Concurrent;
 
 namespace Moteur;
 
@@ -15,30 +11,41 @@ public class Level
     public  int ID; 
     public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
     private Palette palette;
-    public static int blocH;
-    private List<Entity> entities = new List<Entity>();
+    public static int blocH => Camera.blocH;
+    private ConcurrentBag<Entity> entities = new ConcurrentBag<Entity>();
     private Bitmap? Background;
+    public static int LevelLoaded = 0;
+    private bool fullLoaded = false;
     public Palette getPalette => palette;
+    public (int w , int h ) GetRealSize => (levelMatrice.GetLength( 0 )  , levelMatrice.GetLength(1) );
     public Level(int id)
     {
-        palette = new Palette(blocH);
+        
+        
+        LevelLoaded++;
+       
         this.ID = id;
         if (currentLevel == null)
             currentLevel = this;
         setupMatrice(findFilenameByID(id));
-     
+
+        
+        fullLoaded = true;
     }
 
     public Level(int id , Palette palette)
     {
+        if (Level.currentLevel.ID == id)
+            throw new Exception();
+       
+        LevelLoaded++;
         this.palette = palette;
         this.ID = id;
         if (currentLevel == null)
             currentLevel = this;
         setupMatrice(findFilenameByID(id));
-     
     }
-    public Bitmap getBackground()
+    public Bitmap getBackground( )
     {
         return Background;
     }
@@ -46,21 +53,20 @@ public class Level
     {
         return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.png";
     }
-
     private string findDataFilenamebyID(int id)
     {
         return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.ROOM";
     }
-
     public Bitmap[,]getLevelMatrice()
     {
+
         return levelMatrice;
     }
     public bool[,] getCollisonMatrice()
     {
         return CollisionMatrice;
     }
-    public List<Entity> GetEntities()
+    public ConcurrentBag<Entity> GetEntities()
     {
         return entities;
     }
@@ -71,6 +77,40 @@ public class Level
        
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
+        // Construction à partir du ROOM_ID.ROOM
+       
+       if(levelMatrice.GetLength(0) * blocH < Camera.Width)
+        {
+             while(levelMatrice.GetLength(0) * blocH < Camera.Width)
+            {
+                Camera.FOV--;
+            }
+           
+        }
+        else
+        {
+            Camera.FOV = 30;
+        }
+        Camera.player.ResetSprite();
+        palette = new Palette(blocH);
+        try
+        {
+            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
+            lines[0] = lines[0].Split("..")[1];
+            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                entities.Add(getEncodedEntity(lines[i]));
+            }
+            Background = new Bitmap(lines[0]);
+            //var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
+            //Background = new Bitmap(Background,size);
+        }
+        catch (Exception e)
+        {
+            
+            //No Data Pack Found or Data Pack is corrupted
+        }
         //Construction à partir de l'image ROOM_ID.png
         for (int i = 0; i < rawLevel.Width; i++)
             for (int j = 0; j < rawLevel.Height; j++)
@@ -97,35 +137,23 @@ public class Level
                 
 
             }
-        // Construction à partir du ROOM_ID.ROOM
-
-        try
-        {
-            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
-            lines[0] = lines[0].Split("..")[1];
-            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
-           
-            for (int i = 1; i < lines.Length; i++)
-            {
-                entities.Add(getEncodedEntity(lines[i]));
-            }
-    
-            Background = new Bitmap(lines[0]);
-            var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
-            Background = new Bitmap(Background,size);
-        }
-        catch (Exception e)
-        {
-           //No Data Pack Found or Data Pack is corrupted
-        }
-           
-            
-        
-        
     }
+    
+    
 
+    public void Activate()
+    {
+        fullLoaded= true;
+
+    }
+    public void Deactivate()
+    {
+        fullLoaded = false;
+    }
     public bool Update()
     {
+        if (!fullLoaded)
+            return false;
       
         try
         {
@@ -133,7 +161,7 @@ public class Level
         {
             if(entity.IsDead)
                 {
-                    entities.Remove(entity);
+                    entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
                     continue;
                 }
             if(Camera.isInScope(entity.Hitbox))
@@ -143,6 +171,7 @@ public class Level
         }
         catch (Exception e)
         {
+            throw e;
             return false;
 
         }
@@ -154,6 +183,12 @@ public class Level
         entities.Add(entity);
     }
     
+    public void destroy()
+    {
+        entities.Clear();
+        Background = null;
+
+    }
     public  Entity GetActiveEntityFromGreen(int green, int blue, int x, int y)
     {
         switch (green)
@@ -167,6 +202,9 @@ public class Level
                 return new Zombie(x, y); // 2 -> Zombie
             case 3:
                 return new Skeletton(x, y); // 3 -> Squelette
+            case 4:
+                return new Bullet(x, y);
+            
 
 
 
@@ -181,7 +219,7 @@ public class Level
 
     public void RemoveEntity(Entity entity)
     {
-        entities.Remove(entity);
+        entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
     }
 
     //ElRatz|748!517!:
@@ -223,4 +261,8 @@ public class Level
         return Activator.CreateInstance(t, argument) as Entity; 
     }
 
+    public bool haveBackground()
+    {
+        return Background != null;
+    }
 }

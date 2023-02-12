@@ -1,43 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing.Drawing2D;
 using System.Timers;
-using static Moteur.Entites.BubbleText;
 using Timer = System.Timers.Timer;
 
 namespace Moteur
 {
     internal class Camera : Panel
     {
-        int blocH;
-        int FOV = 30;
+        public static int blocH  => (int)(Width / FOV);
+        public static int FOV = 30;
         private byte frameCounter = 0;
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
-        private  static int Height, Width;
-        public static (int X, int Y, int Width, int Heigth) GetScope() { return Scope; }
-        public Camera(int Widht , int Heigth):base()
+        public  static int Height, Width;
+        public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
+        public Camera(int Widht , int Heigt):base()
         {
-            Height = Heigth;
+            
+           Height = Heigt;
             Width = Widht;
-            DoubleBuffered= true; // Extrêmement important permet d'avoir une image fluide 
+            this.Size = new System.Drawing.Size(Widht,Height);
+            DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
-            blocH = Widht / FOV;
-            Level.blocH = blocH;
-            player = new Player();
+
+           
+             player = new Player();
             new Level(0);
+           
             ResetScope();
             Timer timer= new Timer();
-            timer.Interval= 10;
+            timer.Interval= 1000/60;
             timer.Elapsed += OnTimedEvent;
             timer.Start();
         }
 
+         
            private  async void OnTimedEvent(Object source, ElapsedEventArgs e)
            {
                frameCounter = (byte)((frameCounter + 1) % 10);
@@ -48,17 +44,14 @@ namespace Moteur
                     OnTenTick();
             }
 
-            
-            Level.currentLevel.Update();
 
-            player.Update();
-            Invalidate();
-            
-           
-           
-            // ajustement de la cam 
-            UpdateScope();
-            
+            if (Level.currentLevel.Update())
+            {
+                player.Update();
+                Invalidate();
+                // ajustement de la cam 
+                UpdateScope();
+            }
         }
 
            public delegate void MyEventHandler();
@@ -87,10 +80,16 @@ namespace Moteur
         public void UpdateScope()
         {
             var speedDouble = player.GetSpeed();
+            if (Width > Level.currentLevel.GetRealSize.w * blocH)
+                Scope.Width = Level.currentLevel.GetRealSize.w * blocH;
+            else
+            {
+                Scope.Width = Width;
+            }
             (int vx , int vy ) speedInt = ((int)speedDouble.vx, (int)speedDouble.vy);
             var levelWidht = Level.currentLevel.getCollisonMatrice().GetLength(0) * Level.blocH;
             var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
-            if (((Scope.X + Scope.Width) / 2 > ( player.Coordonates.x ) && player.sensX == -1 )|| (Scope.X +(Scope.Width /2) < player.Coordonates.x && player.sensX == 1) )
+            if ((Scope.X + Scope.Width / 3 > ( player.Coordonates.x ) && player.sensX == -1 )|| (Scope.X +(Scope.Width /3) < player.Coordonates.x && player.sensX == 1) )
             { // Changement de la caméra en X
                 
              
@@ -122,6 +121,19 @@ namespace Moteur
 
         }
 
+        public static int BlocSizeSetter( (int w , int h ) size)
+        {
+            
+               
+                if(Width > size.w * Width / FOV)
+                {
+                    return Width / (size.w);
+                }
+
+            
+            return Width / FOV;
+        }
+
         public static void ResetScope()
         {
             var levelWidht = Level.currentLevel.getCollisonMatrice().GetLength(0) * Level.blocH;
@@ -133,13 +145,6 @@ namespace Moteur
             Scope.Y = player.Coordonates.y ;
         }
 
-        private void redifineScope(Rectangle rect)
-        {
-            //Scope.X = rect.X;
-           // Scope.Y = rect.Y;
-            Scope.Width = rect.Width;
-            Scope.Height = rect.Height; 
-        }
         public void mvPl(Keys k)
         {
             switch (k)
@@ -160,23 +165,14 @@ namespace Moteur
                         break;
 
                     }
+                /*case Keys.Enter:
+                {
+                    player.shoot();
+                    break;
+                }*/
             }
         }
 
-        public Bitmap getDarkFront()
-        {
-            var front = new Bitmap(Camera.Width + Level.blocH*2, Camera.Height +Level.blocH *2);
-            using var g = Graphics.FromImage(front);
-            {
-                g.Clear(Color.Black);
-                g.CompositingMode = CompositingMode.SourceCopy;
-                var rect = player.getRayonRectangle(1.5f);
-                rect.Offset(-Scope.X + Level.blocH, -Scope.Y + Level.blocH);
-                g.FillEllipse(Brushes.Transparent,rect);
-                g.CompositingMode = CompositingMode.SourceOver;
-            }
-            return front;
-        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -193,32 +189,42 @@ namespace Moteur
             //Translation des sprites en fonction des coord du joueur
             
 
-            if(true)//en Fonction du Dark ?
-            {
-
-               // redifineScope(player.getRayonRectangle(2f));
-
-            }
+            
            
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
+
+
+            if (Level.currentLevel.haveBackground())
+            {
+                this.BackgroundImage = Level.currentLevel.getBackground();
+                
+               
+            }
+            else
+            {
+                this.BackgroundImage = null;
+            }
             
-            // if (Level.currentLevel.getBackground() != null)
-            //    g.DrawImage(Level.currentLevel.getBackground() , new Point(0,0));
+                
+            //Variable pour l'optimisation de l'affichage
             var debX = Scope.X / blocH;
             var debY = Scope.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))
                 debY = 0;
             if (debX >= levelMatrice.GetLength(0))
                 debX = 0;
+            var endX = debX + Scope.Width / blocH;
+            var endY = debY + Scope.Height / blocH;
 
             // Dessin du niveau
-            for (int i = debX; i < levelMatrice.GetLength(0); i++)
+            if(levelMatrice != null)
+            for (int i = debX; i <= endX; i++)
             {
-                for(int j = debY; j < levelMatrice.GetLength(1); j++)
+                for(int j = debY; j <= endY +1; j++)
                 {
                     try
                         {
-                        if (levelMatrice[i, j] != null && i * blocH < Scope.Width + Scope.X)
+                        if (levelMatrice[i, j] != null )
                             g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));
                         }
                         catch (Exception)
@@ -238,12 +244,12 @@ namespace Moteur
            
 
 
-                for (int i  = 0 ; i < Level.currentLevel.GetEntities().Count; i ++)
+                foreach (var entity in  Level.currentLevel.GetEntities())
             {
 
                 try
                 {
-                    var entity = Level.currentLevel.GetEntities()[i];
+                    
                     if (isInScope(entity.Hitbox))
                         if(entity is ActiveEntity)
                         {
@@ -267,7 +273,7 @@ namespace Moteur
 
                 }
             }
-           // g.DrawImage(getDarkFront(), Scope.X - Level.blocH, Scope.Y -Level.blocH);
+            
             try
             {
                 g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));

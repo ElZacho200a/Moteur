@@ -1,20 +1,18 @@
-﻿using System.Formats.Asn1;
-using System.Windows.Forms.VisualStyles;
-
-namespace Moteur.Entites;
+﻿namespace Moteur.Entites;
 
 internal class ElRatz : LivingEntity
 {
+    protected new int MaxSpeed => 10;
     public ElRatz(int x, int y)
     {
         Coordonates = (x, y);
         Hitbox = new Rectangle(x,y,Level.blocH,Level.blocH);
         spriteManager = new SpriteManager(Form1.RootDirectory + "Assets\\Sprite\\ElRatz.png", 50, 50);
         Sprite = spriteManager.GetImage(0, sensX);
-        MaxSpeed = 10;
+      
         Acceleration.ax = MaxSpeed;
         Life = 10;
-    }
+       }
 
     public override void Update()
     {

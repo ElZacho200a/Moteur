@@ -1,16 +1,16 @@
-﻿using System.Security.Cryptography;
-
-namespace Moteur.Entites
+﻿namespace Moteur.Entites
 {
     internal class Zombie : TriggerEntity
     {
         protected bool trigered = false;
         Random random = new Random();
+        protected new int MaxSpeed => 8;
+       
         public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
             spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
             Coordonates = (x, y);
-            this.MaxSpeed = 8;
+            
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);
@@ -19,8 +19,11 @@ namespace Moteur.Entites
 
         public override void Update()
         {
-            
-            while(!trigered)
+            if (this.Life >= 0)
+            {
+                Level.currentLevel.RemoveEntity(this);
+            }
+            if(!trigered)
             {
                 trigered = is_triggered();
                 Random rand = Random.Shared;
@@ -35,9 +38,8 @@ namespace Moteur.Entites
                     Speed.vx = Speed.vx * -1;
                 }
             }
-
-            MaxSpeed = 15;
-            Acceleration.ax = MaxSpeed * sensPlayer;
+             
+        Acceleration.ax = MaxSpeed * sensPlayer;
             UpdateAnimation();
             if (Moove())
             {
@@ -66,7 +68,7 @@ namespace Moteur.Entites
             }
             else
             {
-                Sprite = spriteManager.GetImage(2, -sensPlayer);
+                Sprite = spriteManager.GetImage(2, -sensPlayer); // pour pas qu'il lag a cote du perso
             }
         }
     }

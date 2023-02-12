@@ -4,11 +4,13 @@
     {
         protected bool trigered = false;
         Random random = new Random();
+
+        protected  new int MaxSpeed => 8; 
         public Skeletton(int x, int y) : base(15)
         {
             spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
             Coordonates = (x, y);
-            this.MaxSpeed = 8;
+            
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height);
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);

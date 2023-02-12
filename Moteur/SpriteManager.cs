@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Moteur
+﻿namespace Moteur
 {
     public class SpriteManager
     {
@@ -12,9 +6,14 @@ namespace Moteur
         public int Height , Width ;
         public byte cursor = 0;
         private String name;
+        private string filename;
+        private int h, w;
         public SpriteManager(String filename , int h , int w)
         { 
             Bitmap img = new Bitmap(filename);
+            this.filename = filename;
+            this.h = h;
+            this.w= w;
             int nmbSprite = img.Width / w;
                 img = new Bitmap(img, new Size(img.Width * Level.blocH / 50, img.Height * Level.blocH / 50 ));
                 Height = img.Height;
@@ -38,7 +37,14 @@ namespace Moteur
         {
             return name;
         }
-
+        public void setSprite(Bitmap b)
+        {
+            Sprite[cursor] = b;
+        }
+        public SpriteManager getOriginal()
+        {
+           return new SpriteManager(filename, h, w);
+        }
         public void fillSprite(Bitmap img)
         {
            
