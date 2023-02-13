@@ -10,7 +10,7 @@
         
         }
         
-        
+        public float light = 2f;
         protected (double vx, double vy) Speed;
         protected (double ax, double ay) Acceleration;
         public int sensX => Speed.vx > 0 ? 1 : -1;

@@ -16,6 +16,7 @@ public class Level
     private Bitmap? Background;
     public static int LevelLoaded = 0;
     private bool fullLoaded = false;
+    public bool Dark = false;
     public Palette getPalette => palette;
     public (int w , int h ) GetRealSize => (levelMatrice.GetLength( 0 )  , levelMatrice.GetLength(1) );
     public Level(int id)

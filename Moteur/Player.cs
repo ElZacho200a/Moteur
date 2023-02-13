@@ -11,10 +11,11 @@ namespace Moteur
     internal class Player : LivingEntity
     {
         protected int MaxSpeed => Level.blocH/4;
+       
         public Player(): base()
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
-            Coordonates = (Level.blocH*2,Level.blocH*6);
+            Coordonates = (Level.blocH*2,Level.blocH*4);
             
             Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
             Camera.AddSubscriberTenTick(UpdateAnimation);
