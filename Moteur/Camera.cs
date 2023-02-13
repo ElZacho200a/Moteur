@@ -338,8 +338,11 @@ namespace Moteur
 
             if (Level.currentLevel.Dark)
             {
-                
-                g.DrawImage(getDarkFront() ,  Scope.X, Scope.Y);
+                using (var front = getDarkFront() )
+                {
+                    g.DrawImage( front,  Scope.X, Scope.Y);
+                }
+               
             }
                 
         }
