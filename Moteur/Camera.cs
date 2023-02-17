@@ -12,19 +12,28 @@ namespace Moteur
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
         public  static int Height, Width;
+        public Bitmap rawFront;
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Heigt):base()
         {
+
+            rawFront = new Bitmap(Widht, Heigt); // Une image Noir de la taille de l'écran permettant d'opti les rendu en mode Dark
+            using (var g = Graphics.FromImage(rawFront))
+            {
+                g.Clear(Color.Black);
+            }
+            
             
            Height = Heigt;
             Width = Widht;
+            
             this.Size = new System.Drawing.Size(Widht,Height);
             DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht , Height );
-
+    
            
              player = new Player();
-            new Level(0);
+            new Level(12);
            
             ResetScope();
             Timer timer= new Timer();
@@ -145,6 +154,10 @@ namespace Moteur
             Scope.Y = player.Coordonates.y ;
         }
 
+        public Rectangle getRectFromScope()
+        {
+            return  new Rectangle(Scope.X, Scope.Y, Scope.Width, Scope.Height);
+        }
         public void mvPl(Keys k)
         {
             switch (k)
@@ -173,22 +186,52 @@ namespace Moteur
             }
         }
 
-        /*  public Bitmap getDarkFront()
+        private PathGradientBrush getGrandientForEntity(ActiveEntity entity , int Needed)
         {
-            var front = new Bitmap(Camera.CWidth + Level.blocH*2, Camera.CHeight +Level.blocH *2);
-            using var g = Graphics.FromImage(front);
+           
+            GraphicsPath path = new GraphicsPath();
+            var rect = player.getRayonRectangle(entity.light);
+            rect.X = Needed;
+            rect.Y = Needed;
+            path.AddEllipse(rect);
+
+            // Use the path to construct a brush.
+            PathGradientBrush pthGrBrush = new PathGradientBrush(path);
+
+            // Set the color at the center of the path to blue.
+            pthGrBrush.CenterColor = Color.FromArgb(120, 0, 0, 0);
+
+            // Set the color along the entire boundary 
+            // of the path to aqua.
+            Color[] colors = { Color.FromArgb(255, 0, 0, 0) };
+            pthGrBrush.SurroundColors = colors;
+            // 
+            return pthGrBrush;
+        }
+        public (Bitmap front, Point) getDarkFront()
+        {
+            var NeededDecal = (int)(2.5 * Level.blocH);
+            var pthGrBrush = getGrandientForEntity(player , NeededDecal/2);
+            
+            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +NeededDecal ,(int)pthGrBrush.Rectangle.Height +NeededDecal);
+            using (var g = Graphics.FromImage(front))
             {
                 g.Clear(Color.Black);
+                
                 g.CompositingMode = CompositingMode.SourceCopy;
-                var rect = player.getRayonRectangle(1.5f);
-                rect.Offset(-Scope.X + Level.blocH, -Scope.Y + Level.blocH);
-                g.FillEllipse(Brushes.Transparent,rect);
+                
+                g.FillEllipse( pthGrBrush, pthGrBrush.Rectangle );
+               
                 g.CompositingMode = CompositingMode.SourceOver;
+                pthGrBrush.Dispose();
+               
             }
-            return front;
-        }
-*/
 
+            var p = player.getCenter();
+            p.Offset(-front.Width/2,-front.Height/2);
+            return (front ,p)  ;
+        }
+        
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -202,13 +245,13 @@ namespace Moteur
             // Cette décal permet de mettre le bas du niveau en bas de l'écran cette utilité est voué à disparaitre
            //g.TranslateTransform(0.0F, (float)decalY, MatrixOrder.Append);
             //Translation des sprites en fonction des coord du joueur
-            
+
 
             
            
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
 
-
+            
             if (Level.currentLevel.haveBackground())
             {
                 this.BackgroundImage = Level.currentLevel.getBackground();
@@ -222,20 +265,33 @@ namespace Moteur
             
                 
             //Variable pour l'optimisation de l'affichage
-            var debX = Scope.X / blocH;
-            var debY = Scope.Y / blocH;
+
+            Rectangle OptiDrawRect;
+            if (Level.currentLevel.Dark) 
+            {
+                OptiDrawRect = player.getRayonRectangle(player.light );
+                if (BackgroundImage != rawFront)
+                    BackgroundImage = rawFront;
+            }
+            else
+            {
+                OptiDrawRect =getRectFromScope();
+                OptiDrawRect.Height += Level.blocH;
+            }
+            var debX = OptiDrawRect.X / blocH;
+            var debY = OptiDrawRect.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))
                 debY = 0;
             if (debX >= levelMatrice.GetLength(0))
                 debX = 0;
-            var endX = debX + Scope.Width / blocH;
-            var endY = debY + Scope.Height / blocH;
+            var endX = debX + OptiDrawRect.Width / blocH;
+            var endY = debY + OptiDrawRect.Height / blocH;
 
             // Dessin du niveau
             if(levelMatrice != null)
             for (int i = debX; i <= endX; i++)
             {
-                for(int j = debY; j <= endY +1; j++)
+                for(int j = debY; j <= endY ; j++)
                 {
                     try
                         {
@@ -288,7 +344,7 @@ namespace Moteur
 
                 }
             }
-            
+             
             try
             {
                 g.DrawImage(player.Sprite, new Point(player.Coordonates.x, player.Coordonates.y));
@@ -298,6 +354,16 @@ namespace Moteur
 
               
             }
+
+            if (Level.currentLevel.Dark)
+            {
+                (Bitmap front, Point point) result = getDarkFront();
+                g.DrawImage( result.front,  result.point);
+                result.front.Dispose();   
+                
+               
+            }
+                
         }
 
     }
