@@ -33,7 +33,7 @@ namespace Moteur
     
            
              player = new Player();
-            new Level(12);
+            new Level(0);
            
             ResetScope();
             Timer timer= new Timer();
@@ -268,36 +268,7 @@ namespace Moteur
                 OptiDrawRect =getRectFromScope();
                 OptiDrawRect.Height += Level.blocH;
             }
-            var debX = OptiDrawRect.X / blocH;
-            var debY = OptiDrawRect.Y / blocH;
-            if (debY >= levelMatrice.GetLength(1))
-                debY = 0;
-            if (debX >= levelMatrice.GetLength(0))
-                debX = 0;
-            var endX = debX + OptiDrawRect.Width / blocH;
-            var endY = debY + OptiDrawRect.Height / blocH;
-
-            // Dessin du niveau
-            if(levelMatrice != null)
-            for (int i = debX; i <= endX; i++)
-            {
-                for(int j = debY; j <= endY ; j++)
-                {
-                    try
-                        {
-                        if (levelMatrice[i, j] != null )
-                            g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));
-                        }
-                        catch (Exception)
-                        {
-
-                          
-                        }
-                        
-
-                    
-                }
-            }
+           
             //Dessin du joueur
 
 
@@ -356,6 +327,7 @@ namespace Moteur
                 
         }
 
+        
         protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
         {
             if( !Level.currentLevel.Dark)
@@ -363,11 +335,61 @@ namespace Moteur
                 {
                     BackgroundImage = Level.currentLevel.getBackground();
                     base.OnPaintBackground(paintEventArgs);
+                   
                     
                    
                     
 
                 }
+            var g = paintEventArgs.Graphics;
+            g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
+            drawBlocs(g);
+            
+        }
+
+        protected void drawBlocs(Graphics g )
+        {
+            Rectangle OptiDrawRect;
+            if (Level.currentLevel.Dark)
+                OptiDrawRect = player.getRayonRectangle(player.light *3/4 );
+                else
+            {
+                OptiDrawRect =getRectFromScope();
+                OptiDrawRect.Height += Level.blocH;
+            }
+
+            var levelMatrice = Level.currentLevel.getLevelMatrice();
+            var debX = OptiDrawRect.X / blocH;
+            var debY = OptiDrawRect.Y / blocH;
+            if (debY >= levelMatrice.GetLength(1))
+                debY = 0;
+            if (debX >= levelMatrice.GetLength(0))
+                debX = 0;
+            var endX = debX + OptiDrawRect.Width / blocH;
+            var endY = debY + OptiDrawRect.Height / blocH;
+
+            // Dessin du niveau
+            if(levelMatrice != null)
+                for (int i = debX; i <= endX; i++)
+                {
+                    for(int j = debY; j <= endY ; j++)
+                    {
+                        try
+                        {
+                            if (levelMatrice[i, j] != null )
+                                g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));
+                        }
+                        catch (Exception)
+                        {
+
+                          
+                        }
+                        
+
+                    
+                    }
+                }
+            
             
         }
     }
