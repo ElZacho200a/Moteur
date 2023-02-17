@@ -12,10 +12,17 @@ namespace Moteur
         public static Player player;
         private static (int X , int Y , int Width , int Height )  Scope ;
         public  static int Height, Width;
-       
+        public Bitmap rawFront;
         public static (int X, int Y, int Width, int Height) GetScope() { return Scope; }
         public Camera(int Widht , int Heigt):base()
         {
+
+            rawFront = new Bitmap(Widht, Heigt); // Une image Noir de la taille de l'écran permettant d'opti les rendu en mode Dark
+            using (var g = Graphics.FromImage(rawFront))
+            {
+                g.Clear(Color.Black);
+            }
+            
             
            Height = Heigt;
             Width = Widht;
@@ -179,12 +186,13 @@ namespace Moteur
             }
         }
 
-        private PathGradientBrush getGrandientForEntity(ActiveEntity entity)
+        private PathGradientBrush getGrandientForEntity(ActiveEntity entity , int Needed)
         {
            
             GraphicsPath path = new GraphicsPath();
             var rect = player.getRayonRectangle(entity.light);
-            rect.Offset(-Scope.X, -Scope.Y);
+            rect.X = Needed;
+            rect.Y = Needed;
             path.AddEllipse(rect);
 
             // Use the path to construct a brush.
@@ -200,20 +208,28 @@ namespace Moteur
             // 
             return pthGrBrush;
         }
-        public Bitmap getDarkFront()
+        public (Bitmap front, Point) getDarkFront()
         {
-            var front = new Bitmap(Width, Height);
+            var NeededDecal = (int)(2.5 * Level.blocH);
+            var pthGrBrush = getGrandientForEntity(player , NeededDecal/2);
+            
+            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +NeededDecal ,(int)pthGrBrush.Rectangle.Height +NeededDecal);
             using (var g = Graphics.FromImage(front))
             {
                 g.Clear(Color.Black);
+                
                 g.CompositingMode = CompositingMode.SourceCopy;
-                var pthGrBrush = getGrandientForEntity(player);
+                
                 g.FillEllipse( pthGrBrush, pthGrBrush.Rectangle );
-                pthGrBrush.Dispose();
+               
                 g.CompositingMode = CompositingMode.SourceOver;
-                g.Dispose();
+                pthGrBrush.Dispose();
+               
             }
-            return front;
+
+            var p = player.getCenter();
+            p.Offset(-front.Width/2,-front.Height/2);
+            return (front ,p)  ;
         }
         
         protected override void OnPaint(PaintEventArgs e)
@@ -254,10 +270,13 @@ namespace Moteur
             if (Level.currentLevel.Dark) 
             {
                 OptiDrawRect = player.getRayonRectangle(player.light );
+                if (BackgroundImage != rawFront)
+                    BackgroundImage = rawFront;
             }
             else
             {
                 OptiDrawRect =getRectFromScope();
+                OptiDrawRect.Height += Level.blocH;
             }
             var debX = OptiDrawRect.X / blocH;
             var debY = OptiDrawRect.Y / blocH;
@@ -272,7 +291,7 @@ namespace Moteur
             if(levelMatrice != null)
             for (int i = debX; i <= endX; i++)
             {
-                for(int j = debY; j <= endY +1; j++)
+                for(int j = debY; j <= endY ; j++)
                 {
                     try
                         {
@@ -338,10 +357,10 @@ namespace Moteur
 
             if (Level.currentLevel.Dark)
             {
-                using (var front = getDarkFront() )
-                {
-                    g.DrawImage( front,  Scope.X, Scope.Y);
-                }
+                (Bitmap front, Point point) result = getDarkFront();
+                g.DrawImage( result.front,  result.point);
+                result.front.Dispose();   
+                
                
             }
                 

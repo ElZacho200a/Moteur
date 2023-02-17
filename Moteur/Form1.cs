@@ -44,7 +44,11 @@ namespace Moteur
                     Level.currentLevel.Dark = !Level.currentLevel.Dark;
                     break;
                 case Keys.S :
-                    
+                    Camera.player.light--;
+                    break;
+                    break;
+                case Keys.P :
+                    Camera.player.light++;
                     break;
                 case Keys.Enter: // le tir 
                     try // pour le debug
