@@ -1,5 +1,7 @@
 using Moteur.Entites;
 using System.Collections.Concurrent;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Moteur;
 
@@ -94,24 +96,7 @@ public class Level
         }
         Camera.player.ResetSprite();
         palette = new Palette(blocH);
-        try
-        {
-            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
-            lines[0] = lines[0].Split("..")[1];
-            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
-            for (int i = 1; i < lines.Length; i++)
-            {
-                entities.Add(getEncodedEntity(lines[i]));
-            }
-            Background = new Bitmap(lines[0]);
-            //var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
-            //Background = new Bitmap(Background,size);
-        }
-        catch (Exception e)
-        {
-            
-            //No Data Pack Found or Data Pack is corrupted
-        }
+       LoadFromRoomFile();
         //Construction à partir de l'image ROOM_ID.png
         for (int i = 0; i < rawLevel.Width; i++)
             for (int j = 0; j < rawLevel.Height; j++)
@@ -139,9 +124,46 @@ public class Level
 
             }
     }
-    
-    
 
+    private void LoadFromXML()
+    {
+        try
+        {
+           // XmlSerializer serializer = new XmlSerializer(typeof(RoomSave));
+            using (TextReader reader = new StreamReader($"ROOM_{ID}.xml"))
+            {
+                //RoomSave roomSave = (RoomSave)serializer.Deserialize(reader);
+            }
+        }
+        catch (Exception e)
+        {
+           
+        }
+       
+        
+    }
+
+    private void LoadFromRoomFile()
+    {
+        try
+        {
+            String[] lines = File.ReadAllLines(findDataFilenamebyID(ID));
+            lines[0] = lines[0].Split("..")[1];
+            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
+            for (int i = 1; i < lines.Length; i++)
+            {
+                entities.Add(getEncodedEntity(lines[i]));
+            }
+            Background = new Bitmap(lines[0]);
+            //var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
+            //Background = new Bitmap(Background,size);
+        }
+        catch (Exception e)
+        {
+            
+            //No Data Pack Found or Data Pack is corrupted
+        }
+    }
     public void Activate()
     {
         fullLoaded= true;

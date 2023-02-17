@@ -234,7 +234,7 @@ namespace Moteur
         
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+           
             var g = e.Graphics;
             var levelMatrice = Level.currentLevel.getLevelMatrice();
             var pCoord = player.Coordonates;
@@ -252,16 +252,7 @@ namespace Moteur
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
 
             
-            if (Level.currentLevel.haveBackground())
-            {
-                this.BackgroundImage = Level.currentLevel.getBackground();
-                
-               
-            }
-            else
-            {
-                this.BackgroundImage = null;
-            }
+            
             
                 
             //Variable pour l'optimisation de l'affichage
@@ -269,9 +260,8 @@ namespace Moteur
             Rectangle OptiDrawRect;
             if (Level.currentLevel.Dark) 
             {
-                OptiDrawRect = player.getRayonRectangle(player.light );
-                if (BackgroundImage != rawFront)
-                    BackgroundImage = rawFront;
+                OptiDrawRect = player.getRayonRectangle(player.light *3/4 );
+              
             }
             else
             {
@@ -321,7 +311,7 @@ namespace Moteur
                 try
                 {
                     
-                    if (isInScope(entity.Hitbox))
+                    if (entity.Hitbox.IntersectsWith(OptiDrawRect) && isInScope(entity.Hitbox) )
                         if(entity is ActiveEntity)
                         {
                             var active = entity as ActiveEntity;
@@ -366,5 +356,19 @@ namespace Moteur
                 
         }
 
+        protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
+        {
+            if( !Level.currentLevel.Dark)
+                if (Level.currentLevel.haveBackground())
+                {
+                    BackgroundImage = Level.currentLevel.getBackground();
+                    base.OnPaintBackground(paintEventArgs);
+                    
+                   
+                    
+
+                }
+            
+        }
     }
 }
