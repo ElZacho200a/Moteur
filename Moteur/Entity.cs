@@ -6,6 +6,7 @@
         public Rectangle Hitbox;
         protected bool isDead = false;
         public bool IsDead => isDead;
+        public string name;
         public abstract void Update();
 
         public Point getCenter()

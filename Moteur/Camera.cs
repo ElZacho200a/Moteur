@@ -330,23 +330,14 @@ namespace Moteur
         
         protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
         {
-            if( !Level.currentLevel.Dark)
-                if (Level.currentLevel.haveBackground())
-                {
-                    BackgroundImage = Level.currentLevel.getBackground();
-                    base.OnPaintBackground(paintEventArgs);
-                   
-                    
-                   
-                    
-
-                }
+           
             var g = paintEventArgs.Graphics;
             g.TranslateTransform( -Scope.X, -Scope.Y, MatrixOrder.Append);
             drawBlocs(g);
             
         }
 
+       
         protected void drawBlocs(Graphics g )
         {
             Rectangle OptiDrawRect;
@@ -359,6 +350,9 @@ namespace Moteur
             }
 
             var levelMatrice = Level.currentLevel.getLevelMatrice();
+            var BackGroundMatrice = Level.currentLevel.BackGroundMatrice;
+            var BackW = BackGroundMatrice.GetLength(0);
+            var BackH = BackGroundMatrice.GetLength(1);
             var debX = OptiDrawRect.X / blocH;
             var debY = OptiDrawRect.Y / blocH;
             if (debY >= levelMatrice.GetLength(1))
@@ -376,8 +370,13 @@ namespace Moteur
                     {
                         try
                         {
+                            if (Level.currentLevel.haveBackground() && !Level.currentLevel.getCollisonMatrice()[i, j])
+                            {
+                                g.DrawImage(BackGroundMatrice[i % BackW,j% BackH],i * Level.blocH, j * Level.blocH);
+                            }
                             if (levelMatrice[i, j] != null )
-                                g.DrawImage(levelMatrice[i, j], new Point(i * Level.blocH, j * Level.blocH));
+                                g.DrawImage(levelMatrice[i, j],i * Level.blocH, j * Level.blocH);
+                            
                         }
                         catch (Exception)
                         {
