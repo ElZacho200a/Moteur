@@ -158,11 +158,11 @@ public class Level
                 imgMatrice[i , j ] = new Bitmap(bitmap.Clone(rect, bitmap.PixelFormat), size);
                 rect.Y += 50;
             }
-            Background.Dispose();
-            rect.Y = 0;
+           
+            rect.Y = 0; 
             rect.X += 50;
         }
-
+        Background.Dispose();
         return imgMatrice;
     }
 
