@@ -76,4 +76,8 @@ public class Palette
         return ne;
     }
 
+    public static Rectangle getRectFromBitmap(Bitmap img)
+    {
+        return new Rectangle(0, 0, img.Width, img.Height);
+    }
 }
