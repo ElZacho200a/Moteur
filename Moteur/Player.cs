@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing.Drawing2D;
 using Moteur.Entites;
 
 namespace Moteur
 {
     internal class Player : LivingEntity
     {
-        protected int MaxSpeed => Level.blocH/4;
-        private Bitmap darkFront;
+        protected  new int MaxSpeed => Level.blocH/4;
+        private Bitmap? darkFront;
 
         public Bitmap DarkFront
         {
@@ -38,7 +32,7 @@ namespace Moteur
             }
         }
         
-        public Player(): base()
+        public Player()
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
@@ -134,7 +128,7 @@ namespace Moteur
             return true;
         }
         
-        private PathGradientBrush getGrandient( int Needed)
+        private PathGradientBrush GetGrandient( int Needed)
         {
            
             GraphicsPath path = new GraphicsPath();
@@ -159,10 +153,10 @@ namespace Moteur
         
         private Bitmap GenerateDarkFront()
         {
-            var NeededDecal = (int)(4 * Level.blocH);
-            var pthGrBrush = getGrandient( NeededDecal/2);
+            var neededDecal = (4 * Level.blocH);
+            var pthGrBrush = GetGrandient( neededDecal/2);
             
-            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +NeededDecal ,(int)pthGrBrush.Rectangle.Height +NeededDecal);
+            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +neededDecal ,(int)pthGrBrush.Rectangle.Height +neededDecal);
             using (var g = Graphics.FromImage(front))
             {
                 g.Clear(Color.Black);

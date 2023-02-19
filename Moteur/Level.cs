@@ -150,19 +150,21 @@ public class Level
         var imgMatrice = new Bitmap[bitmap.Width / 50, bitmap.Height / 50];
         var size = new Size(blocH + Level.blocH / 50 , blocH + Level.blocH / 50 );
         var rect = new Rectangle(0, 0, 50, 50);
-        for (var i = 0; i  < imgMatrice.GetLength(0); i ++)
+        var w = Math.Min(imgMatrice.GetLength(0) , levelMatrice.GetLength(0));
+        var h = Math.Min(imgMatrice.GetLength(1) , levelMatrice.GetLength(1));
+        for (var i = 0; i  < w ; i ++)
         {
-            for (var j = 0; j  < imgMatrice.GetLength(1); j ++)
+            for (var j = 0; j  < h; j ++)
             {
-               
-                imgMatrice[i , j ] = new Bitmap(bitmap.Clone(rect, bitmap.PixelFormat), size);
+                var img = bitmap.Clone(rect, bitmap.PixelFormat);
+                imgMatrice[i, j] = new Bitmap(img, size);
                 rect.Y += 50;
             }
-           
-            rect.Y = 0; 
+
+            rect.Y = 0;
             rect.X += 50;
         }
-        Background.Dispose();
+
         return imgMatrice;
     }
 
