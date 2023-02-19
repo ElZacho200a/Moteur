@@ -18,8 +18,8 @@ namespace Moteur
         {
             get
             {
-                if (darkFront == null) ;
-                darkFront = GenerateDarkFront();
+                if (darkFront == null) 
+                    darkFront = GenerateDarkFront();
                 return darkFront;
             }
             
@@ -33,6 +33,7 @@ namespace Moteur
                 if(value <= 0)
                     return;
                 light = value;
+                darkFront.Dispose();
                 darkFront = GenerateDarkFront();
             }
         }
