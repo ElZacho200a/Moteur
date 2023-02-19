@@ -33,7 +33,7 @@ namespace Moteur
     
            
              player = new Player();
-            new Level(0);
+            new Level(12);
            
             ResetScope();
             Timer timer= new Timer();
@@ -186,51 +186,8 @@ namespace Moteur
             }
         }
 
-        private PathGradientBrush getGrandientForEntity(ActiveEntity entity , int Needed)
-        {
-           
-            GraphicsPath path = new GraphicsPath();
-            var rect = player.getRayonRectangle(entity.light);
-            rect.X = Needed;
-            rect.Y = Needed;
-            path.AddEllipse(rect);
-
-            // Use the path to construct a brush.
-            PathGradientBrush pthGrBrush = new PathGradientBrush(path);
-
-            // Set the color at the center of the path to blue.
-            pthGrBrush.CenterColor = Color.FromArgb(120, 0, 0, 0);
-
-            // Set the color along the entire boundary 
-            // of the path to aqua.
-            Color[] colors = { Color.FromArgb(255, 0, 0, 0) };
-            pthGrBrush.SurroundColors = colors;
-            // 
-            return pthGrBrush;
-        }
-        public (Bitmap front, Point) getDarkFront()
-        {
-            var NeededDecal = (int)(2.5 * Level.blocH);
-            var pthGrBrush = getGrandientForEntity(player , NeededDecal/2);
-            
-            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +NeededDecal ,(int)pthGrBrush.Rectangle.Height +NeededDecal);
-            using (var g = Graphics.FromImage(front))
-            {
-                g.Clear(Color.Black);
-                
-                g.CompositingMode = CompositingMode.SourceCopy;
-                
-                g.FillEllipse( pthGrBrush, pthGrBrush.Rectangle );
-               
-                g.CompositingMode = CompositingMode.SourceOver;
-                pthGrBrush.Dispose();
-               
-            }
-
-            var p = player.getCenter();
-            p.Offset(-front.Width/2,-front.Height/2);
-            return (front ,p)  ;
-        }
+        
+       
         
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -260,7 +217,7 @@ namespace Moteur
             Rectangle OptiDrawRect;
             if (Level.currentLevel.Dark) 
             {
-                OptiDrawRect = player.getRayonRectangle(player.light *3/4 );
+                OptiDrawRect = player.getRayonRectangle(player.Light *3/4 );
               
             }
             else
@@ -318,9 +275,11 @@ namespace Moteur
 
             if (Level.currentLevel.Dark)
             {
-                (Bitmap front, Point point) result = getDarkFront();
-                g.DrawImage( result.front,  result.point);
-                result.front.Dispose();   
+                var front = player.DarkFront;
+                var p = player.getCenter();
+                p.Offset(-front.Width/2 , -front.Height /2);
+                g.DrawImage( front, p  );
+                   
                 
                
             }
@@ -342,7 +301,7 @@ namespace Moteur
         {
             Rectangle OptiDrawRect;
             if (Level.currentLevel.Dark)
-                OptiDrawRect = player.getRayonRectangle(player.light *3/4 );
+                OptiDrawRect = player.getRayonRectangle(player.Light  );
                 else
             {
                 OptiDrawRect =getRectFromScope();
@@ -361,7 +320,9 @@ namespace Moteur
                 debX = 0;
             var endX = debX + OptiDrawRect.Width / blocH;
             var endY = debY + OptiDrawRect.Height / blocH;
-
+            var p = player.getCenter();
+            p.X /= Level.blocH;
+            p.Y /= Level.blocH;
             // Dessin du niveau
             if(levelMatrice != null)
                 for (int i = debX; i <= endX; i++)
@@ -370,6 +331,8 @@ namespace Moteur
                     {
                         try
                         {
+                          // if(Level.currentLevel.Dark && player.isInLightRadius(i,j))
+                           //    continue;
                             if (Level.currentLevel.haveBackground() && !Level.currentLevel.getCollisonMatrice()[i, j])
                             {
                                 g.DrawImage(BackGroundMatrice[i % BackW,j% BackH],i * Level.blocH, j * Level.blocH);
