@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -11,7 +12,32 @@ namespace Moteur
     internal class Player : LivingEntity
     {
         protected int MaxSpeed => Level.blocH/4;
-       
+        private Bitmap darkFront;
+
+        public Bitmap DarkFront
+        {
+            get
+            {
+                if (darkFront == null) 
+                    darkFront = GenerateDarkFront();
+                return darkFront;
+            }
+            
+        }
+
+        public new float Light
+        {
+            get => light;
+            set
+            {
+                if(value <= 0)
+                    return;
+                light = value;
+                darkFront.Dispose();
+                darkFront = GenerateDarkFront();
+            }
+        }
+        
         public Player(): base()
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
@@ -107,6 +133,51 @@ namespace Moteur
             Level.currentLevel.addEntity(bullet); // j'ajoute l'entite au bag
             return true;
         }
+        
+        private PathGradientBrush getGrandient( int Needed)
+        {
+           
+            GraphicsPath path = new GraphicsPath();
+            var rect = getRayonRectangle(Light);
+            rect.X = Needed;
+            rect.Y = Needed;
+            path.AddEllipse(rect);
 
+            // Use the path to construct a brush.
+            PathGradientBrush pthGrBrush = new PathGradientBrush(path);
+
+            // Set the color at the center of the path to blue.
+            pthGrBrush.CenterColor = Color.FromArgb(120, 0, 0, 0);
+
+            // Set the color along the entire boundary 
+            // of the path to aqua.
+            Color[] colors = { Color.FromArgb(255, 0, 0, 0) };
+            pthGrBrush.SurroundColors = colors;
+            // 
+            return pthGrBrush;
+        }
+        
+        private Bitmap GenerateDarkFront()
+        {
+            var NeededDecal = (int)(4 * Level.blocH);
+            var pthGrBrush = getGrandient( NeededDecal/2);
+            
+            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +NeededDecal ,(int)pthGrBrush.Rectangle.Height +NeededDecal);
+            using (var g = Graphics.FromImage(front))
+            {
+                g.Clear(Color.Black);
+                
+                g.CompositingMode = CompositingMode.SourceCopy;
+                
+                g.FillEllipse( pthGrBrush, pthGrBrush.Rectangle );
+               
+                g.CompositingMode = CompositingMode.SourceOver;
+                pthGrBrush.Dispose();
+               
+            }
+
+            
+            return front  ;
+        }
     }
 }

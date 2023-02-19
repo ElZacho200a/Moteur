@@ -21,35 +21,40 @@ namespace Moteur
         protected override bool Moove()
         {
             bool toReturn = false;
+            
             (int nextX, int nextY) nextCoord = (Coordonates.x + (int)Speed.vx, Coordonates.y);
             // On ne met pas le Y en next car On check les collison en X puis en Y
-            if (IsCollided(nextCoord))
+            if (!IsCollided(Coordonates))
             {
-                toReturn = true;
-                nextCoord.nextX -= (int)Speed.vx;
-                Acceleration.ax = 0;
+                if (IsCollided(nextCoord))
+                {
+                    toReturn = true;
+                    nextCoord.nextX -= (int)Speed.vx;
+                    Acceleration.ax = 0;
 
-            }
-            
-                nextCoord.nextY += (int)Speed.vy; // On ajoute alors le Y pour checker une potentielle collision vertical
-                
+                }
+
+                nextCoord.nextY +=
+                    (int)Speed.vy; // On ajoute alors le Y pour checker une potentielle collision vertical
+
                 //Test pour Y
                 if (IsCollided(nextCoord))
                 {
-                    if(sensY == 1)
-                    nextCoord.nextY = PutOnground(nextCoord);
+                    if (sensY == 1)
+                        nextCoord.nextY = PutOnground(nextCoord);
                     else
-                    nextCoord.nextY -= (int)Speed.vy;
+                        nextCoord.nextY -= (int)Speed.vy;
                     Speed.vy = 0;
                     Acceleration.ay = 0;
 
                 }
-                else 
-                { 
-                Acceleration.ay = Gravity; // Dans le cas ou l'entité  ne touche pas le sol, elle subit la gravité 
-                } 
-                
-                Coordonates = nextCoord; // Une fois le traitement des nouvelles coordonnées on les substitut au coord actuelles
+                else
+                {
+                    Acceleration.ay = Gravity; // Dans le cas ou l'entité  ne touche pas le sol, elle subit la gravité 
+                }
+            }
+
+            Coordonates = nextCoord; // Une fois le traitement des nouvelles coordonnées on les substitut au coord actuelles
                 
                 //Fin de la mise à jour de coordonné de l'entité
                 //Mise à jour de la vitesse avec l'accélération

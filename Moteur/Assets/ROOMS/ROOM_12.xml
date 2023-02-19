@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><RoomSave>
+  <raws>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>18</x>
+      <y>49</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>49</x>
+      <y>49</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>69</x>
+      <y>49</y>
+    </Entity>
+  </raws>
+  <isDark>true</isDark>
+  <BackgroundPath>Background:Background:Background:../Backgrounds/back_crypte.png</BackgroundPath>
+</RoomSave>
