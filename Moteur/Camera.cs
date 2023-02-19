@@ -208,7 +208,7 @@ namespace Moteur
             //Translation des sprites en fonction des coord du joueur
 
 
-            g.TranslateTransform(-Scope.X, -Scope.Y, MatrixOrder.Append);
+            g.TranslateTransform(-Scope.X, -Scope.Y);
 
 
             //Variable pour l'optimisation de l'affichage
@@ -241,12 +241,7 @@ namespace Moteur
                             if (active != null)
                                 g.DrawImage(active.Sprite, active.Hitbox.Location);
                         }
-                        else if (entity is Porte)
-                        {
-                            var porte = entity as Porte;
-                            if (porte != null)
-                                g.DrawImage(porte.texture, porte.Hitbox.Location);
-                        }
+                       
                 }
                 catch (Exception)
                 {
@@ -274,7 +269,7 @@ namespace Moteur
         protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
         {
             var g = paintEventArgs.Graphics;
-            g.TranslateTransform(-Scope.X, -Scope.Y, MatrixOrder.Append);
+            g.TranslateTransform(-Scope.X, -Scope.Y);
             drawBlocs(g);
         }
 
@@ -328,6 +323,13 @@ namespace Moteur
                         }
                     }
                 }
+
+            var portes = from entity in Level.currentLevel.GetEntities() where entity is Porte select entity;
+            foreach (Porte porte in portes)
+            {
+                g.DrawImage(porte.texture, porte.Hitbox.Location);
+            }
+                
         }
     }
 }
