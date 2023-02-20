@@ -38,7 +38,7 @@ namespace Moteur
 
 
             player = new Player();
-            new Level(12);
+            new Level(0);
 
             ResetScope();
             Timer timer = new Timer();
