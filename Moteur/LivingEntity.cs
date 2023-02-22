@@ -95,9 +95,9 @@ namespace Moteur
             Rectangle toCheck  = new Rectangle(Coord.x, Coord.y , Hitbox.Width , Hitbox.Height );
             // Mise à l'échelle de la Hitbox par rapport à la grille de collisions
             
-            for (int i = toCheck.X; i < toCheck.Width +toCheck.X   ; i ++)
+            for (int i = toCheck.X; i < toCheck.Width +toCheck.X   ; i += 1)
             {
-                for(int j = toCheck.Y;j < toCheck.Height+ toCheck.Y   ; j ++ )
+                for(int j = toCheck.Y;j < toCheck.Height+ toCheck.Y   ; j += 1)
                 {
                     try
                     { 
@@ -108,9 +108,11 @@ namespace Moteur
                     {
                       return false;
                     }
-                   
-                        
+
+
+                    j += blocH - (j % blocH) - 1;
                 }
+                i += blocH -  (i % blocH);
             }
             return false;
 

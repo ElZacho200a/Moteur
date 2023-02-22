@@ -15,6 +15,7 @@ public class Level
     private ConcurrentBag<Entity> entities = new();
     private bool fullLoaded;
     public int ID;
+    public VoidArea? VoidArea;
     protected Bitmap[,] levelMatrice;
 
     public Level(int id)
@@ -109,6 +110,8 @@ public class Level
             LoadFromRoomFile();
         }
 
+        
+        VoidArea = new VoidArea(rawLevel.Width, rawLevel.Height , this);
 
         //Construction à partir de l'image ROOM_ID.png
         for (var i = 0; i < rawLevel.Width; i++)
@@ -119,9 +122,11 @@ public class Level
             {
                 case 1:
                 case 2:
+                   
                     getPalette.loadBloc(color);
                     CollisionMatrice[i, j] = color.R == 1; // setup de la Matrice de Collision
                     levelMatrice[i, j] = getPalette.getImageByColor(color); // setup des Images
+                    VoidArea[i, j] = color.R == 2 && color.G == 28; // Setup DangerousArea
                     break;
 
                 case 5:
@@ -215,7 +220,8 @@ public class Level
     {
         if (!fullLoaded)
             return false;
-
+        if(VoidArea != null)
+            VoidArea.UpdateAnimation();
         try
         {
             foreach (var entity in entities)
@@ -232,7 +238,7 @@ public class Level
         }
         catch (Exception e)
         {
-            throw e;
+            //throw e;
             return false;
         }
 

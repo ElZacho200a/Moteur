@@ -7,6 +7,7 @@ namespace Moteur
     {
         protected  new int MaxSpeed => Level.blocH/4;
         private Bitmap? darkFront;
+        private Point LastPos;
 
         public Bitmap DarkFront
         {
@@ -36,7 +37,7 @@ namespace Moteur
         {
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
-            
+            LastPos = new Point(0, 0);
             Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
             Camera.AddSubscriberTenTick(UpdateAnimation);
         }
@@ -46,8 +47,11 @@ namespace Moteur
             Hitbox.Y = Coordonates.y;
             AdaptAnimation();
             Moove();
-            
-          
+            if (IsCollided((Coordonates.x, Coordonates.y + 1)))
+                LastPos =  new Point(Hitbox.Location.X, Hitbox.Location.Y);
+            else if (Level.currentLevel.VoidArea.isCollidedWithEntity(this))
+                Coordonates = (LastPos.X, LastPos.Y);
+
         }
         public void KeyPressed(int sens)
         {
@@ -102,8 +106,6 @@ namespace Moteur
                 else
                     Sprite = spriteManager.GetImage(2, sensX);
             }
-           
-            
         }
         public void ResetSprite()
         {
