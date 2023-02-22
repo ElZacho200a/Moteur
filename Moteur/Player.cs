@@ -47,11 +47,12 @@ namespace Moteur
             Hitbox.Y = Coordonates.y;
             AdaptAnimation();
             Moove();
-            if (IsCollided((Coordonates.x, Coordonates.y + 1)))
-                LastPos =  new Point(Hitbox.Location.X, Hitbox.Location.Y);
-            else if (Level.currentLevel.VoidArea.isCollidedWithEntity(this))
-                Coordonates = (LastPos.X, LastPos.Y);
 
+            if (Speed.vy > 0 && Level.currentLevel.VoidArea.isCollidedWithEntity(this))
+            {
+                Coordonates = (LastPos.X, LastPos.Y);
+                Camera.ResetScope();
+            }
         }
         public void KeyPressed(int sens)
         {
@@ -106,6 +107,13 @@ namespace Moteur
                 else
                     Sprite = spriteManager.GetImage(2, sensX);
             }
+
+            if (IsCollided((Coordonates.x, Coordonates.y + 1)))
+            {
+                
+                LastPos =  new Point(Hitbox.Location.X, Hitbox.Location.Y);
+            }
+                
         }
         public void ResetSprite()
         {

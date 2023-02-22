@@ -51,7 +51,7 @@ namespace Moteur
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             frameCounter = (byte)((frameCounter + 1) % 10);
-            if (frameCounter % 10 == 0)
+            if (frameCounter % 10 == 0) 
             {
                 if (OnTenTick != null)
                     OnTenTick();
