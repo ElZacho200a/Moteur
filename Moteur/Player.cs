@@ -8,6 +8,8 @@ namespace Moteur
         protected  new int MaxSpeed => Level.blocH/4;
         private Bitmap? darkFront;
         private Point LastPos;
+        private List<Item> Inventory;
+
 
         public Bitmap DarkFront
         {
@@ -35,6 +37,7 @@ namespace Moteur
         
         public Player()
         {
+            Inventory = new List<Item> { };
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
             LastPos = new Point(0, 0);
@@ -47,6 +50,7 @@ namespace Moteur
             Hitbox.Y = Coordonates.y;
             AdaptAnimation();
             Moove();
+
 
             if (Speed.vy > 0 && Level.currentLevel.VoidArea.isCollidedWithEntity(this))
             {
@@ -122,6 +126,11 @@ namespace Moteur
             Sprite = spriteManager.GetImage(saveCursor, sensX);
             Hitbox .Width = Sprite.Width;
             Hitbox .Height = Sprite.Height;
+        }
+        public void receiveItem(Item item)
+        {
+            if (item == null) { return; }
+            Inventory.Add(item);
         }
         public void jump()
         {

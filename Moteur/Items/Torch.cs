@@ -10,12 +10,13 @@ namespace Moteur.Items
     {
         public override void OnCatch()
         {
-            throw new NotImplementedException();
+            base.OnCatch();
+            Camera.player.Light += 7;
         }
 
         public override void OnUse()
         {
-            throw new NotImplementedException();
+          
         }
     }
 }

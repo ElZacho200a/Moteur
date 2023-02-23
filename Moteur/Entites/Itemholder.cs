@@ -20,14 +20,26 @@
 
         private  void setup()
         {
+            Camera.player.AddSubscriber(GiveAndDestroy);
             Sprite = Item.GetImage();
             Hitbox = new Rectangle(this[0], this[1], Level.blocH, Level.blocH);
         }
         public override void Update()
         {
-            throw new NotImplementedException();
+            return;
         }
 
+        private void GiveAndDestroy()
+        {
+            if (Camera.player.Hitbox.IntersectsWith(Hitbox))
+            {
+                Camera.player.receiveItem(Item);
+                Item.OnCatch();
+                Camera.player.Equals(GiveAndDestroy);
+                Level.currentLevel.RemoveEntity(this);
+            }
+
+        }
         protected override bool Moove()
         {
             throw new InvalidOperationException();

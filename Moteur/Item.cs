@@ -11,6 +11,7 @@ namespace Moteur
         protected int Unit;
         protected Bitmap Image;
         protected string Name;
+        protected bool Catched;
 
         protected Item() 
         {
@@ -20,7 +21,12 @@ namespace Moteur
         {
             return Image;
         }
-        public abstract void OnCatch();
+        public virtual void OnCatch()
+        {
+            if (Catched)
+                return;
+            Catched = true;
+        }
         public abstract void OnUse();
     }
 }
