@@ -49,6 +49,13 @@
       <x>12</x>
       <y>14</y>
     </Entity>
+    <Entity>
+      <argument>Torch</argument>
+      <name>test</name>
+      <type>Itemholder</type>
+      <x>17</x>
+      <y>15</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
