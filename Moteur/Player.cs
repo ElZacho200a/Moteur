@@ -30,6 +30,8 @@ namespace Moteur
                 if(value <= 0)
                     return;
                 light = value;
+                
+                if(darkFront !=null)
                 darkFront.Dispose();
                 darkFront = GenerateDarkFront();
             }

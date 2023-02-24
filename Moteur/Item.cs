@@ -12,6 +12,7 @@ namespace Moteur
         protected Bitmap Image;
         protected string Name;
         protected bool Catched;
+        
 
         protected Item() 
         {
@@ -29,4 +30,6 @@ namespace Moteur
         }
         public abstract void OnUse();
     }
+
+   
 }

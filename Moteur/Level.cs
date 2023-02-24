@@ -249,6 +249,11 @@ public class Level
     {
         entities.Add(entity);
     }
+    public void RemoveEntity(Entity entity)
+    {
+        
+        entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
+    }
 
     public void destroy()
     {
@@ -278,10 +283,7 @@ public class Level
         }
     }
 
-    public void RemoveEntity(Entity entity)
-    {
-        entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
-    }
+    
 
     //ElRatz|748!517!:
     private Entity getEntityFromXML(XmlNode node)
