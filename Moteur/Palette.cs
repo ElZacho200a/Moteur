@@ -51,6 +51,19 @@ public class Palette
         }
        
     }
+
+    public Color simplify(Color color) => Color.FromArgb(color.A, color.R, color.G, 0);
+    public bool isOpaque(Bitmap img)
+    {
+        if (img == null)
+            return true;
+        for (int i = 0; i < img.Width; i+=3 )
+            for (int j = 0; j < img.Height; j+= 3)
+                if (img.GetPixel(i, j).A ==0)
+                    return false;
+        return true;
+
+    }
     public Bitmap turn(Bitmap img)
     {
         Bitmap ne = new Bitmap(img);
