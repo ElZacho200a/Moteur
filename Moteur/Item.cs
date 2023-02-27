@@ -23,9 +23,11 @@ namespace Moteur
             return Image;
         }
         
-        public Bitmap GetResizedImage()
+        public Bitmap GetResizedImage(int size = -1)
         {
-            return new Bitmap(Image ,Level.blocH,Level.blocH);
+            if (size == -1)
+                size = Level.blocH;
+            return new Bitmap(Image ,size ,size);
         }
         public virtual void OnCatch()
         {

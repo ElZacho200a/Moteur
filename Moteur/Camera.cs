@@ -13,6 +13,9 @@ namespace Moteur
         private static (int X, int Y, int Width, int Height ) Scope;
         public static int Height, Width;
         public Bitmap rawFront;
+        public Bitmap PauseMenu;
+        public int gameState = 0;
+        private double pauseRatio;
 
         public static (int X, int Y, int Width, int Height) GetScope()
         {
@@ -31,14 +34,16 @@ namespace Moteur
 
             Height = Heigt;
             Width = Widht;
-
+            PauseMenu = new Bitmap(Form1.RootDirectory + "Assets/Textures/PauseMenu.png");
+            PauseMenu = new Bitmap(PauseMenu, Width * 4/5 , Height* 4/5 );
+            pauseRatio = PauseMenu.Width / 1920.0;
             this.Size = new System.Drawing.Size(Widht, Height);
             DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht, Height);
 
 
             player = new Player();
-            new Level(10);
+            new Level(1);
 
             ResetScope();
             Timer timer = new Timer();
@@ -50,20 +55,27 @@ namespace Moteur
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            frameCounter = (byte)((frameCounter + 1) % 10);
-            if (frameCounter % 10 == 0) 
+            if (gameState == 1)
             {
-                if (OnTenTick != null)
-                    OnTenTick();
-            }
-
-
-            if (Level.currentLevel.Update())
-            {
-                player.Update();
                 Invalidate();
-                // ajustement de la cam 
-                UpdateScope();
+            }
+            else if (gameState == 0)
+            {
+                frameCounter = (byte)((frameCounter + 1) % 10);
+                if (frameCounter % 10 == 0)
+                {
+                    if (OnTenTick != null)
+                        OnTenTick();
+                }
+
+
+                if (Level.currentLevel.Update())
+                {
+                    player.Update();
+                    Invalidate();
+                    // ajustement de la cam 
+                    UpdateScope();
+                }
             }
         }
 
@@ -168,6 +180,12 @@ namespace Moteur
 
         public void OnInput(KeyEventArgs e)
         {
+            if(e.KeyCode == Keys.Escape)
+                if (gameState == 0)
+                    gameState = 1;
+                else if (gameState == 1)
+                    gameState = 0;
+            if(gameState == 0)
             switch(e.KeyCode)
             {
                 case Keys.Up :
@@ -262,7 +280,7 @@ namespace Moteur
             catch (Exception)
             {
             }
-
+            //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu
             if (Level.currentLevel.Dark)
             {
                 var front = player.DarkFront;
@@ -270,6 +288,29 @@ namespace Moteur
                 p.Offset(-front.Width / 2, -front.Height / 2);
                 g.DrawImage(front, p);
             }
+
+            g.TranslateTransform(Scope.X ,Scope.Y);
+            if (gameState == 1)
+            {
+                // On affiche le menu pause
+                int x = (Width - PauseMenu.Width) / 2;
+                int y = (Height - PauseMenu.Height) / 2;
+                g.DrawImage(PauseMenu ,x, y);
+                int itemRatio = (int)(162 * pauseRatio);
+                int decalX = 0, decalY = 0;
+                for (int i = 0; i < 9; i++)
+                {
+                    
+                    if(i >= player.Inventory.Count )
+                        return;
+                    decalX = (int)((itemRatio + 30 * pauseRatio) * (i % 3));
+                    decalY = (int)((itemRatio + 30 * pauseRatio) * (i / 3));
+                    g.DrawImage(player.Inventory[i].GetResizedImage(itemRatio) , (int)(x + 42 *pauseRatio ) + decalX,(int)(y +503*pauseRatio) + decalY);
+                    
+                }
+            }
+            
+            
         }
 
 
