@@ -12,6 +12,7 @@ namespace Moteur
         protected Bitmap Image;
         protected string Name;
         protected bool Catched = false;
+        protected string description = "Ceci est un item et quelqu'un à oublié de faire sa description shaaaammme";
         
 
         protected Item() 
