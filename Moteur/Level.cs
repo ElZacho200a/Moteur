@@ -179,7 +179,8 @@ public class Level
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(filename);
         var rawEntities = xmlDocument.GetElementsByTagName("Entity");
-        foreach (XmlNode rawEntity in rawEntities) entities.Add(getEntityFromXML(rawEntity));
+        foreach (XmlNode rawEntity in rawEntities) 
+            entities.Add(getEntityFromXML(rawEntity));
 
         var RoomSave = xmlDocument.SelectSingleNode("RoomSave");
         Dark = bool.Parse(RoomSave.SelectSingleNode("isDark").InnerText);

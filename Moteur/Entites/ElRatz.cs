@@ -3,7 +3,7 @@
 internal class ElRatz : LivingEntity
 {
     protected new int MaxSpeed => 10;
-    public ElRatz(int x, int y)
+    public ElRatz(int x, int y)//Obligatoire selon la convention de Genève 
     {
         Coordonates = (x, y);
         Hitbox = new Rectangle(x,y,Level.blocH,Level.blocH);
@@ -30,8 +30,7 @@ internal class ElRatz : LivingEntity
 
         if (this.Life == 0)
         {
-            var level = Level.currentLevel;
-            level.RemoveEntity(this);
+            isDead= true;
         }
     }
 

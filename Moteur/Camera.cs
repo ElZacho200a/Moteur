@@ -166,30 +166,37 @@ namespace Moteur
             return new Rectangle(Scope.X, Scope.Y, Scope.Width, Scope.Height);
         }
 
-        public void mvPl(Keys k)
+        public void OnInput(KeyEventArgs e)
         {
-            switch (k)
+            switch(e.KeyCode)
             {
-                case Keys.Up:
-                {
+                case Keys.Up :
                     player.KeyUp();
                     break;
-                }
                 case Keys.Left:
-                {
                     player.KeyPressed(-1);
                     break;
-                }
                 case Keys.Right:
-                {
                     player.KeyPressed(1);
                     break;
-                }
-                /*case Keys.Enter:
-                {
-                    player.shoot();
+                case Keys.Space:
+                    player.jump();
                     break;
-                }*/
+                case Keys.Z :
+                    Level.currentLevel.Dark = !Level.currentLevel.Dark;
+                    break;
+                case Keys.Enter: // le tir 
+                    try // pour le debug
+                    {
+                        player.shoot();
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine("t'as merde frero");
+                        throw;
+                    }
+                    break;
+
             }
         }
 
@@ -200,8 +207,8 @@ namespace Moteur
             var levelMatrice = Level.currentLevel.getLevelMatrice();
             var pCoord = player.Coordonates;
 
-            var decalY = Screen.FromControl(this).Bounds.Height;
-            decalY -= levelMatrice.GetLength(1) * Level.blocH;
+           // var decalY = Screen.FromControl(this).Bounds.Height;
+            //decalY -= levelMatrice.GetLength(1) * Level.blocH;
             // translation des tout les élement 
             // Cette décal permet de mettre le bas du niveau en bas de l'écran cette utilité est voué à disparaitre
             //g.TranslateTransform(0.0F, (float)decalY, MatrixOrder.Append);

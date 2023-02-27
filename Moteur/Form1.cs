@@ -20,49 +20,13 @@ namespace Moteur
         private void camera_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             
-            camera.mvPl(e.KeyCode);
+           
             camera.Invalidate();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-           switch(e.KeyCode)
-            {
-                case Keys.Up :
-                    Camera.player.KeyUp();
-                    break;
-                case Keys.Left:
-                    Camera.player.KeyPressed(-1);
-                    break;
-                case Keys.Right:
-                    Camera.player.KeyPressed(1);
-                    break;
-                case Keys.Space:
-                    Camera.player.jump();
-                    break;
-                case Keys.Z :
-                    Level.currentLevel.Dark = !Level.currentLevel.Dark;
-                    break;
-                case Keys.S :
-                    Camera.player.Light--;
-                    break;
-                    break;
-                case Keys.P :
-                    Camera.player.Light++;
-                    break;
-                case Keys.Enter: // le tir 
-                    try // pour le debug
-                    {
-                        Camera.player.shoot();
-                    }
-                    catch (Exception exception)
-                    {
-                        Console.WriteLine("t'as merde frero");
-                        throw;
-                    }
-                    break;
-
-            }
+          camera.OnInput(e);
             
         }
 

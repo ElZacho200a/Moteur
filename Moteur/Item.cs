@@ -11,7 +11,7 @@ namespace Moteur
         protected int Unit;
         protected Bitmap Image;
         protected string Name;
-        protected bool Catched;
+        protected bool Catched = false;
         
 
         protected Item() 
@@ -21,6 +21,11 @@ namespace Moteur
         public Bitmap GetImage()
         {
             return Image;
+        }
+        
+        public Bitmap GetResizedImage()
+        {
+            return new Bitmap(Image ,Level.blocH,Level.blocH);
         }
         public virtual void OnCatch()
         {
