@@ -38,7 +38,7 @@ namespace Moteur
 
 
             player = new Player();
-            new Level(0);
+            new Level(10);
 
             ResetScope();
             Timer timer = new Timer();
@@ -113,8 +113,8 @@ namespace Moteur
                 Scope.X += speedInt.vx;
             }
 
-            if ((Scope.Y + (Scope.Height / 3) > (player.Coordonates.y) && player.sensY == -1) ||
-                (Scope.Y + (Scope.Height / 3 * 2) < player.Coordonates.y && player.sensY == 1))
+            if ((Scope.Y + (Scope.Height / 2) > (player.Coordonates.y) && player.sensY == -1) ||
+                (Scope.Y + (Scope.Height /2) < player.Coordonates.y && player.sensY == 1))
             {
                 // Changement de la caméra en X
 
