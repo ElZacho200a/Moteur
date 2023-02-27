@@ -38,7 +38,7 @@ namespace Moteur
 
 
             player = new Player();
-            new Level(1);
+            new Level(0);
 
             ResetScope();
             Timer timer = new Timer();
@@ -310,13 +310,13 @@ namespace Moteur
                         {
                             // if(Level.currentLevel.Dark && player.isInLightRadius(i,j))
                             //    continue;
-                            if (Level.currentLevel.haveBackground() && !Level.currentLevel.getCollisonMatrice()[i, j])
+                            if (Level.currentLevel.haveBackground() && !Level.currentLevel.BackgroundNeedded[i, j])
                             {
                                 g.DrawImage(BackGroundMatrice[i % BackW, j % BackH], i * Level.blocH, j * Level.blocH);
                             }
 
                             if (levelMatrice[i, j] != null)
-                                g.DrawImage(levelMatrice[i, j], i * Level.blocH, j * Level.blocH);
+                              g.DrawImage(levelMatrice[i, j], i * Level.blocH, j * Level.blocH);
                         }
                         catch (Exception)
                         {
