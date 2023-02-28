@@ -1,6 +1,6 @@
 ﻿namespace Moteur;
 
-internal class PauseMenu
+public class PauseMenu
 {
     //L'image de base du menu au format 1920X1080
     private Bitmap baseImage;
