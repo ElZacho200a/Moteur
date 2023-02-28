@@ -8,7 +8,13 @@ namespace Moteur
         protected  new int MaxSpeed => Level.blocH/4;
         private Bitmap? darkFront;
         private Point LastPos;
-        private List<Item> Inventory;
+        private List<Item> inventory;
+
+        public List<Item> Inventory
+        {
+            get => inventory;
+           
+        }
 
 
         public Bitmap DarkFront
@@ -39,7 +45,7 @@ namespace Moteur
         
         public Player()
         {
-            Inventory = new List<Item> { };
+            inventory = new List<Item> { };
             spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
             LastPos = new Point(0, 0);

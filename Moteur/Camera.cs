@@ -13,6 +13,9 @@ namespace Moteur
         private static (int X, int Y, int Width, int Height ) Scope;
         public static int Height, Width;
         public Bitmap rawFront;
+        public Bitmap PauseMenu;
+        public int gameState = 0;
+        private double pauseRatio;
 
         public static (int X, int Y, int Width, int Height) GetScope()
         {
@@ -31,7 +34,9 @@ namespace Moteur
 
             Height = Heigt;
             Width = Widht;
-
+            PauseMenu = new Bitmap(Form1.RootDirectory + "Assets/Textures/PauseMenu.png");
+            PauseMenu = new Bitmap(PauseMenu, Width * 4/5 , Height* 4/5 );
+            pauseRatio = PauseMenu.Width / 1920.0;
             this.Size = new System.Drawing.Size(Widht, Height);
             DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht, Height);
@@ -50,20 +55,27 @@ namespace Moteur
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            frameCounter = (byte)((frameCounter + 1) % 10);
-            if (frameCounter % 10 == 0) 
+            if (gameState == 1)
             {
-                if (OnTenTick != null)
-                    OnTenTick();
-            }
-
-
-            if (Level.currentLevel.Update())
-            {
-                player.Update();
                 Invalidate();
-                // ajustement de la cam 
-                UpdateScope();
+            }
+            else if (gameState == 0)
+            {
+                frameCounter = (byte)((frameCounter + 1) % 10);
+                if (frameCounter % 10 == 0)
+                {
+                    if (OnTenTick != null)
+                        OnTenTick();
+                }
+
+
+                if (Level.currentLevel.Update())
+                {
+                    player.Update();
+                    Invalidate();
+                    // ajustement de la cam 
+                    UpdateScope();
+                }
             }
         }
 
@@ -113,8 +125,8 @@ namespace Moteur
                 Scope.X += speedInt.vx;
             }
 
-            if ((Scope.Y + (Scope.Height / 3) > (player.Coordonates.y) && player.sensY == -1) ||
-                (Scope.Y + (Scope.Height / 3 * 2) < player.Coordonates.y && player.sensY == 1))
+            if ((Scope.Y + (Scope.Height / 2) > (player.Coordonates.y) && player.sensY == -1) ||
+                (Scope.Y + (Scope.Height /2) < player.Coordonates.y && player.sensY == 1))
             {
                 // Changement de la caméra en X
 
@@ -166,30 +178,43 @@ namespace Moteur
             return new Rectangle(Scope.X, Scope.Y, Scope.Width, Scope.Height);
         }
 
-        public void mvPl(Keys k)
+        public void OnInput(KeyEventArgs e)
         {
-            switch (k)
+            if(e.KeyCode == Keys.Escape)
+                if (gameState == 0)
+                    gameState = 1;
+                else if (gameState == 1)
+                    gameState = 0;
+            if(gameState == 0)
+            switch(e.KeyCode)
             {
-                case Keys.Up:
-                {
+                case Keys.Up :
                     player.KeyUp();
                     break;
-                }
                 case Keys.Left:
-                {
                     player.KeyPressed(-1);
                     break;
-                }
                 case Keys.Right:
-                {
                     player.KeyPressed(1);
                     break;
-                }
-                /*case Keys.Enter:
-                {
-                    player.shoot();
+                case Keys.Space:
+                    player.jump();
                     break;
-                }*/
+                case Keys.Z :
+                    Level.currentLevel.Dark = !Level.currentLevel.Dark;
+                    break;
+                case Keys.Enter: // le tir 
+                    try // pour le debug
+                    {
+                        player.shoot();
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine("t'as merde frero");
+                        throw;
+                    }
+                    break;
+
             }
         }
 
@@ -200,8 +225,8 @@ namespace Moteur
             var levelMatrice = Level.currentLevel.getLevelMatrice();
             var pCoord = player.Coordonates;
 
-            var decalY = Screen.FromControl(this).Bounds.Height;
-            decalY -= levelMatrice.GetLength(1) * Level.blocH;
+           // var decalY = Screen.FromControl(this).Bounds.Height;
+            //decalY -= levelMatrice.GetLength(1) * Level.blocH;
             // translation des tout les élement 
             // Cette décal permet de mettre le bas du niveau en bas de l'écran cette utilité est voué à disparaitre
             //g.TranslateTransform(0.0F, (float)decalY, MatrixOrder.Append);
@@ -255,7 +280,7 @@ namespace Moteur
             catch (Exception)
             {
             }
-
+            //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu
             if (Level.currentLevel.Dark)
             {
                 var front = player.DarkFront;
@@ -263,6 +288,29 @@ namespace Moteur
                 p.Offset(-front.Width / 2, -front.Height / 2);
                 g.DrawImage(front, p);
             }
+
+            g.TranslateTransform(Scope.X ,Scope.Y);
+            if (gameState == 1)
+            {
+                // On affiche le menu pause
+                int x = (Width - PauseMenu.Width) / 2;
+                int y = (Height - PauseMenu.Height) / 2;
+                g.DrawImage(PauseMenu ,x, y);
+                int itemRatio = (int)(162 * pauseRatio);
+                int decalX = 0, decalY = 0;
+                for (int i = 0; i < 9; i++)
+                {
+                    
+                    if(i >= player.Inventory.Count )
+                        return;
+                    decalX = (int)((itemRatio + 30 * pauseRatio) * (i % 3));
+                    decalY = (int)((itemRatio + 30 * pauseRatio) * (i / 3));
+                    g.DrawImage(player.Inventory[i].GetResizedImage(itemRatio) , (int)(x + 42 *pauseRatio ) + decalX,(int)(y +503*pauseRatio) + decalY);
+                    
+                }
+            }
+            
+            
         }
 
 
@@ -310,13 +358,13 @@ namespace Moteur
                         {
                             // if(Level.currentLevel.Dark && player.isInLightRadius(i,j))
                             //    continue;
-                            if (Level.currentLevel.haveBackground() && !Level.currentLevel.getCollisonMatrice()[i, j])
+                            if (Level.currentLevel.haveBackground() && !Level.currentLevel.BackgroundNeedded[i, j])
                             {
                                 g.DrawImage(BackGroundMatrice[i % BackW, j % BackH], i * Level.blocH, j * Level.blocH);
                             }
 
                             if (levelMatrice[i, j] != null)
-                                g.DrawImage(levelMatrice[i, j], i * Level.blocH, j * Level.blocH);
+                              g.DrawImage(levelMatrice[i, j], i * Level.blocH, j * Level.blocH);
                         }
                         catch (Exception)
                         {

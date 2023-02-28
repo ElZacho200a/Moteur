@@ -17,6 +17,13 @@ public class Level
     public int ID;
     public VoidArea? VoidArea;
     protected Bitmap[,] levelMatrice;
+    protected bool[,] backgroundNeedded;
+
+    public bool[,] BackgroundNeedded
+    {
+        get => backgroundNeedded;
+       
+    }
 
     public Level(int id)
     {
@@ -91,6 +98,7 @@ public class Level
 
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
+        backgroundNeedded = new bool[rawLevel.Width, rawLevel.Height];
         // Construction à partir du ROOM_ID.ROOM
 
         if (levelMatrice.GetLength(0) * blocH < Camera.Width)
@@ -126,6 +134,7 @@ public class Level
                     getPalette.loadBloc(color);
                     CollisionMatrice[i, j] = color.R == 1; // setup de la Matrice de Collision
                     levelMatrice[i, j] = getPalette.getImageByColor(color); // setup des Images
+                    backgroundNeedded[i, j] = getPalette.isOpaque(levelMatrice[i,j]);
                     VoidArea[i, j] = color.R == 2 && color.G == 28; // Setup DangerousArea
                     break;
 
@@ -179,7 +188,8 @@ public class Level
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(filename);
         var rawEntities = xmlDocument.GetElementsByTagName("Entity");
-        foreach (XmlNode rawEntity in rawEntities) entities.Add(getEntityFromXML(rawEntity));
+        foreach (XmlNode rawEntity in rawEntities) 
+            entities.Add(getEntityFromXML(rawEntity));
 
         var RoomSave = xmlDocument.SelectSingleNode("RoomSave");
         Dark = bool.Parse(RoomSave.SelectSingleNode("isDark").InnerText);

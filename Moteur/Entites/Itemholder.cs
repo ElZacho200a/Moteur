@@ -22,7 +22,7 @@
         private  void setup()
         {
             Camera.player.AddSubscriber(GiveAndDestroy);
-            Sprite = Item.GetImage();
+            Sprite = Item.GetResizedImage();
             Hitbox = new Rectangle(this[0], this[1], Level.blocH, Level.blocH);
         }
         public override void Update()
@@ -49,12 +49,12 @@
                 if (help != null)
                 {
                     help.kill();
-                    help = null;
+                    
                 }
                 Camera.player.receiveItem(Item);
                 Item.OnCatch();
                 Camera.player.DelSubscriber(GiveAndDestroy);
-                Level.currentLevel.RemoveEntity(this);
+                isDead = true; 
             }
 
         }
