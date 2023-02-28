@@ -66,7 +66,7 @@ namespace Moteur.Entites
              
                     if (this.Hitbox.IntersectsWith(entity.Hitbox)) // et si on est en contact avec elle
                     {
-                        (entity as LivingEntity).GetLife -= 1; // Alors on lui inflige des dommages
+                        (entity as LivingEntity).Life -= 1; // Alors on lui inflige des dommages
                         return true; 
                     }
                 

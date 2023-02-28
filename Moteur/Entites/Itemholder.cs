@@ -4,6 +4,14 @@
     {
         private Item Item;
         private Helper help;
+        private String _itemName;
+
+        public string ItemName
+        {
+            get => _itemName;
+           
+        }
+        public override string getArgument => _itemName;
         public Itemholder(int x , int y, Item item) : base()
         { 
             Coordonates = (x,y);
@@ -14,6 +22,7 @@
         public Itemholder(int x, int y, string name)
         {
             Coordonates = (x, y);
+            _itemName = name;
             Type type = Type.GetType( "Moteur.Items." +name);
             Item = (Item)Activator.CreateInstance(type);
             setup();
