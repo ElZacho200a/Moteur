@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><RoomSave>
+  <raws>
+    <Entity>
+      <argument></argument>
+      <name>pigeon</name>
+      <type>ElRatz</type>
+      <x>31</x>
+      <y>18</y>
+    </Entity>
+  </raws>
+  <isDark>true</isDark>
+  <BackgroundPath>../Backgrounds/back_crypte.png</BackgroundPath>
+</RoomSave>
