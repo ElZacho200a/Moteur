@@ -4,7 +4,7 @@ using Timer = System.Timers.Timer;
 
 namespace Moteur
 {
-    internal class Camera : Panel
+    public class Camera : Panel
     {
         public static int blocH => (int)(Width / FOV);
         public static int FOV = 30;

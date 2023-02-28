@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Moteur
 {
-    internal abstract class Item
+    public abstract class Item
     {
         protected int Unit;
         protected Bitmap Image;
