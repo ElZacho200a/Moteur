@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Moteur
 {
-    internal abstract class LivingEntity : ActiveEntity
+    public abstract class LivingEntity : ActiveEntity
     {
         protected int Life;
         public virtual double Gravity => Level.blocH / 130.0; // Level.blocH / x -> x  ; Plus x  est grand plus la gravité est faible

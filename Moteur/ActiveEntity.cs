@@ -1,6 +1,6 @@
 ﻿namespace Moteur
 {
-    internal abstract class ActiveEntity : Entity
+    public abstract class ActiveEntity : Entity
     {
         
         public ActiveEntity() { 
