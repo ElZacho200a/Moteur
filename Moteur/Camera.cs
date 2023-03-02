@@ -4,7 +4,7 @@ using Timer = System.Timers.Timer;
 
 namespace Moteur
 {
-    internal class Camera : Panel
+    public class Camera : Panel
     {
         public static int blocH => (int)(Width / FOV);
         public static int FOV = 30;
@@ -13,9 +13,9 @@ namespace Moteur
         private static (int X, int Y, int Width, int Height ) Scope;
         public static int Height, Width;
         public Bitmap rawFront;
-        public Bitmap PauseMenu;
+        public  PauseMenu PauseMenu;
         public int gameState = 0;
-        private double pauseRatio;
+       
 
         public static (int X, int Y, int Width, int Height) GetScope()
         {
@@ -34,9 +34,7 @@ namespace Moteur
 
             Height = Heigt;
             Width = Widht;
-            PauseMenu = new Bitmap(Form1.RootDirectory + "Assets/Textures/PauseMenu.png");
-            PauseMenu = new Bitmap(PauseMenu, Width * 4/5 , Height* 4/5 );
-            pauseRatio = PauseMenu.Width / 1920.0;
+           
             this.Size = new System.Drawing.Size(Widht, Height);
             DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
             Scope = (0, 0, Widht, Height);
@@ -44,7 +42,7 @@ namespace Moteur
 
             player = new Player();
             new Level(1);
-
+            PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             ResetScope();
             Timer timer = new Timer();
             timer.Interval = 1000 / 60;
@@ -105,7 +103,7 @@ namespace Moteur
 
         public void UpdateScope()
         {
-            var speedDouble = player.GetSpeed();
+            var speedDouble = player.Speed1;
             if (Width > Level.currentLevel.GetRealSize.w * blocH)
                 Scope.Width = Level.currentLevel.GetRealSize.w * blocH;
             else
@@ -292,22 +290,7 @@ namespace Moteur
             g.TranslateTransform(Scope.X ,Scope.Y);
             if (gameState == 1)
             {
-                // On affiche le menu pause
-                int x = (Width - PauseMenu.Width) / 2;
-                int y = (Height - PauseMenu.Height) / 2;
-                g.DrawImage(PauseMenu ,x, y);
-                int itemRatio = (int)(162 * pauseRatio);
-                int decalX = 0, decalY = 0;
-                for (int i = 0; i < 9; i++)
-                {
-                    
-                    if(i >= player.Inventory.Count )
-                        return;
-                    decalX = (int)((itemRatio + 30 * pauseRatio) * (i % 3));
-                    decalY = (int)((itemRatio + 30 * pauseRatio) * (i / 3));
-                    g.DrawImage(player.Inventory[i].GetResizedImage(itemRatio) , (int)(x + 42 *pauseRatio ) + decalX,(int)(y +503*pauseRatio) + decalY);
-                    
-                }
+                PauseMenu.Draw(g);
             }
             
             

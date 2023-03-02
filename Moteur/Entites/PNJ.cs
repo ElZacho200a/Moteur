@@ -8,7 +8,5 @@ internal abstract class PNJ:TriggerEntity
         Text = text;
     }
 
-    
-
-   
+    public override string getArgument => Text;
 }

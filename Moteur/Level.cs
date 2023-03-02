@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Xml;
+using System.Xml.Serialization;
 using Moteur.Entites;
 
 namespace Moteur;
@@ -8,6 +9,7 @@ public class Level
 {
     public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
     public static int LevelLoaded;
+    public  XmlSerializer serializer;
     private Bitmap? Background;
     protected Bitmap[,] BackgroundMatrice = {{null}};
     protected bool[,] CollisionMatrice;
@@ -95,7 +97,8 @@ public class Level
     private void setupMatrice(string filename)
     {
         var rawLevel = new Bitmap(Image.FromFile(filename));
-
+        if (serializer == null)
+            serializer = new XmlSerializer(typeof(List<RawEntity>));
         levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
         backgroundNeedded = new bool[rawLevel.Width, rawLevel.Height];
@@ -115,10 +118,14 @@ public class Level
         }
         catch (Exception e)
         {
-            LoadFromRoomFile();
+          LoadFromRoomFile();
         }
-
+      
+         
         
+       
+
+
         VoidArea = new VoidArea(rawLevel.Width, rawLevel.Height , this);
 
         //Construction à partir de l'image ROOM_ID.png
@@ -188,8 +195,32 @@ public class Level
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(filename);
         var rawEntities = xmlDocument.GetElementsByTagName("Entity");
-        foreach (XmlNode rawEntity in rawEntities) 
-            entities.Add(getEntityFromXML(rawEntity));
+        if (!File.Exists(Form1.RootDirectory + $"Save/Save_{ID}.xml"))
+        {
+            
+            foreach (XmlNode rawEntity in rawEntities)
+                entities.Add(getEntityFromXML(rawEntity));
+        }
+        else
+        {
+            FileStream stream = new FileStream(Form1.RootDirectory + $"Save/Save_{ID}.xml", FileMode.Open);
+            List<RawEntity> list = (List<RawEntity>)serializer.Deserialize(stream);
+            foreach (var rawEntity in list)
+                try
+                {
+                    entities.Add(rawEntity.Recover());
+                }
+                catch (Exception e)
+                {
+                  
+                }
+                   
+                
+             
+               
+               
+               
+        }
 
         var RoomSave = xmlDocument.SelectSingleNode("RoomSave");
         Dark = bool.Parse(RoomSave.SelectSingleNode("isDark").InnerText);
@@ -267,8 +298,36 @@ public class Level
 
     public void destroy()
     {
-        entities.Clear();
-        Background = null;
+        //Sauvegarde Des entités 
+              SaveEntities();
+        //Effacement des Object Potentiellement Persistant
+       entities.Clear();
+       Background = null;
+      
+
+    }
+
+    private void SaveEntities()
+    {
+        var Actives = new List<RawEntity>();
+        foreach (var entity in entities)
+            if(entity is ActiveEntity && !(entity is BubbleText) && !(entity is Itemholder.Helper))
+                Actives.Add((entity as ActiveEntity).CreateRawEntity());
+
+       
+        if(serializer == null)
+         serializer = new XmlSerializer(Actives.GetType());
+        try
+        {
+            using (StreamWriter writer = new StreamWriter(Form1.RootDirectory + $"Save/Save_{ID}.xml"))
+                serializer.Serialize(writer,Actives);
+        }
+        catch (Exception e)
+        {
+            
+        }
+       
+        
     }
 
     public Entity GetActiveEntityFromGreen(int green, int blue, int x, int y)

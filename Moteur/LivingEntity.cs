@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Moteur
 {
-    internal abstract class LivingEntity : ActiveEntity
+    public abstract class LivingEntity : ActiveEntity
     {
-        protected int Life;
+        protected int life;
         public virtual double Gravity => Level.blocH / 130.0; // Level.blocH / x -> x  ; Plus x  est grand plus la gravité est faible
         /* public virtual double Gravity { get; set; } = 80/Level.blocH;*/ ////pour overrider pour modifier la gravite sans toucher celle des autres entites
         protected virtual int MaxSpeed() { return 10 ; }
@@ -118,10 +118,10 @@ namespace Moteur
 
         }
 
-        public int GetLife // pour chopper la vie des mobs 
+        public int Life // pour chopper la vie des mobs 
         {
-            get => Life;
-            set => Life = value;
+            get => life;
+            set => life = value;
         }
 
         public double GetGravity // pour modifier la gravite de certaines entites

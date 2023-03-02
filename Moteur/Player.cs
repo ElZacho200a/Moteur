@@ -3,7 +3,7 @@ using Moteur.Entites;
 
 namespace Moteur
 {
-    internal class Player : LivingEntity
+    public class Player : LivingEntity
     {
         protected  new int MaxSpeed => Level.blocH/4;
         private Bitmap? darkFront;

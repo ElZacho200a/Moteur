@@ -39,6 +39,10 @@
         {
             LevelLoad= true;
             Level.currentLevel.Deactivate();
+            foreach (Sortie sortie in Level.currentLevel.GetEntities().Select(entity => entity ).Where(E => E is Sortie))
+            {
+                sortie.Used = true;
+            }
             var ID = Level.currentLevel.ID;
             
             var nLevel = new Level(nextLevel );
