@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfRawEntity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RawEntity>
+    <Argument />
+    <Name />
+    <Essence>Moteur.Entites.ElRatz</Essence>
+    <X>1737</X>
+    <Y>1088</Y>
+    <Life1>4</Life1>
+    <Vx>5.293501048210561</Vx>
+    <Vy>0.49230769230769234</Vy>
+    <Ax>10</Ax>
+    <Ay>0.49230769230769234</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+  <RawEntity>
+    <Argument />
+    <Name />
+    <Essence>Moteur.Entites.ElRatz</Essence>
+    <X>1850</X>
+    <Y>1088</Y>
+    <Life1>10</Life1>
+    <Vx>-2.515723270305815</Vx>
+    <Vy>0.49230769230769234</Vy>
+    <Ax>-10</Ax>
+    <Ay>0.49230769230769234</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+  <RawEntity>
+    <Argument />
+    <Name />
+    <Essence>Moteur.Entites.Pigeon</Essence>
+    <X>0</X>
+    <Y>0</Y>
+    <Life1>0</Life1>
+    <Vx>10</Vx>
+    <Vy>10</Vy>
+    <Ax>0</Ax>
+    <Ay>0</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+  <RawEntity>
+    <Argument>Des rats des rats partout...</Argument>
+    <Name />
+    <Essence>Moteur.Entites.OldMan</Essence>
+    <X>384</X>
+    <Y>896</Y>
+    <Life1>0</Life1>
+    <Vx>-1</Vx>
+    <Vy>0</Vy>
+    <Ax>0</Ax>
+    <Ay>0</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+  <RawEntity>
+    <Argument>La brume est de pire en pire depuis peu</Argument>
+    <Name />
+    <Essence>Moteur.Entites.OldMan</Essence>
+    <X>1472</X>
+    <Y>896</Y>
+    <Life1>0</Life1>
+    <Vx>-1</Vx>
+    <Vy>0</Vy>
+    <Ax>0</Ax>
+    <Ay>0</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+</ArrayOfRawEntity>
