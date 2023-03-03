@@ -4,13 +4,26 @@
     <Argument />
     <Name />
     <Essence>Moteur.Entites.ElRatz</Essence>
-    <X>3890</X>
+    <X>4675</X>
     <Y>3136</Y>
     <Life1>2</Life1>
-    <Vx>-7.547169811320755</Vx>
-    <Vy>0</Vy>
+    <Vx>-5.849056603773586</Vx>
+    <Vy>0.49230769230769234</Vy>
     <Ax>-10</Ax>
-    <Ay>0</Ay>
+    <Ay>0.49230769230769234</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+  <RawEntity>
+    <Argument />
+    <Name />
+    <Essence>Moteur.Entites.ElRatz</Essence>
+    <X>2619</X>
+    <Y>3136</Y>
+    <Life1>2</Life1>
+    <Vx>-5.283018867924529</Vx>
+    <Vy>0.9846153846153847</Vy>
+    <Ax>-10</Ax>
+    <Ay>0.49230769230769234</Ay>
     <CursorAnimation>0</CursorAnimation>
   </RawEntity>
   <RawEntity>
