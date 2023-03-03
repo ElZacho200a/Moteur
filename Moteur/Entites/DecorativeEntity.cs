@@ -7,6 +7,7 @@ public class DecorativeEntity : ActiveEntity
     private string imageFile;
     private string arguments;
     private int time = 0;
+    private bool animated;
     public new  string getArgument => arguments;
     // Tout les argument sont dans la string nommée "ImageFile_nbAnimation_Temp" et séparés par des |
     // ( on appel ça des pipes alors faites pas les étonné)
@@ -18,7 +19,7 @@ public class DecorativeEntity : ActiveEntity
 
         if (args.Length <= 3)
         {
-            imageFile = Form1.RootDirectory +"Assets/DecorativeSprite/" +args[0] +"png";
+            imageFile = Form1.RootDirectory +"Assets/DecorativeSprite/" +args[0] +".png";
             if (args.Length > 1)
             {
                 animation = Int32.Parse(args[1]);
@@ -32,12 +33,16 @@ public class DecorativeEntity : ActiveEntity
         {
             throw new ArgumentException("Les arguments donné à cette entité ne sont du bon format");
         }
+
+        animated = animation > 1;
         spriteManager = new SpriteManager(imageFile, animation, false);
+        Hitbox = new Rectangle(x, y, spriteManager.Width, spriteManager.Height);
         Sprite = spriteManager.GetImage(0);
+        Coordonates = (x, y);
     }
     public override void Update()
     {
-        if(animation == 1)
+        if(!animated)
             return;
         time = (time + 1 % temp);
         if (time == 0)
