@@ -407,6 +407,14 @@ public class Level
         return Activator.CreateInstance(t, argument) as Entity;
     }
 
+    public IEnumerable<CollidedEntity> getCollidedEntity()
+    {
+        foreach (var entity in entities)
+        {
+            if (entity is CollidedEntity)
+                yield return (entity as CollidedEntity);
+        }
+    }
     public bool haveBackground()
     {
         return Background != null;

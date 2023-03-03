@@ -42,6 +42,8 @@ public class DecorativeEntity : ActiveEntity
     }
     public override void Update()
     {
+        
+        
         if(!animated)
             return;
         time = (time + 1 % temp);
@@ -49,6 +51,7 @@ public class DecorativeEntity : ActiveEntity
         {
             Sprite = spriteManager.nextCursor();
         }
+        
     }
 
     

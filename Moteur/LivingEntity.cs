@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Moteur.Entites;
 
 namespace Moteur
 {
@@ -84,6 +85,14 @@ namespace Moteur
         {
             int blocH = Level.blocH; // Récupération de la taille en pixel des blocs
             var CollisionMatrice = Level.currentLevel.getCollisonMatrice();
+            //Check des CollidedEntity
+            Rectangle toCheck  = new Rectangle(Coord.x, Coord.y , Hitbox.Width , Hitbox.Height );
+            foreach (var collidedEntity in Level.currentLevel.getCollidedEntity())
+            {
+                if (toCheck.IntersectsWith(collidedEntity.Hitbox))
+                    return true;
+            }
+            
             
             // Check de sortie de Bounds
             if(Coord.y+Hitbox.Height >blocH * CollisionMatrice.GetLength(1) )
@@ -92,7 +101,7 @@ namespace Moteur
                 return true;
             if(Coord.x + Hitbox.Width > blocH * CollisionMatrice.GetLength(0))
                 return true;
-            Rectangle toCheck  = new Rectangle(Coord.x, Coord.y , Hitbox.Width , Hitbox.Height );
+           
             // Mise à l'échelle de la Hitbox par rapport à la grille de collisions
             
             for (int i = toCheck.X; i < toCheck.Width +toCheck.X   ; i += 1)
