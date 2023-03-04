@@ -299,7 +299,7 @@ public class Level
     public void destroy()
     {
         //Sauvegarde Des entités 
-              SaveEntities();
+              //SaveEntities();
         //Effacement des Object Potentiellement Persistant
        entities.Clear();
        Background = null;

@@ -1,8 +1,10 @@
-﻿namespace Moteur.Entites
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms.VisualStyles;
+
+namespace Moteur.Entites
 {
     internal class Zombie : TriggerEntity
     {
-        protected bool trigered = false;
         Random random = new Random();
         protected new int MaxSpeed => 8;
        
@@ -10,20 +12,19 @@
         {
             spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
             Coordonates = (x, y);
-            Hitbox = new Rectangle(x, y, Level.blocH  , (int)(Level.blocH * 1.5)); // J'ai modif , le rect doit prendre x,y en premier arg
+            Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);
-            Acceleration.ax = (random.Next(3) == 1 ? 1 : -1) * MaxSpeed;
+            Acceleration.ax = (random.Next(2) == 1 ? 1 : -1) * MaxSpeed;
         }
 
         public override void Update()
         {
-            trigered = is_triggered();
             if (this.Life <= 0)
             {
                 isDead = true;
             }
-            if(!trigered)
+            if(!is_triggered())
             {
                 Random rand = Random.Shared;
                 int randint = rand.Next(2);
@@ -36,13 +37,18 @@
                 {
                     Speed.vx = Speed.vx * -1;
                 }
+
+                Acceleration.ax = MaxSpeed * this.sensX;
+                UpdateAnimation();
             }
-             
-            Acceleration.ax = MaxSpeed * sensPlayer;
-            UpdateAnimation();
-            if (Moove())
+            else
             {
-                Speed.vy = (-MaxSpeed * 1  - Speed.vx / 6) ;
+                if (Moove())
+                {
+                    Speed.vy = (-MaxSpeed * 1  - Speed.vx / 6) ;
+                }
+                Acceleration.ax = MaxSpeed * sensPlayer;
+                UpdateAnimation();
             }
 
             if (Camera.player.Hitbox.IntersectsWith(this.Hitbox))

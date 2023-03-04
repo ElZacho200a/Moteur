@@ -12,6 +12,7 @@ namespace Moteur
         protected Bitmap Image;
         protected string Name;
         protected bool Catched = false;
+        protected int Count = 1;
         protected string description = "Ceci est un item et quelqu'un à oublié de faire sa description shaaaammme";
         
 
@@ -22,6 +23,12 @@ namespace Moteur
         public Bitmap GetImage()
         {
             return Image;
+        }
+
+        public int GetCount
+        {
+            get => Count;
+            set => Count = value;
         }
         
         public Bitmap GetResizedImage(int size = -1)

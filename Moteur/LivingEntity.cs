@@ -32,7 +32,6 @@ namespace Moteur
                     toReturn = true;
                     nextCoord.nextX -= (int)Speed.vx;
                     Acceleration.ax = 0;
-
                 }
 
                 nextCoord.nextY +=
@@ -74,7 +73,7 @@ namespace Moteur
 
 
 
-    private int  PutOnground((int x, int y) Coord)
+    protected int  PutOnground((int x, int y) Coord)
         {
             while (!IsCollided(Coord)){
                 Coord.y += Level.blocH;

@@ -1,5 +1,7 @@
 ﻿using System.Drawing.Drawing2D;
 using Moteur.Entites;
+using Moteur.Items;
+using Keys = System.Windows.Forms.Keys;
 
 namespace Moteur
 {
@@ -9,11 +11,31 @@ namespace Moteur
         private Bitmap? darkFront;
         private Point LastPos;
         private List<Item> inventory;
+        private bool canshoot = false;
 
         public List<Item> Inventory
         {
             get => inventory;
-           
+        }
+
+        public IEnumerable<Item> GetKey
+        {
+            get
+            {
+                var key = from keys in inventory
+                    where keys.GetType() == typeof(Keys)
+                    select keys;
+                foreach (var cle in key)
+                {
+                    yield return cle;
+                }
+            }
+        }
+
+        public bool CanShoot
+        {
+            get => canshoot;
+            set => canshoot = value;
         }
 
 
@@ -161,9 +183,20 @@ namespace Moteur
 
         public bool shoot()
         {
-            var bullet = new Bullet(Coordonates.x, Coordonates.y);
-            Level.currentLevel.addEntity(bullet); // j'ajoute l'entite au bag
-            return true;
+            if (canshoot)
+            {
+                var balles = from balle in Inventory
+                    where balle.GetType() == typeof(Bullets)
+                    select balle;
+                if (balles.Any())
+                {
+                    var bullet = new Bullet(Coordonates.x, Coordonates.y);
+                    Level.currentLevel.addEntity(bullet); // j'ajoute l'entite au bag
+                    return true;
+                }
+            }
+
+            return false;
         }
         
         private PathGradientBrush GetGrandient( int Needed)
