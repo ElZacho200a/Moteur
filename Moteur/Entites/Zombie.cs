@@ -8,10 +8,9 @@
        
         public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
-            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
+            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
             Coordonates = (x, y);
-            
-            Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
+            Hitbox = new Rectangle(x, y, Level.blocH  , (int)(Level.blocH * 1.5)); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);
             Acceleration.ax = (random.Next(3) == 1 ? 1 : -1) * MaxSpeed;
@@ -19,27 +18,27 @@
 
         public override void Update()
         {
-            if (this.Life >= 0)
+            trigered = is_triggered();
+            if (this.Life <= 0)
             {
-                Level.currentLevel.RemoveEntity(this);
+                isDead = true;
             }
             if(!trigered)
             {
-                trigered = is_triggered();
                 Random rand = Random.Shared;
-                int randint = rand.Next(100);
-                if (Moove() && randint < 50)
+                int randint = rand.Next(2);
+                if (Moove() && randint == 0)
                 {
                     Speed.vy = (-MaxSpeed * 1  - Speed.vx / 6) ;
                 }
 
-                if (Moove() && randint > 50)
+                else if (Moove())
                 {
                     Speed.vx = Speed.vx * -1;
                 }
             }
              
-        Acceleration.ax = MaxSpeed * sensPlayer;
+            Acceleration.ax = MaxSpeed * sensPlayer;
             UpdateAnimation();
             if (Moove())
             {
