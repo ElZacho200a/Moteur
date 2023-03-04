@@ -29,6 +29,26 @@
 
             fillSprite(img);
         }
+        public SpriteManager(String filename ,int nb_Animation, bool symetric  = true)
+        { 
+            Bitmap img = new Bitmap(filename);
+            this.filename = filename;
+            this.h =  img.Height;
+            this.w= img.Width / nb_Animation;
+            Symetric = symetric;
+            int nmbSprite = img.Width / w;
+            img = new Bitmap(img, new Size(img.Width * Level.blocH / 50, img.Height * Level.blocH / 50 ));
+            Height = img.Height;
+            Width = img.Width / nmbSprite ;
+            if(symetric)
+                Sprite = new Bitmap[img.Width  * 2/ Width];
+            else 
+                Sprite = new Bitmap[img.Width / Width];
+            name = Path.GetFileName(filename) + $"X{Sprite.Length / 2}";
+          
+
+            fillSprite(img);
+        }
         public Bitmap GetImage(byte toGet , int sens)
         {
             cursor = toGet;

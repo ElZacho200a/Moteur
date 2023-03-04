@@ -140,12 +140,23 @@ namespace Moteur
             if (item == null) { return; }
             Inventory.Add(item);
         }
+
+
+        private bool DoubleJump = false;
         public void jump()
         {
             
             // une vitesse négative est dirigée vers le haut tout du moins en Y
-            if(IsCollided((Coordonates.x , Coordonates.y +1)))
-            Speed.vy = (-MaxSpeed   -Math.Abs(Speed.vx) / 6) ;
+            if (IsCollided((Coordonates.x, Coordonates.y + 1)))
+            {
+                Speed.vy = (-MaxSpeed - Math.Abs(Speed.vx) / 6);
+                DoubleJump = true;
+            }
+            else if (DoubleJump)
+            {
+                DoubleJump = false;
+                Speed.vy = (-MaxSpeed - Math.Abs(Speed.vx) / 6);
+            }
         }
 
         public bool shoot()
