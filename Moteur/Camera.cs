@@ -14,6 +14,7 @@ namespace Moteur
         public static int Height, Width;
         public Bitmap rawFront;
         public  PauseMenu PauseMenu;
+        private DialogArea dialogArea;
         public int gameState = 0;
        
 
@@ -25,7 +26,7 @@ namespace Moteur
         public Camera(int Widht, int Heigt) : base()
         {
             rawFront = new Bitmap(Widht,
-                Heigt); // Une image Noir de la taille de l'écran permettant d'opti les rendu en mode Dark
+                Heigt); // Une image Noir de la \n taille de l'écran permettant d'opti \nles rendu en mode Dark
             using (var g = Graphics.FromImage(rawFront))
             {
                 g.Clear(Color.Black);
@@ -41,21 +42,25 @@ namespace Moteur
 
 
             player = new Player();
-            new Level(1);
+            new Level(9);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
+            dialogArea = new DialogArea(Width, Height);
             ResetScope();
             Timer timer = new Timer();
             timer.Interval = 1000 / 60;
             timer.Elapsed += OnTimedEvent;
             timer.Start();
+            dialogArea.ToSay = "Ceci est un test consistant  a tester les dialog Area";
+          
         }
 
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            if (gameState == 1)
+            if (gameState != 0)
             {
                 Invalidate();
+              
             }
             else if (gameState == 0)
             {
@@ -199,7 +204,7 @@ namespace Moteur
                     player.jump();
                     break;
                 case Keys.Z :
-                    Level.currentLevel.Dark = !Level.currentLevel.Dark;
+                    gameState = 2;
                     break;
                 case Keys.Enter: // le tir 
                     try // pour le debug
@@ -233,7 +238,7 @@ namespace Moteur
 
             g.TranslateTransform(-Scope.X, -Scope.Y);
 
-
+            drawBlocs(g);
             //Variable pour l'optimisation de l'affichage
 
             Rectangle OptiDrawRect;
@@ -257,7 +262,7 @@ namespace Moteur
             {
                 try
                 {
-                    if (entity.Hitbox.IntersectsWith(OptiDrawRect) && isInScope(entity.Hitbox))
+                    if (entity.Hitbox.IntersectsWith(OptiDrawRect) )
                         if (entity is ActiveEntity)
                         {
                             var active = entity as ActiveEntity;
@@ -291,6 +296,14 @@ namespace Moteur
             if (gameState == 1)
             {
                 PauseMenu.Draw(g);
+            }else if (gameState == 2)
+            {
+                if (dialogArea.ShowAndDraw(g))
+                {
+                    gameState = 0;
+                    dialogArea.Reset();
+                }
+                   
             }
             
             
@@ -299,9 +312,9 @@ namespace Moteur
 
         protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
         {
-            var g = paintEventArgs.Graphics;
-            g.TranslateTransform(-Scope.X, -Scope.Y);
-            drawBlocs(g);
+         //   var g = paintEventArgs.Graphics;
+           // g.TranslateTransform(-Scope.X, -Scope.Y);
+           
         }
 
 
@@ -344,6 +357,7 @@ namespace Moteur
                             if (Level.currentLevel.haveBackground() && !Level.currentLevel.BackgroundNeedded[i, j])
                             {
                                 g.DrawImage(BackGroundMatrice[i % BackW, j % BackH], i * Level.blocH, j * Level.blocH);
+                               //DrawBloc(i * Level.blocH , j  * Level.blocH ,BackGroundMatrice[i % BackW, j % BackH] , OptiDrawRect , g );
                             }
 
                             if (levelMatrice[i, j] != null)
@@ -362,5 +376,36 @@ namespace Moteur
             }
                 
         }
+
+
+
+        private void DrawBloc(int x, int y, Bitmap bloc, Rectangle Limit , Graphics g)
+        {
+            Pen pen = new Pen(Color.Black);
+            //Bounds du Bloc de Base
+            int debI = 0;
+            int debJ = 0;
+            int endI = bloc.Width;
+            int endJ = bloc.Height;
+            // Changement si néscéssaire
+            if (x < Limit.X)
+                debI = Limit.X - x;
+            if(y < Limit.Y)
+                debJ = Limit.Y - y;
+            if (x + endI > Limit.Right)
+                endI = x + endI - Limit.Right;
+            if (y + endJ > Limit.Bottom)
+                endJ = y + endJ - Limit.Bottom;
+            //Dessin du bloc
+            for ( int i = debI; i < endI ; i++)
+                for (int j = debJ; j <   endJ; j++)
+                    {
+                        pen.Color = bloc.GetPixel(i, j);
+                        g.DrawRectangle(pen , i + x , j +y ,1,1);
+                    }
+            
+        }
+        
+        
     }
 }

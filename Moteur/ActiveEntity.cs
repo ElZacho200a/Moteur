@@ -1,5 +1,4 @@
-﻿using System.Xml.Serialization;
-
+﻿
 namespace Moteur
 {
     public abstract class ActiveEntity : Entity

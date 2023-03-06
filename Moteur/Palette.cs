@@ -5,8 +5,11 @@ public class Palette
     protected Dictionary<Color, Bitmap> ColorIndex;
     private string filename;
     private int blocH;
+    private static Bitmap Alphabet = new Bitmap(Form1.RootDirectory +"Assets/Textures/Alphabet.png");
+    
     public Palette(int blocH)
     {
+        
         this.blocH = blocH;
         ColorIndex = new Dictionary<Color, Bitmap>();
         filename = Form1.RootDirectory + @"Assets\BlocsImage\";
@@ -93,4 +96,20 @@ public class Palette
     {
         return new Rectangle(0, 0, img.Width, img.Height);
     }
+
+    private static Bitmap getLineImage(String s ,int charSize = 10)
+    {
+     
+        Font font = new Font("Runescape UF", charSize);
+        Bitmap b = new Bitmap(charSize * s.Length,charSize);
+        using (var g = Graphics.FromImage(b))
+        {
+            g.DrawString(s,font,Brushes.Black, 0,0);
+            
+        }
+
+        return b;
+    }
+    
+    
 }
