@@ -8,7 +8,7 @@ public class DecorativeEntity : ActiveEntity
     private string arguments;
     private int time = 0;
     private bool animated;
-    public new  string getArgument => arguments;
+    public override string getArgument => arguments;
     // Tout les argument sont dans la string nommée "ImageFile_nbAnimation_Temp" et séparés par des |
     // ( on appel ça des pipes alors faites pas les étonné)
     public DecorativeEntity(int x, int y, string ImageFile_nbAnimation_Temp)
