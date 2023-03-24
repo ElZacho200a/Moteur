@@ -13,6 +13,7 @@
         {
             return new Point(Hitbox.X  + Hitbox.Width / 2, Hitbox.Y + Hitbox.Height / 2);
         }
+        public virtual void  Destroy(){}
         public Rectangle getRayonRectangle(float rayon)
         {
             int Rayon = (int)(rayon * Level.blocH);

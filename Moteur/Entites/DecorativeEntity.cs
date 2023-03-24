@@ -19,7 +19,7 @@ public class DecorativeEntity : ActiveEntity
 
         if (args.Length <= 3)
         {
-            imageFile = Form1.RootDirectory +"Assets/DecorativeSprite/" +args[0] +".png";
+            imageFile = Program.RootDirectory +"Assets/DecorativeSprite/" +args[0] +".png";
             if (args.Length > 1)
             {
                 animation = Int32.Parse(args[1]);

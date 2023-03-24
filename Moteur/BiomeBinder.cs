@@ -5,7 +5,7 @@ public class BiomeBinder
     public static Dictionary<int , string> binder;
     public BiomeBinder()
     {
-        var filename = Form1.RootDirectory + "Assets/ROOMS/BiomeBinder.bb";
+        var filename = Program.RootDirectory + "Assets/ROOMS/BiomeBinder.bb";
         string rawData = File.ReadAllText(filename);
         var splittedData = rawData.Split("/");
         if (splittedData.Length % 2 != 0)

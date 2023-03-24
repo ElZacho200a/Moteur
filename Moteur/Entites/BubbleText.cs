@@ -12,7 +12,7 @@ internal class BubbleText:TriggerEntity
     Bitmap emptySprite;
     public BubbleText(String Text, Rectangle rect , int range ) : base(range)
     {
-        var filename = Form1.RootDirectory + "Assets\\Textures\\DialogBox.png";
+        /*var filename = Form1.RootDirectory + "Assets\\Textures\\DialogBox.png";
         spriteManager = new SpriteManager( filename, 94, 100);
         Coordonates = (rect.X, rect.Y);
         Sprite = spriteManager.GetImage(0, sensX);
@@ -23,7 +23,7 @@ internal class BubbleText:TriggerEntity
         emptySprite = Sprite.Clone(new Rectangle(0, 0,Hitbox.Width,Hitbox.Height) , Sprite.PixelFormat);
         this.Text = formate(Text);
        Camera.AddSubscriberTenTick(UpdateAnimation);
-        
+        */
         
     }
 
@@ -62,8 +62,8 @@ internal class BubbleText:TriggerEntity
     protected override void UpdateAnimation()
     {
         
-        if (Sprite == null)
-            return;
+        //if (Sprite == null)
+          //  return;
         Hitbox.X = origin.X - Hitbox.Width;
         Hitbox.Y = origin.Y - Hitbox.Height;
         

@@ -1,18 +1,21 @@
 ﻿using System.Drawing.Drawing2D;
 using Moteur.Entites;
 using Moteur.Items;
+using Raylib_cs;
+using Color = System.Drawing.Color;
 using Keys = System.Windows.Forms.Keys;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace Moteur
 {
     public class Player : LivingEntity
     {
         protected  new int MaxSpeed => Level.blocH/4;
-        private Bitmap? darkFront;
+        private Texture2D? darkFront;
         private Point LastPos;
         private List<Item> inventory;
         private bool canshoot = false;
-
+        
         public List<Item> Inventory
         {
             get => inventory;
@@ -39,7 +42,7 @@ namespace Moteur
         }
 
 
-        public Bitmap DarkFront
+        public Texture2D? DarkFront
         {
             get
             {
@@ -60,17 +63,19 @@ namespace Moteur
                 light = value;
                 
                 if(darkFront !=null)
-                darkFront.Dispose();
+                    Raylib.UnloadTexture((Texture2D)darkFront);
                 darkFront = GenerateDarkFront();
             }
         }
-        
+
+        public int getMaxSpeed => MaxSpeed;
         public Player()
         {
             inventory = new List<Item> { };
-            spriteManager = new SpriteManager(Form1.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
+            spriteManager = new SpriteManager(Program.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
             LastPos = new Point(0, 0);
+            light = 5;
             Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
             Camera.AddSubscriberTenTick(UpdateAnimation);
         }
@@ -116,19 +121,29 @@ namespace Moteur
             MyEvent -= sub;
         }
 
+        public void ResetSucribers()
+        {
+            MyEvent = null;
+        }
+
         private void AdaptAnimation()
         {
             if (!IsCollided((Coordonates.x, Coordonates.y + 1))) // Equivalent de le joueur est sur le sol
             {
                 if (sensY > 0)
                 {
-                    Sprite = spriteManager.GetImage(4, sensX);
+                  
+                    Sprite = spriteManager.GetImage(6, sensX);
                 }
                 else
                 {
-                    Sprite = spriteManager.GetImage(3, sensX);
+                    if(spriteManager .cursor == 4 ||spriteManager .cursor == 5 )
+                        Sprite = spriteManager.GetImage(5, sensX);
+                    Sprite = spriteManager.GetImage(4, sensX);
                 }
+                
             }
+           
         }
         protected  override void UpdateAnimation()
         {
@@ -136,10 +151,12 @@ namespace Moteur
             {
                 if (((int)(Speed.vx)) * sensX < 3)
                     Sprite = spriteManager.GetImage(0 , sensX);
-                else if(spriteManager.cursor != 1)
-                    Sprite = spriteManager.GetImage(1, sensX);
+                else if (spriteManager.cursor == 1 ||spriteManager.cursor == 2)
+                    Sprite = spriteManager.GetImage((byte)(spriteManager.cursor +1), sensX);
                 else
-                    Sprite = spriteManager.GetImage(2, sensX);
+                    Sprite = spriteManager.GetImage(1, sensX);
+                    
+              
             }
 
             if (IsCollided((Coordonates.x, Coordonates.y + 1)))
@@ -154,8 +171,8 @@ namespace Moteur
             byte saveCursor = spriteManager.cursor;
             spriteManager = spriteManager.getOriginal();
             Sprite = spriteManager.GetImage(saveCursor, sensX);
-            Hitbox .Width = Sprite.Width;
-            Hitbox .Height = Sprite.Height;
+            Hitbox .Width = Sprite.width;
+            Hitbox .Height = Sprite.height;
         }
         public void receiveItem(Item item)
         {
@@ -222,27 +239,29 @@ namespace Moteur
             return pthGrBrush;
         }
         
-        private Bitmap GenerateDarkFront()
+        private Texture2D GenerateDarkFront()
         {
             var neededDecal = (4 * Level.blocH);
-            var pthGrBrush = GetGrandient( neededDecal/2);
-            
-            var front = new Bitmap((int)pthGrBrush.Rectangle.Width +neededDecal ,(int)pthGrBrush.Rectangle.Height +neededDecal);
-            using (var g = Graphics.FromImage(front))
-            {
-                g.Clear(Color.Black);
-                
-                g.CompositingMode = CompositingMode.SourceCopy;
-                
-                g.FillEllipse( pthGrBrush, pthGrBrush.Rectangle );
-               
-                g.CompositingMode = CompositingMode.SourceOver;
-                pthGrBrush.Dispose();
-               
-            }
 
-            
-            return front  ;
+            var transparent = new Raylib_cs.Color(50, 40, 0, 100);
+            var rect = getRayonRectangle(Light);
+            rect.Width =  (int)(rect.Width * 2);
+            rect.Height =  (int)(rect.Height * 2);
+            RenderTexture2D texture = Raylib.LoadRenderTexture(rect.Width, rect.Height);
+            Raylib.BeginTextureMode(texture);
+            Raylib.ClearBackground(Raylib_cs.Color.BLACK);
+            Raylib.DrawCircleGradient(
+                rect.Width/2,
+                rect.Height/2, 
+                Math.Max(rect.Width/2, rect.Height/2) - Light * Level.blocH, 
+                transparent, 
+                Raylib_cs.Color.BLACK);
+            Raylib.EndTextureMode();
+            var texture2D = texture.texture;
+            return texture2D;
+
+
+
         }
     }
 }

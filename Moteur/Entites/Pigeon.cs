@@ -8,7 +8,7 @@
         private bool trigered =false;
         private byte triggerRange =9;
         public Pigeon(int x , int y) {
-            spriteManager = new SpriteManager(Form1.RootDirectory + "Assets\\Sprite\\Pigeon.png", 50, 50);
+            spriteManager = new SpriteManager(Program.RootDirectory + "Assets\\Sprite\\Pigeon.png", 50, 50);
             
             Speed.vy = 10;
             Speed.vx = 10 * ((random.Next(2) == 1 ) ? -1 : 1 );

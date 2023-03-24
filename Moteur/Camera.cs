@@ -1,10 +1,19 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Timers;
+using Raylib_cs;
+using static Raylib_cs.Raylib;
+using Color = System.Drawing.Color;
+using Image = System.Drawing.Image;
+using Rectangle = System.Drawing.Rectangle;
 using Timer = System.Timers.Timer;
 
 namespace Moteur
 {
-    public class Camera : Panel
+    public class Camera 
     {
         public static int blocH => (int)(Width / FOV);
         public static int FOV = 30;
@@ -32,38 +41,48 @@ namespace Moteur
                 g.Clear(Color.Black);
             }
 
-
+          
+            InitWindow(Widht,Heigt , "Test de la manette");
+            //ToggleFullscreen();
+            Widht = Raylib.GetMonitorWidth(0);
+            Heigt = Raylib.GetMonitorHeight(0);
+            //back = new Bitmap(Widht, Height);
+            SetTargetFPS(60);
             Height = Heigt;
             Width = Widht;
-           
-            this.Size = new System.Drawing.Size(Widht, Height);
-            DoubleBuffered = true; // Extrêmement important permet d'avoir une image fluide 
-            Scope = (0, 0, Widht, Height);
+            Scope = (0, 0, Width, Height);
 
 
             player = new Player();
-            new Level(9);
+            Level.Camera = this;
+            new Level(0);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
-            Timer timer = new Timer();
-            timer.Interval = 1000 / 60;
-            timer.Elapsed += OnTimedEvent;
-            timer.Start();
-            dialogArea.ToSay = "Ceci est un test consistant  a tester les dialog Area";
-          
+            
+            
+            Console.WriteLine("JE peut print !!!");
+            dialogArea.ToSay = "";
+
+            while (!Raylib.WindowShouldClose())
+            {
+                GameLoop();
+            }
         }
 
 
-        private async void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private  void GameLoop()
         {
+            rayControl();
+            rayDraw();
             if (gameState != 0)
             {
-                Invalidate();
+               
               
             }
             else if (gameState == 0)
             {
+                
                 frameCounter = (byte)((frameCounter + 1) % 10);
                 if (frameCounter % 10 == 0)
                 {
@@ -74,8 +93,8 @@ namespace Moteur
 
                 if (Level.currentLevel.Update())
                 {
+                    
                     player.Update();
-                    Invalidate();
                     // ajustement de la cam 
                     UpdateScope();
                 }
@@ -154,16 +173,7 @@ namespace Moteur
                 Scope.Y = 0;
         }
 
-        public static int BlocSizeSetter((int w, int h ) size)
-        {
-            if (Width > size.w * Width / FOV)
-            {
-                return Width / (size.w);
-            }
-
-
-            return Width / FOV;
-        }
+       
 
         public static void ResetScope()
         {
@@ -188,10 +198,18 @@ namespace Moteur
                     gameState = 1;
                 else if (gameState == 1)
                     gameState = 0;
-            if(gameState == 0)
+            if (gameState == 2)
+            {
+                if (e.KeyCode == Keys.E)
+                {
+                        gameState = 0;
+                        dialogArea.Reset();
+                    }
+            }
+            else if(gameState == 0)
             switch(e.KeyCode)
             {
-                case Keys.Up :
+                case Keys.E :
                     player.KeyUp();
                     break;
                 case Keys.Left:
@@ -204,7 +222,7 @@ namespace Moteur
                     player.jump();
                     break;
                 case Keys.Z :
-                    gameState = 2;
+                    //gameState = 2;
                     break;
                 case Keys.Enter: // le tir 
                     try // pour le debug
@@ -221,8 +239,88 @@ namespace Moteur
             }
         }
 
+        protected void rayControl()
+        {
+            if (IsGamepadAvailable(0))
+            {
+                if (gameState == 0)
+                {
+                    if (IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
+                    {
+                        player.jump();
+                    }
 
-        protected override void OnPaint(PaintEventArgs e)
+                    if (IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
+                    {
+                        player.KeyUp();
+                    }
+
+                    if (IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT))
+                    {
+                        gameState = 1;
+                    }
+                    var X = GetGamepadAxisMovement(0, GamepadAxis.GAMEPAD_AXIS_LEFT_X);
+                    player.Acceleration1 = ((double)(player.getMaxSpeed * X), player.Acceleration1.ay);
+                }
+                else if (gameState == 1)
+                {
+                    if (IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT))
+                    {
+                        gameState = 0;
+                    } 
+                }
+                else if (gameState == 2)
+                {
+                    if (dialogArea.Finish)
+                        if (IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_LEFT))
+                        {
+                            dialogArea.Reset();
+                            gameState = 0;
+                        }
+                    
+                }
+            }
+            else
+            {
+                if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_D) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_A))
+                {
+                    if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_A))
+                        player.Acceleration1 = ((double)(player.getMaxSpeed * -1), player.Acceleration1.ay);
+                    else
+                        player.Acceleration1 = ((double)(player.getMaxSpeed ), player.Acceleration1.ay);
+                }
+                else
+                {
+                    player.Acceleration1 = ((double)(0), player.Acceleration1.ay);
+                }
+               
+                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_SPACE))
+                {
+                    player.jump();
+                }
+                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_E))
+                {
+                    if(gameState == 0)
+                        player.KeyUp();
+                    if (gameState == 2)
+                    {
+                        if (dialogArea.Finish)
+                        {
+                            dialogArea.Reset();
+                            gameState = 0;
+                        }
+                    }
+                }
+                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_ESCAPE))
+                {
+                    if(gameState == 0 )
+                        gameState = 1;
+                    else if (gameState == 1)
+                        gameState = 0;
+                }
+            }
+        }
+       /* protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
             var levelMatrice = Level.currentLevel.getLevelMatrice();
@@ -300,14 +398,13 @@ namespace Moteur
             {
                 if (dialogArea.ShowAndDraw(g))
                 {
-                    gameState = 0;
-                    dialogArea.Reset();
+                    
                 }
                    
             }
             
             
-        }
+        }/*
 
 
         protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
@@ -375,37 +472,133 @@ namespace Moteur
                 g.DrawImage(porte.texture, porte.Hitbox.Location);
             }
                 
-        }
-
-
-
-        private void DrawBloc(int x, int y, Bitmap bloc, Rectangle Limit , Graphics g)
+        }*/
+       public void ShowDialog(String Text)
         {
-            Pen pen = new Pen(Color.Black);
-            //Bounds du Bloc de Base
-            int debI = 0;
-            int debJ = 0;
-            int endI = bloc.Width;
-            int endJ = bloc.Height;
-            // Changement si néscéssaire
-            if (x < Limit.X)
-                debI = Limit.X - x;
-            if(y < Limit.Y)
-                debJ = Limit.Y - y;
-            if (x + endI > Limit.Right)
-                endI = x + endI - Limit.Right;
-            if (y + endJ > Limit.Bottom)
-                endJ = y + endJ - Limit.Bottom;
-            //Dessin du bloc
-            for ( int i = debI; i < endI ; i++)
-                for (int j = debJ; j <   endJ; j++)
-                    {
-                        pen.Color = bloc.GetPixel(i, j);
-                        g.DrawRectangle(pen , i + x , j +y ,1,1);
-                    }
-            
+            dialogArea.ToSay = Text;
+            gameState = 2;
         }
-        
+
+
+        private Bitmap back;
+        public unsafe void rayDraw()
+        {
+            BeginDrawing();
+            Raylib.ClearBackground(Raylib_cs.Color.BLACK);
+            Raylib.BeginMode2D(new Camera2D(new Vector2(-Scope.X , -Scope.Y) , Vector2.Zero, 0,1));
+            //Dessin des Blocs
+                //Teinte des Blocs
+                var Tint = Raylib_cs.Color.WHITE;
+                //Récuperation des Données Utiles
+            var blocs = Level.currentLevel.getLevelMatrice();
+            var Opacitymap = Level.currentLevel.BackgroundNeedded;
+            var backGroundBloc = Level.currentLevel.BackGroundMatrice;
+            var Backbounds = (backGroundBloc.GetLength(0), backGroundBloc.GetLength(1));
+                //Setup des aires de Dessin
+             Rectangle OptiDrawRect;
+             if (Level.currentLevel.Dark)
+                 OptiDrawRect = player.getRayonRectangle(player.Light);
+             else
+             {
+                 OptiDrawRect = getRectFromScope();
+                 OptiDrawRect.Height += Level.blocH;
+             }   
+                //Setup des Informations de Dessins
+                var debX = OptiDrawRect.X / blocH;
+                var debY = OptiDrawRect.Y / blocH;
+                if (debX < 0)
+                    debX = 0;
+                if (debY < 0)
+                    debY = 0;
+                var endX = debX + OptiDrawRect.Width / blocH + 1 ;
+                var endY = debY + OptiDrawRect.Height / blocH + 1;
+                var DangerousAnim = Level.currentLevel.VoidArea.ELectricAnim;
+                //Application des textures sur la fenêtre
+            for (int i = debX; i < endX; i++)
+                for (int j = debY; j < endY; j++)
+                {
+                    try
+                    {
+
+                   
+                    var x = i * blocH;
+                    var y = j * blocH;
+                    if (Level.currentLevel.haveBackground() )
+                    {
+                        var BackTexture =(Texture2D)(backGroundBloc[i % Backbounds.Item1, j % Backbounds.Item2]);
+                        DrawTexture(BackTexture , x , y ,Tint);
+                       
+                    }
+
+                    if (Level.currentLevel.VoidArea[i, j])
+                    {
+                        Raylib.DrawTexture(DangerousAnim.GetImage(DangerousAnim.cursor) , x ,y , Raylib_cs.Color.WHITE);
+                    }
+                    if (blocs[i, j] != null)
+                    {
+                        var BlocTexture = (Texture2D)(blocs[i, j]);
+                        DrawTexture(BlocTexture, x, y, Tint);
+                    }
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                }
+                // Dessin des Entités
+                foreach (var entity in Level.currentLevel.GetEntities())
+                {
+                    try
+                    {
+                        if (entity.Hitbox.IntersectsWith(OptiDrawRect) )
+                            if (entity is ActiveEntity)
+                            {
+                                var active = entity as ActiveEntity;
+                                if (active != null)
+                                    Raylib.DrawTexture(active.Sprite , active[0] , active[1],Raylib_cs.Color.WHITE);
+                            }
+                            else if (entity is Porte)
+                            {
+                                var porte = entity as Porte;
+                                Raylib.DrawTexture(porte.texture , porte[0] , porte[1],Raylib_cs.Color.WHITE);
+                            }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                    
+                //Dessin du Joueur
+                
+                DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
+                
+                //
+                //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu
+                if (Level.currentLevel.Dark)
+                {
+                    var front = (Texture2D)player.DarkFront;
+                    var p = player.getCenter();
+                    p.Offset(-front.width / 2, -front.height / 2);
+                   DrawTexture(front,p.X,p.Y,Raylib_cs.Color.WHITE);
+                }
+
+               EndMode2D();
+                if (gameState == 1)
+                {
+                    PauseMenu.Draw();
+                }else if (gameState == 2)
+                {
+                    if (dialogArea.ShowAndDraw())
+                    {
+                    
+                    }
+                   
+                }
+                    EndDrawing();
+        }
+
+       
         
     }
+    
 }

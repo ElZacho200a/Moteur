@@ -1,4 +1,6 @@
 ﻿
+using Raylib_cs;
+
 namespace Moteur
 {
     public abstract class ActiveEntity : Entity
@@ -13,6 +15,11 @@ namespace Moteur
         
         protected float light = 2f;
 
+        public override void Destroy()
+        {
+            Raylib.UnloadTexture(Sprite);
+            
+        }
         public float Light
         {
             get => light;
@@ -29,7 +36,7 @@ namespace Moteur
         public int sensY => Speed.vy > 0 ? 1 : -1;
         
         public SpriteManager GetSpriteManager => spriteManager;
-        public Bitmap Sprite;
+        public Texture2D Sprite;
         protected SpriteManager spriteManager;
         protected abstract bool Moove();
         protected abstract void UpdateAnimation();

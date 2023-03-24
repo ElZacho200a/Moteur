@@ -7,7 +7,7 @@ internal class ElRatz : LivingEntity
     {
         Coordonates = (x, y);
         Hitbox = new Rectangle(x,y,Level.blocH,Level.blocH);
-        spriteManager = new SpriteManager(Form1.RootDirectory + "Assets\\Sprite\\ElRatz.png", 50, 50);
+        spriteManager = new SpriteManager(Program.RootDirectory + "Assets\\Sprite\\ElRatz.png", 50, 50);
         Sprite = spriteManager.GetImage(0, sensX);
       
         Acceleration.ax = MaxSpeed;

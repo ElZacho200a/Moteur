@@ -1,14 +1,21 @@
+using Raylib_cs;
+
 namespace Moteur;
 
 internal class Porte :Sortie
 {
-    public Bitmap texture;
-    public Porte(int nextLevel, int x, int y , Bitmap Texture) : base(nextLevel, x, y)
+    public Texture2D texture;
+    public Porte(int nextLevel, int x, int y , Texture2D Texture) : base(nextLevel, x, y)
     {
         texture = Texture;
         Camera.player.AddSubscriber(HandleEvent);
         
         
+    }
+
+    public override void Destroy()
+    {
+        Raylib.UnloadTexture(texture);
     }
 
     private void HandleEvent()

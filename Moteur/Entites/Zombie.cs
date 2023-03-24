@@ -10,7 +10,7 @@ namespace Moteur.Entites
        
         public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
-            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
+            spriteManager = new SpriteManager(Program.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
             Coordonates = (x, y);
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;

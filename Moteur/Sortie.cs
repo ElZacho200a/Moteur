@@ -38,6 +38,7 @@
         protected void LoadNextLevel()
         {
             LevelLoad= true;
+            Camera.player.ResetSucribers();
             Level.currentLevel.Deactivate();
             foreach (Sortie sortie in Level.currentLevel.GetEntities().Select(entity => entity ).Where(E => E is Sortie))
             {
@@ -67,6 +68,7 @@
                         Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
                         Camera.player.Hitbox.Location = new Point(Camera.player[0], Camera.player[1]);
                         Camera.ResetScope();
+                        GC.Collect();
                         Level.currentLevel.Activate();
                         
                         return;

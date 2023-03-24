@@ -78,7 +78,7 @@ namespace Moteur
             Rectangle toCheck  = new Rectangle(Coord.x, Coord.y , Hitbox.Width , Hitbox.Height );
             foreach (var collidedEntity in Level.currentLevel.getCollidedEntity())
             {
-                if (toCheck.IntersectsWith(collidedEntity.Hitbox))
+                if (collidedEntity.Hitbox.IntersectsWith(toCheck))
                     return true;
             }
             

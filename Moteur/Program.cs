@@ -2,16 +2,16 @@ namespace Moteur
 {
     public static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
+        
+         public static string RootDirectory ;
+
+        public static Camera Camera;
         public static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            var currentDirectory = Directory.GetCurrentDirectory();
+            RootDirectory = currentDirectory.Split("bin")[0];
+            var size = Screen.AllScreens[0].Bounds;
+            Camera = new Camera(1920,1080);
         }
  
     }

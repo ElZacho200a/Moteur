@@ -89,7 +89,7 @@
                 return;
                exist = true;
                 
-                spriteManager = new SpriteManager(Form1.RootDirectory + "Assets/Textures/ItemHelp.png", 50, 50, false);
+                spriteManager = new SpriteManager(Program.RootDirectory + "Assets/Textures/ItemHelp.png", 50, 50, false);
                 Hitbox = new Rectangle(
                     parent[0], 
                     (int)(parent[1] - (1.5 * spriteManager.Height)), 
