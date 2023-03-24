@@ -42,7 +42,7 @@ namespace Moteur
             }
 
           
-            InitWindow(Widht,Heigt , "Test de la manette");
+            InitWindow(0,0 , "Test de la manette");
             //ToggleFullscreen();
             Widht = Raylib.GetMonitorWidth(0);
             Heigt = Raylib.GetMonitorHeight(0);
