@@ -26,7 +26,8 @@ public class VoidArea
     {
         get
         {
-            return DangerousMatrice[i, j];
+            
+            return i < DangerousMatrice.GetLength(0) && j < DangerousMatrice.GetLength(1) && DangerousMatrice[i, j];
         }
         set
         {

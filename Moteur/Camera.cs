@@ -510,8 +510,13 @@ namespace Moteur
                     debX = 0;
                 if (debY < 0)
                     debY = 0;
-                var endX = debX + OptiDrawRect.Width / blocH + 1 ;
-                var endY = debY + OptiDrawRect.Height / blocH + 1;
+                var endX = debX + OptiDrawRect.Width / blocH  ;
+                if (endX >= blocs.GetLength(0))
+                    endX = blocs.GetLength(0);
+                
+                var endY = debY + OptiDrawRect.Height / blocH ;
+                if (endY >= blocs.GetLength(1))
+                    endY = blocs.GetLength(1) ;
                 var DangerousAnim = Level.currentLevel.VoidArea.ELectricAnim;
                 //Application des textures sur la fenêtre
             for (int i = debX; i < endX; i++)
