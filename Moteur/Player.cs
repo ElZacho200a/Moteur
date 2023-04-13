@@ -173,7 +173,9 @@ namespace Moteur
         public void ResetSprite()
         {
             byte saveCursor = spriteManager.cursor;
-            spriteManager = spriteManager.getOriginal();
+            var saveManager = spriteManager.getOriginal();
+            spriteManager.Destroy();
+            spriteManager = saveManager;
             Sprite = spriteManager.GetImage(saveCursor, sensX);
             Hitbox .Width = Sprite.width;
             Hitbox .Height = Sprite.height;
