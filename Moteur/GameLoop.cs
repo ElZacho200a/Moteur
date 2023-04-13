@@ -37,6 +37,7 @@ public static class GameLoop
             var camera = Cameras[i];
            camera.rayDraw(i);
         }
+        DrawRectangle(Widht/2  -50, 0 ,50, Heigt, Raylib_cs.Color.DARKBROWN);
         EndDrawing();
         for (int i = 0; i < Cameras.Length; i++)
         {
@@ -62,7 +63,7 @@ public static class GameLoop
     public static void init()
     {
         InitWindow(0,0 , "Test de la manette");
-        //ToggleFullscreen();
+        ToggleFullscreen();
         Widht = Raylib.GetMonitorWidth(0);
         Heigt = Raylib.GetMonitorHeight(0);
         //back = new Bitmap(Widht, Height);

@@ -299,11 +299,11 @@ namespace Moteur
                     debX = 0;
                 if (debY < 0)
                     debY = 0;
-                var endX = debX + OptiDrawRect.Width / blocH  ;
+                var endX = debX + OptiDrawRect.Width / blocH  +1;
                 if (endX >= blocs.GetLength(0))
                     endX = blocs.GetLength(0);
                 
-                var endY = debY + OptiDrawRect.Height / blocH ;
+                var endY = debY + OptiDrawRect.Height / blocH  +1 ;
                 if (endY >= blocs.GetLength(1))
                     endY = blocs.GetLength(1) ;
                 var DangerousAnim = Level.currentLevel.VoidArea.ELectricAnim;
