@@ -8,10 +8,10 @@ namespace Moteur.Items
 {
     internal class Torch : Item
     {
-        public override void OnCatch()
+        public override void OnCatch(int index)
         {
-            base.OnCatch();
-            Camera.player.Light += 7;
+            base.OnCatch(index);
+           Level.Players[index].Light += 7;
         }
 
         public override void OnUse()

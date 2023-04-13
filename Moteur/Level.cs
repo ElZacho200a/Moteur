@@ -24,8 +24,8 @@ public class Level
     public VoidArea? VoidArea;
     protected Raylib_cs.Texture2D? [,]  levelMatrice;
     protected bool[,] backgroundNeedded;
-    public static Camera Camera;
-
+    public static List<Player> Players;
+   
     public bool[,] BackgroundNeedded
     {
         get => backgroundNeedded;
@@ -114,7 +114,8 @@ public class Level
                 Camera.FOV--;
         else
             Camera.FOV = 30;
-        Camera.player.ResetSprite();
+        foreach (var player in Players)
+            player.ResetSprite();
         getPalette = new Palette(blocH);
 
         try
@@ -272,7 +273,7 @@ public class Level
             return false;
         if(VoidArea != null)
             VoidArea.UpdateAnimation();
-        try
+       try
         {
             foreach (var entity in entities)
             {
@@ -282,8 +283,17 @@ public class Level
                     continue;
                 }
 
-                if (Camera.isInScope(entity.Hitbox))
-                    entity.Update();
+                foreach (var player in Players)
+                {
+                    var cam = player.Camera;
+                    var hit = entity.Hitbox;
+                    if (cam.isInScope(hit))
+                    {
+                        entity.Update();
+                        break;
+                    }
+                }
+               
             }
         }
         catch (Exception e)
@@ -367,27 +377,7 @@ public class Level
         
     }
 
-    public Entity GetActiveEntityFromGreen(int green, int blue, int x, int y)
-    {
-        switch (green)
-        {
-            case 0:
-                return new Pigeon(x, y); // 0 -> Pigeon
-            case 1:
-                return new ElRatz(x, y); // 1 -> Rat
-            case 2:
-                return new Zombie(x, y); // 2 -> Zombie
-            case 3:
-                return new Skeletton(x, y); // 3 -> Squelette
-            case 4:
-                return new Bullet(x, y);
-
-
-            default:
-                throw new InvalidDataException();
-                return null;
-        }
-    }
+   
 
     
 

@@ -8,7 +8,11 @@ internal class Porte :Sortie
     public Porte(int nextLevel, int x, int y , Texture2D Texture) : base(nextLevel, x, y)
     {
         texture = Texture;
-        Camera.player.AddSubscriber(HandleEvent);
+        foreach (var player in Level.Players)
+         player.AddSubscriber(HandleEvent);
+            
+        
+      
         
         
     }
@@ -18,12 +22,12 @@ internal class Porte :Sortie
         Raylib.UnloadTexture(texture);
     }
 
-    private void HandleEvent()
+    private void HandleEvent(int index)
     {
-        if(!Camera.player.Hitbox.Contains(trigger))
+        if(!Level.Players[index].Hitbox.Contains(trigger))
             return;
         
-        Camera.player.DelSubscriber(HandleEvent);
+        Level.Players[index].DelSubscriber(HandleEvent);
         LoadNextLevel();
     }
     public override void Update()

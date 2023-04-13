@@ -42,7 +42,7 @@ namespace Moteur
            
             return Raylib.LoadTextureFromImage(img);
         }
-        public virtual void OnCatch()
+        public virtual void OnCatch(int index)
         {
             if (Catched)
                 return;

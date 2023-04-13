@@ -22,8 +22,8 @@ internal class ElRatz : LivingEntity
         }
         UpdateAnimation();
         Acceleration.ax = MaxSpeed * sensX;
-
-        if (Camera.player.Hitbox.IntersectsWith(Hitbox))
+        foreach (var player in Level.Players)
+        if (player.Hitbox.IntersectsWith(Hitbox))
         {
             this.Life -= 1;
         }

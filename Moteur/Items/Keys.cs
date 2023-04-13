@@ -2,9 +2,9 @@
 {
     internal class Keys : Item
     {
-        public override void OnCatch()
+        public override void OnCatch(int index)
         {
-            base.OnCatch();
+            base.OnCatch(index);
         }
 
         public override void OnUse()

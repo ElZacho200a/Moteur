@@ -2,9 +2,9 @@
 {
     internal class Bullets : Item
     {
-        public override void OnCatch()
+        public override void OnCatch(int index)
         {
-            base.OnCatch();
+            base.OnCatch(index);
             this.Count = 15;
         }
 

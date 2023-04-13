@@ -19,8 +19,8 @@
 
         public override void Update()
         {
-           
-            if (Camera.player.Hitbox.IntersectsWith(Hitbox))
+            foreach (var player in Level.Players)
+            if (player.Hitbox.IntersectsWith(Hitbox))
             {
                 
                 if (!Used)
@@ -38,7 +38,8 @@
         protected void LoadNextLevel()
         {
             LevelLoad= true;
-            Camera.player.ResetSucribers();
+            foreach (var player in Level.Players)
+                player.ResetSucribers();
             Level.currentLevel.Deactivate();
             foreach (Sortie sortie in Level.currentLevel.GetEntities().Select(entity => entity ).Where(E => E is Sortie))
             {
@@ -64,10 +65,14 @@
                         Level.currentLevel.destroy();
                        
                         Level.currentLevel = nLevel;
-                        
-                        Camera.player.Coordonates = (sortie.Coordonates.x, sortie.Coordonates.y + Level.blocH - Camera.player.Hitbox.Height);
-                        Camera.player.Hitbox.Location = new Point(Camera.player[0], Camera.player[1]);
-                        Camera.ResetScope();
+                        foreach (var player in Level.Players)
+                        {
+                            player.Coordonates = (sortie.Coordonates.x,
+                                sortie.Coordonates.y + Level.blocH - player.Hitbox.Height);
+                            player.Hitbox.Location = new Point(player[0], player[1]);
+                            player.Camera.ResetScope();
+                        }
+
                         GC.Collect();
                         Level.currentLevel.Activate();
                         

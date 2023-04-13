@@ -17,7 +17,8 @@
         }
         public override void Update()
         {
-            if (!trigered && Math.Abs(Camera.player[0] - this.Hitbox.X)  < Level.blocH * triggerRange)
+            foreach (var player in Level.Players)
+            if (!trigered && Math.Abs(player[0] - this.Hitbox.X)  < Level.blocH * triggerRange)
             {
                 trigered = true;
                 

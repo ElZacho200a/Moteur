@@ -11,9 +11,9 @@ namespace Moteur.Entites
         private Player? player; // Le ? évite un warning inutile mais est dans les fait facultatif
         private static int size = Level.blocH /10;
         
-        public Bullet(int x, int y)
+        public Bullet(int x, int y , Player player)
         {
-            player = Camera.player; // Le player est déjà une ressource statique
+            this.player = player; // Le player est déjà une ressource statique
             Coordonates = (x, y + player.Hitbox.Height / 4); //Setup des coordonnée
             Sprite = GetImage(); // Voir la Fonction Image  , elle dis tout
             Hitbox = new Rectangle(x, y, Sprite.width, Sprite.height); // Une fois l'image défini on setup la Hitbox

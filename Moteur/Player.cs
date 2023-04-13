@@ -15,7 +15,8 @@ namespace Moteur
         private Point LastPos;
         private List<Item> inventory;
         private bool canshoot = false;
-        
+        public Camera Camera;
+        private int index;
         public List<Item> Inventory
         {
             get => inventory;
@@ -69,14 +70,17 @@ namespace Moteur
         }
 
         public int getMaxSpeed => MaxSpeed;
-        public Player()
+        public Player(Camera camera , int index)
         {
+             Camera = camera;
+            this.index = index;
             inventory = new List<Item> { };
             spriteManager = new SpriteManager(Program.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
             LastPos = new Point(0, 0);
             light = 5;
             Hitbox = new Rectangle(0, 0, Level.blocH, Level.blocH * 2);
+           
             Camera.AddSubscriberTenTick(UpdateAnimation);
         }
         public override void Update()
@@ -101,7 +105,7 @@ namespace Moteur
         
         
         
-        public delegate void MyEventHandler();
+        public delegate void MyEventHandler( int index);
         public event MyEventHandler MyEvent;
        
 
@@ -109,7 +113,7 @@ namespace Moteur
         {
             
             if(MyEvent != null)
-                MyEvent();
+                MyEvent(index);
         }
         public void AddSubscriber(MyEventHandler sub)
         {
@@ -207,7 +211,7 @@ namespace Moteur
                     select balle;
                 if (balles.Any())
                 {
-                    var bullet = new Bullet(Coordonates.x, Coordonates.y);
+                    var bullet = new Bullet(Coordonates.x, Coordonates.y , this);
                     Level.currentLevel.addEntity(bullet); // j'ajoute l'entite au bag
                     return true;
                 }

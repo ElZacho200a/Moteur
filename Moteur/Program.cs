@@ -11,7 +11,8 @@ namespace Moteur
             var currentDirectory = Directory.GetCurrentDirectory();
             RootDirectory = currentDirectory.Split("bin")[0];
             var size = Screen.AllScreens[0].Bounds;
-            Camera = new Camera(1920,1080);
+            // défini le nombre de joueurs
+            GameLoop.start(1);
         }
  
     }

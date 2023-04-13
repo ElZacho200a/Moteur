@@ -51,7 +51,8 @@ namespace Moteur.Entites
                 UpdateAnimation();
             }
 
-            if (Camera.player.Hitbox.IntersectsWith(this.Hitbox))
+            foreach (var player in Level.Players)
+            if (player.Hitbox.IntersectsWith(this.Hitbox))
             {
                 Speed.vx = 0;
             }
@@ -62,7 +63,8 @@ namespace Moteur.Entites
         {
             Hitbox.X = Coordonates.x;
             Hitbox.Y = Coordonates.y;
-            if (!Camera.player.Hitbox.IntersectsWith(this.Hitbox))
+            foreach (var player in Level.Players)
+            if (!player.Hitbox.IntersectsWith(this.Hitbox))
             {
                 if (spriteManager.cursor !=0 )
                     Sprite = spriteManager.GetImage(0, -sensX);

@@ -6,17 +6,19 @@ internal abstract class PNJ:TriggerEntity
     public PNJ(string text) : base(5)
     {
         Text = text;
-        Camera.player.AddSubscriber(say);
+        foreach (var player in Level.Players)
+         player.AddSubscriber(say);
     }
 
      ~PNJ()
     {
-        Camera.player.DelSubscriber(say);
+        foreach (var player in Level.Players)
+            player.DelSubscriber(say);
     }
     public override string getArgument => Text;
-    protected void say()
+    protected void say(int index)
     {
-        if(Camera.player.Hitbox.IntersectsWith(Hitbox))
-            Level.Camera.ShowDialog(Text);
+        if(Level.Players[index].Hitbox.IntersectsWith(Hitbox))
+            Level.Players[index].Camera.ShowDialog(Text);
     }
 }
