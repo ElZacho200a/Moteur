@@ -1,52 +1,58 @@
-﻿namespace Moteur.Entites
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms.VisualStyles;
+
+namespace Moteur.Entites
 {
     internal class Zombie : TriggerEntity
     {
-        protected bool trigered = false;
         Random random = new Random();
         protected new int MaxSpeed => 8;
        
         public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
-            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
+            spriteManager = new SpriteManager(Program.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
             Coordonates = (x, y);
-            
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);
-            Acceleration.ax = (random.Next(3) == 1 ? 1 : -1) * MaxSpeed;
+            Acceleration.ax = (random.Next(2) == 1 ? 1 : -1) * MaxSpeed;
         }
 
         public override void Update()
         {
-            if (this.Life >= 0)
+            if (this.Life <= 0)
             {
-                Level.currentLevel.RemoveEntity(this);
+                isDead = true;
             }
-            if(!trigered)
+            if(!is_triggered())
             {
-                trigered = is_triggered();
                 Random rand = Random.Shared;
-                int randint = rand.Next(100);
-                if (Moove() && randint < 50)
+                int randint = rand.Next(2);
+                if (Moove() && randint == 0)
                 {
                     Speed.vy = (-MaxSpeed * 1  - Speed.vx / 6) ;
                 }
 
-                if (Moove() && randint > 50)
+                else if (Moove())
                 {
                     Speed.vx = Speed.vx * -1;
                 }
+
+                Acceleration.ax = MaxSpeed * this.sensX;
+                UpdateAnimation();
             }
-             
-        Acceleration.ax = MaxSpeed * sensPlayer;
-            UpdateAnimation();
-            if (Moove())
+            else
             {
-                Speed.vy = (-MaxSpeed * 1  - Speed.vx / 6) ;
+                if (Moove())
+                {
+                    Speed.vy = (-MaxSpeed * 1  - Speed.vx / 6) ;
+                }
+                Acceleration.ax = MaxSpeed * sensPlayer;
+                UpdateAnimation();
             }
 
-            if (Camera.player.Hitbox.IntersectsWith(this.Hitbox))
+            foreach (var player in Level.Players)
+            if (player.Hitbox.IntersectsWith(this.Hitbox))
             {
                 Speed.vx = 0;
             }
@@ -57,7 +63,8 @@
         {
             Hitbox.X = Coordonates.x;
             Hitbox.Y = Coordonates.y;
-            if (!Camera.player.Hitbox.IntersectsWith(this.Hitbox))
+            foreach (var player in Level.Players)
+            if (!player.Hitbox.IntersectsWith(this.Hitbox))
             {
                 if (spriteManager.cursor !=0 )
                     Sprite = spriteManager.GetImage(0, -sensX);

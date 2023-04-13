@@ -30,13 +30,15 @@
 
         private  void setup()
         {
-            Camera.player.AddSubscriber(GiveAndDestroy);
+            foreach (var player in Level.Players)
+                player.AddSubscriber(GiveAndDestroy);
             Sprite = Item.GetResizedImage();
             Hitbox = new Rectangle(this[0], this[1], Level.blocH, Level.blocH);
         }
         public override void Update()
         {
-            if (Math.Abs(Camera.player[0] - this[0]) < 3 * Level.blocH)
+            foreach (var player in Level.Players)
+            if (Math.Abs(player[0] - this[0]) < 3 * Level.blocH)
             {
                 if (help == null)
                     help = new Helper(this);
@@ -50,19 +52,19 @@
 
         }
 
-        private void GiveAndDestroy()
+        private void GiveAndDestroy(int index)
         {
-            
-            if (Camera.player.Hitbox.IntersectsWith(Hitbox))
+            var player = Level.Players[index];
+            if (player.Hitbox.IntersectsWith(Hitbox))
             {
                 if (help != null)
                 {
                     help.kill();
                     
                 }
-                Camera.player.receiveItem(Item);
-                Item.OnCatch();
-                Camera.player.DelSubscriber(GiveAndDestroy);
+                player.receiveItem(Item);
+                Item.OnCatch(index);
+                player.DelSubscriber(GiveAndDestroy);
                 isDead = true; 
             }
 
@@ -89,7 +91,7 @@
                 return;
                exist = true;
                 
-                spriteManager = new SpriteManager(Form1.RootDirectory + "Assets/Textures/ItemHelp.png", 50, 50, false);
+                spriteManager = new SpriteManager(Program.RootDirectory + "Assets/Textures/ItemHelp.png", 50, 50, false);
                 Hitbox = new Rectangle(
                     parent[0], 
                     (int)(parent[1] - (1.5 * spriteManager.Height)), 

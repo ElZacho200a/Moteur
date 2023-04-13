@@ -2,6 +2,10 @@ using System.Collections.Concurrent;
 using System.Xml;
 using System.Xml.Serialization;
 using Moteur.Entites;
+using Raylib_cs;
+using static Raylib_cs.Raylib;
+using Image = System.Drawing.Image;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace Moteur;
 
@@ -10,17 +14,18 @@ public class Level
     public static Level? currentLevel; //  l'accès à tout niveau ( ou salle ) doit se faire à travers cette variable .
     public static int LevelLoaded;
     public  XmlSerializer serializer;
-    private Bitmap? Background;
-    protected Bitmap[,] BackgroundMatrice = {{null}};
+    private Raylib_cs.Image Background;
+    protected Raylib_cs.Texture2D? [,] BackgroundMatrice = {{}};
     protected bool[,] CollisionMatrice;
     public bool Dark;
     private ConcurrentBag<Entity> entities = new();
     private bool fullLoaded;
     public int ID;
     public VoidArea? VoidArea;
-    protected Bitmap[,] levelMatrice;
+    protected Raylib_cs.Texture2D? [,]  levelMatrice;
     protected bool[,] backgroundNeedded;
-
+    public static List<Player> Players;
+   
     public bool[,] BackgroundNeedded
     {
         get => backgroundNeedded;
@@ -54,32 +59,32 @@ public class Level
     }
 
     public static int blocH => Camera.blocH;
-    public Bitmap[,] BackGroundMatrice => BackgroundMatrice;
+    public Raylib_cs.Texture2D ?[,] BackGroundMatrice => BackgroundMatrice;
     public Palette getPalette { get; private set; }
 
     public (int w, int h ) GetRealSize => (levelMatrice.GetLength(0), levelMatrice.GetLength(1));
 
-    public Bitmap getBackground()
+    public Raylib_cs.Image? getBackground()
     {
         return Background;
     }
 
     private string findFilenameByID(int id)
     {
-        return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.png";
+        return Program.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.png";
     }
 
     private string findDataFilenamebyID(int id)
     {
-        return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.ROOM";
+        return Program.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.ROOM";
     }
 
     private string findXMLFilenamebyID(int id)
     {
-        return Form1.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.xml";
+        return Program.RootDirectory + @$"Assets/ROOMS/ROOM_{id}.xml";
     }
 
-    public Bitmap[,] getLevelMatrice()
+    public Raylib_cs.Texture2D ?[,] getLevelMatrice()
     {
         return levelMatrice;
     }
@@ -99,7 +104,7 @@ public class Level
         var rawLevel = new Bitmap(Image.FromFile(filename));
         if (serializer == null)
             serializer = new XmlSerializer(typeof(List<RawEntity>));
-        levelMatrice = new Bitmap[rawLevel.Width, rawLevel.Height];
+        levelMatrice = new Raylib_cs.Texture2D?[rawLevel.Width, rawLevel.Height];
         CollisionMatrice = new bool[rawLevel.Width, rawLevel.Height];
         backgroundNeedded = new bool[rawLevel.Width, rawLevel.Height];
         // Construction à partir du ROOM_ID.ROOM
@@ -109,7 +114,8 @@ public class Level
                 Camera.FOV--;
         else
             Camera.FOV = 30;
-        Camera.player.ResetSprite();
+        foreach (var player in Players)
+            player.ResetSprite();
         getPalette = new Palette(blocH);
 
         try
@@ -153,7 +159,7 @@ public class Level
                     else
                     {
                         getPalette.loadBloc(color);
-                        entities.Add(new Porte(color.B, i * blocH, j * blocH, getPalette.getImageByColor(color)));
+                        entities.Add(new Porte(color.B, i * blocH, j * blocH,  (Texture2D)getPalette.getImageByColor(color)));
                     }
 
                     break;
@@ -166,24 +172,28 @@ public class Level
             BackgroundMatrice = SliceImage(Background);
     }
 
-    private Bitmap[,] SliceImage(Bitmap bitmap)
+    private Raylib_cs.Texture2D?[,] SliceImage(Raylib_cs.Image backImage)
     {
-        var imgMatrice = new Bitmap[bitmap.Width / 50, bitmap.Height / 50];
+      
+        var imgMatrice = new Raylib_cs.Texture2D?[backImage.width / 50, backImage.height / 50];
         var size = new Size(blocH + Level.blocH / 50 , blocH + Level.blocH / 50 );
-        var rect = new Rectangle(0, 0, 50, 50);
+        var rect = new Raylib_cs.Rectangle(0, 0, 50, 50);
         var w = Math.Min(imgMatrice.GetLength(0) , levelMatrice.GetLength(0));
         var h = Math.Min(imgMatrice.GetLength(1) , levelMatrice.GetLength(1));
         for (var i = 0; i  < w ; i ++)
         {
             for (var j = 0; j  < h; j ++)
             {
-                var img = bitmap.Clone(rect, bitmap.PixelFormat);
-                imgMatrice[i, j] = new Bitmap(img, size);
-                rect.Y += 50;
+                var img = Raylib.ImageCopy(backImage);
+                Raylib.ImageCrop(ref img , rect);
+                Raylib.ImageResize(ref img , size.Height,size.Width);
+                imgMatrice[i, j] = LoadTextureFromImage(img);
+                UnloadImage(img);
+                rect.y += 50;
             }
 
-            rect.Y = 0;
-            rect.X += 50;
+            rect.y = 0;
+            rect.x += 50;
         }
 
         return imgMatrice;
@@ -195,7 +205,7 @@ public class Level
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(filename);
         var rawEntities = xmlDocument.GetElementsByTagName("Entity");
-        if (!File.Exists(Form1.RootDirectory + $"Save/Save_{ID}.xml"))
+        if (!File.Exists(Program.RootDirectory + $"Save/Save_{ID}.xml"))
         {
             
             foreach (XmlNode rawEntity in rawEntities)
@@ -203,7 +213,7 @@ public class Level
         }
         else
         {
-            FileStream stream = new FileStream(Form1.RootDirectory + $"Save/Save_{ID}.xml", FileMode.Open);
+            FileStream stream = new FileStream(Program.RootDirectory + $"Save/Save_{ID}.xml", FileMode.Open);
             List<RawEntity> list = (List<RawEntity>)serializer.Deserialize(stream);
             foreach (var rawEntity in list)
                 try
@@ -225,8 +235,8 @@ public class Level
         var RoomSave = xmlDocument.SelectSingleNode("RoomSave");
         Dark = bool.Parse(RoomSave.SelectSingleNode("isDark").InnerText);
         var BackGroundPath = RoomSave.SelectSingleNode("BackgroundPath").InnerText;
-        BackGroundPath = Form1.RootDirectory + "Assets" + BackGroundPath.Split("..")[1];
-        Background = new Bitmap(BackGroundPath);
+        BackGroundPath = Program.RootDirectory + "Assets" + BackGroundPath.Split("..")[1];
+        Background = LoadImage(BackGroundPath);
     }
 
     private void LoadFromRoomFile()
@@ -235,9 +245,9 @@ public class Level
         {
             var lines = File.ReadAllLines(findDataFilenamebyID(ID));
             lines[0] = lines[0].Split("..")[1];
-            lines[0] = Form1.RootDirectory + "Assets" + lines[0];
+            lines[0] = Program.RootDirectory + "Assets" + lines[0];
             for (var i = 1; i < lines.Length; i++) entities.Add(getEncodedEntity(lines[i]));
-            Background = new Bitmap(lines[0]);
+            Background = Raylib.LoadImage(lines[0]);
             //var size = new Size(Background.Width * rawLevel.Height * blocH / Background.Height, rawLevel.Height * blocH);
             //Background = new Bitmap(Background,size);
         }
@@ -263,18 +273,27 @@ public class Level
             return false;
         if(VoidArea != null)
             VoidArea.UpdateAnimation();
-        try
+       try
         {
             foreach (var entity in entities)
             {
                 if (entity.IsDead)
                 {
-                    entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
+                    RemoveEntity(entity);
                     continue;
                 }
 
-                if (Camera.isInScope(entity.Hitbox))
-                    entity.Update();
+                foreach (var player in Players)
+                {
+                    var cam = player.Camera;
+                    var hit = entity.Hitbox;
+                    if (cam.isInScope(hit))
+                    {
+                        entity.Update();
+                        break;
+                    }
+                }
+               
             }
         }
         catch (Exception e)
@@ -292,7 +311,7 @@ public class Level
     }
     public void RemoveEntity(Entity entity)
     {
-        
+        entity.Destroy();
         entities = new ConcurrentBag<Entity>(entities.Except(new[] { entity }));
     }
 
@@ -301,10 +320,38 @@ public class Level
         //Sauvegarde Des entités 
               SaveEntities();
         //Effacement des Object Potentiellement Persistant
-       entities.Clear();
-       Background = null;
-      
 
+        foreach (var entity in entities)
+        {
+            RemoveEntity(entity);
+        }
+        
+       UnloadImage(Background);
+      
+      //Unloading des bloc et matrice
+      for (int i = 0; i < levelMatrice.GetLength(0); i++)
+      for (int j = 0; j < levelMatrice.GetLength(1); j++)
+          {
+              var texture = levelMatrice[i, j];
+              if (texture != null)
+                  Raylib.UnloadTexture((Texture2D)texture);
+              levelMatrice[i, j] = null;
+          }
+      
+      for (int i = 0; i < BackgroundMatrice.GetLength(0); i++)
+      for (int j = 0; j < BackgroundMatrice.GetLength(1); j++)
+      {
+          var texture = BackgroundMatrice[i, j];
+          if (texture != null)
+              Raylib.UnloadTexture((Texture2D)texture);
+          BackgroundMatrice[i, j] = null;
+      }
+
+      
+      getPalette.Destroy();
+      VoidArea.Destroy();
+
+      
     }
 
     private void SaveEntities()
@@ -319,7 +366,7 @@ public class Level
          serializer = new XmlSerializer(Actives.GetType());
         try
         {
-            using (StreamWriter writer = new StreamWriter(Form1.RootDirectory + $"Save/Save_{ID}.xml"))
+            using (StreamWriter writer = new StreamWriter(Program.RootDirectory + $"Save/Save_{ID}.xml"))
                 serializer.Serialize(writer,Actives);
         }
         catch (Exception e)
@@ -330,27 +377,7 @@ public class Level
         
     }
 
-    public Entity GetActiveEntityFromGreen(int green, int blue, int x, int y)
-    {
-        switch (green)
-        {
-            case 0:
-                return new Pigeon(x, y); // 0 -> Pigeon
-            case 1:
-                return new ElRatz(x, y); // 1 -> Rat
-            case 2:
-                return new Zombie(x, y); // 2 -> Zombie
-            case 3:
-                return new Skeletton(x, y); // 3 -> Squelette
-            case 4:
-                return new Bullet(x, y);
-
-
-            default:
-                throw new InvalidDataException();
-                return null;
-        }
-    }
+   
 
     
 
@@ -407,8 +434,16 @@ public class Level
         return Activator.CreateInstance(t, argument) as Entity;
     }
 
+    public IEnumerable<CollidedEntity> getCollidedEntity()
+    {
+        foreach (var entity in entities)
+        {
+            if (entity is CollidedEntity)
+                yield return (entity as CollidedEntity);
+        }
+    }
     public bool haveBackground()
     {
-        return Background != null;
+        return Background.width != null && Background.width != 0 ;
     }
 }

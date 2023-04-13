@@ -1,28 +1,33 @@
-﻿namespace Moteur;
+﻿using Raylib_cs;
+using Color = Raylib_cs.Color;
+using Image = Raylib_cs.Image;
+
+namespace Moteur;
 
 public class VoidArea 
 {
     private bool[,] DangerousMatrice;
-    private List<Bitmap> DangerousBloc;
+    private List<Texture2D> DangerousBloc;
     private int time = 0 ;
-    private List<Bitmap> BaseImages;
-    private SpriteManager ELectricAnim;
+    private List<Texture2D> BaseImages;
+    public SpriteManager ELectricAnim;
     private int Bloch => Level.blocH;
     private Level _level;
     public VoidArea(int w, int h, Level level)
     {
         _level = level;
         DangerousMatrice = new bool[w, h];
-        DangerousBloc = new List<Bitmap>();
-        BaseImages = new List<Bitmap>();
-        ELectricAnim = new SpriteManager(Form1.RootDirectory + "Assets/Textures/ElecAnim.png" , 50 , 50 , false);
+        DangerousBloc = new List<Texture2D>();
+        BaseImages = new List<Texture2D>();
+        ELectricAnim = new SpriteManager(Program.RootDirectory + "Assets/Textures/ElecAnim.png" , 50 , 50 , false);
     }
     
     public bool this[int i , int j ]
     {
         get
         {
-            return DangerousMatrice[i, j];
+            
+            return i < DangerousMatrice.GetLength(0) && j < DangerousMatrice.GetLength(1) && DangerousMatrice[i, j];
         }
         set
         {
@@ -33,10 +38,10 @@ public class VoidArea
 
 
             var dangerousBloc = _level.getLevelMatrice()[i, j];
-            if (dangerousBloc != null && !DangerousBloc.Contains(dangerousBloc))
+            if (!DangerousBloc.Contains((Texture2D)dangerousBloc))
             {
-                BaseImages.Add((Bitmap)dangerousBloc.Clone());
-                DangerousBloc.Add(dangerousBloc);
+                BaseImages.Add((Texture2D)dangerousBloc);
+                DangerousBloc.Add((Texture2D)dangerousBloc);
             }
 
             DangerousMatrice[i, j] = value;
@@ -53,12 +58,8 @@ public class VoidArea
            
         for (int i = 0; i < DangerousBloc.Count; i++)
         {
-            var g = Graphics.FromImage(DangerousBloc[i]);
-            g.Clear(Color.Transparent);
-            g.DrawImage(BaseImages[i] , 0 ,0);
-            if( time > 40) 
-                g.DrawImage(ELectricAnim.nextCursor(), 0 , 0);
-            g.Dispose();
+
+            ELectricAnim.nextCursor();
         }
         
         }
@@ -68,6 +69,18 @@ public class VoidArea
         }
     }
 
+    public void Destroy()
+    {
+        foreach (var variaTexture2D in BaseImages)
+        {
+            Raylib.UnloadTexture(variaTexture2D);
+        }
+        ELectricAnim.Destroy();
+        foreach (var texture2D in DangerousBloc)
+        {
+            Raylib.UnloadTexture(texture2D);
+        }
+    }
     public bool isCollidedWithEntity( Entity entity)
     {
         var r = entity.Hitbox;

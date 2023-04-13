@@ -8,7 +8,7 @@
         protected  new int MaxSpeed => 8; 
         public Skeletton(int x, int y) : base(15)
         {
-            spriteManager = new SpriteManager(Form1.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
+            spriteManager = new SpriteManager(Program.RootDirectory + @"Assets\Sprite\Zombie.png", 50, 72);
             Coordonates = (x, y);
             
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height);

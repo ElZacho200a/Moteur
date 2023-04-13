@@ -1,11 +1,15 @@
-﻿namespace Moteur;
+﻿using Raylib_cs;
+using Color = Raylib_cs.Color;
+using Image = Raylib_cs.Image;
+
+namespace Moteur;
 
 public class PauseMenu
 {
     //L'image de base du menu au format 1920X1080
-    private Bitmap baseImage;
+    private Image baseImage;
     //L'image redimensionné pour l'affichage ( taille définis par la Caméra )
-    public Bitmap resizedImage;
+    public Texture2D resizedImage;
     // Points en haut a gauche de chaque Slot de l'inventaire
     private Point[] InventorySlot = new []{ 
         new Point(39,500) ,// Les Point sont trié dans l'ordre de lecteur
@@ -29,17 +33,17 @@ public class PauseMenu
     {
         this.player = player;
         //On récupère l'image de base
-        baseImage = new Bitmap(Form1.RootDirectory + "Assets/Textures/PauseMenu.png");
-        //On la redimensionne
-        resizedImage = new Bitmap(baseImage, Width, Height);
+        baseImage = Raylib.LoadImage(Program.RootDirectory + "Assets/Textures/PauseMenu.png");
         // On trouve le ratio entre les deux images afin de setup les tailles et point pour l'affichage
-        double ratio =  resizedImage.Width / (double)(baseImage.Width);
+        double ratio =  Width / (double)(baseImage.width);
        
         itemSize = (int)(itemSize * ratio); // La taille des Slot
         
         //On défini l'origin de manière à ce que le menu soit centré
         Origin = new Point((Camera.Width - Width) / 2, (Camera.Height - Height) / 2);
-
+        //On la redimensionne
+        Raylib.ImageResize(ref baseImage , Width,Height);
+        resizedImage = Raylib.LoadTextureFromImage(baseImage);
         for (int i = 0; i < InventorySlot.Length; i++)
             scalaire(ref InventorySlot[i], ratio);
 
@@ -48,12 +52,12 @@ public class PauseMenu
 
         }
 
-    public void Draw(Graphics g) 
+    public void Draw() 
     {
-        g.DrawImage(resizedImage,Origin);
-        g.TranslateTransform(Origin.X , Origin.Y);
+       
+        Raylib.DrawTexture(resizedImage,Origin.X,Origin.Y,Color.WHITE);
         for (int i = 0; i < InventorySlot.Length && i < player.Inventory.Count ; i++)
-            g.DrawImage(player.Inventory[i].GetResizedImage(itemSize) , InventorySlot[i]);
+            Raylib.DrawTexture(player.Inventory[i].GetResizedImage(itemSize) ,Origin.X + InventorySlot[i].X ,Origin.Y +InventorySlot[i].Y , Color.WHITE );
         
     }
     private void scalaire( ref Point point, double scalaire) // Sers juste à fludifier le code 

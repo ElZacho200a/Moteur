@@ -1,4 +1,8 @@
 using System.Security.Permissions;
+using Raylib_cs;
+using Color = System.Drawing.Color;
+using Image = Raylib_cs.Image;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace Moteur.Entites
 {
@@ -6,13 +10,13 @@ namespace Moteur.Entites
     {
         private Player? player; // Le ? évite un warning inutile mais est dans les fait facultatif
         private static int size = Level.blocH /10;
-        private static Bitmap img = Image();
-        public Bullet(int x, int y)
+        
+        public Bullet(int x, int y , Player player)
         {
-            player = Camera.player; // Le player est déjà une ressource statique
+            this.player = player; // Le player est déjà une ressource statique
             Coordonates = (x, y + player.Hitbox.Height / 4); //Setup des coordonnée
-            Sprite = img; // Voir la Fonction Image  , elle dis tout
-            Hitbox = new Rectangle(x, y, Sprite.Width, Sprite.Height); // Une fois l'image défini on setup la Hitbox
+            Sprite = GetImage(); // Voir la Fonction Image  , elle dis tout
+            Hitbox = new Rectangle(x, y, Sprite.width, Sprite.height); // Une fois l'image défini on setup la Hitbox
              // J'ai enlevé la gravité statique    
             Speed.vx = 30 * player.sensX;  // la vitesse est défini par le sens du player
             Acceleration.ax = 30 * player.sensX; // manque le sens j'y arrive pas jsuis con wallah 
@@ -43,16 +47,16 @@ namespace Moteur.Entites
             throw new InvalidOperationException("Cette méthode n'est pas censé etre appelée");
         }
 
-        private  static Bitmap Image() // On peut se permettre de déssiner nous même l'image de la balle et ainsi évité de pollué L'éditeur
+        private  static Texture2D GetImage() // On peut se permettre de déssiner nous même l'image de la balle et ainsi évité de pollué L'éditeur
         {// De plus le dessin sur place évite la lecture d'un fichier accélérant ainsi le processus
-            var img = new Bitmap(size, size, Camera.player.Sprite.PixelFormat); // Créer une Image de Vide de Dimension Level.blocH / 6XLevel.blocH / 6
-            
-            using Graphics g = Graphics.FromImage(img); // Créer provisoirement un Graphics permettant de Dessiner dans l'image
-            {
-                //Rempli l'image en Noir
-                g.Clear(Color.Black);
-            }
-            return img;
+            var img = new Image(); // Créer une Image de Vide de Dimension Level.blocH / 6XLevel.blocH / 6
+            var size = Level.blocH / 6;
+            img.width = size;
+            img.height = size;
+            Raylib.ImageDrawRectangle(ref img ,0 ,0 ,size,size,Raylib_cs.Color.BLACK);
+            var texture = Raylib.LoadTextureFromImage(img);
+            Raylib.UnloadImage(img);
+            return texture;
         }
         
         public bool IsCollidedWithMob()

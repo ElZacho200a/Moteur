@@ -3,34 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Raylib_cs;
+using Image = Raylib_cs.Image;
 
 namespace Moteur
 {
     public abstract class Item
     {
         protected int Unit;
-        protected Bitmap Image;
+        protected Image Image;
         protected string Name;
         protected bool Catched = false;
+        protected int Count = 1;
         protected string description = "Ceci est un item et quelqu'un à oublié de faire sa description shaaaammme";
         
 
         protected Item() 
         {
-            Image = new Bitmap(Form1.RootDirectory + $"Assets/Items_sprite/{this.GetType().Name}.png");
+            Image = Raylib.LoadImage(Program.RootDirectory + $"Assets/Items_sprite/{this.GetType().Name}.png");
         }
-        public Bitmap GetImage()
+        public Texture2D GetImage()
         {
-            return Image;
+            return Raylib.LoadTextureFromImage(Image);
+        }
+
+        public int GetCount
+        {
+            get => Count;
+            set => Count = value;
         }
         
-        public Bitmap GetResizedImage(int size = -1)
+        public Texture2D GetResizedImage(int size = -1)
         {
             if (size == -1)
                 size = Level.blocH;
-            return new Bitmap(Image ,size ,size);
+            var img = Raylib.ImageCopy(Image);
+            Raylib.ImageResize(ref img , size , size);
+           
+            return Raylib.LoadTextureFromImage(img);
         }
-        public virtual void OnCatch()
+        public virtual void OnCatch(int index)
         {
             if (Catched)
                 return;

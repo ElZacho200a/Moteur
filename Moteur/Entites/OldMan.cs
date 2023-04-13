@@ -10,9 +10,9 @@ internal class OldMan : PNJ
     public OldMan(int x , int y ) : base("")
     {
         Speed.vx = new Random().Next(2) == 0 ? 1 : -1;
-        spriteManager = new SpriteManager(Form1.RootDirectory + "Assets/Sprite/OldMan.png",118,75);
+        spriteManager = new SpriteManager(Program.RootDirectory + "Assets/Sprite/OldMan.png",118,75);
         Sprite = spriteManager.GetImage(0, sensX);
-        Hitbox = new Rectangle(x, y, Sprite.Width, Sprite.Height);
+        Hitbox = new Rectangle(x, y, Sprite.width, Sprite.height);
         Camera.AddSubscriberTenTick(UpdateAnimation);
     }
     
@@ -20,37 +20,21 @@ internal class OldMan : PNJ
     public OldMan(int x , int y , string text ) : base(text)
     {
         Speed.vx = new Random().Next(2) == 0 ? 1 : -1;
-        spriteManager = new SpriteManager(Form1.RootDirectory + "Assets/Sprite/OldMan.png",118,75);
+        spriteManager = new SpriteManager(Program.RootDirectory + "Assets/Sprite/OldMan.png",118,75);
         Sprite = spriteManager.GetImage(0, sensX);
         Coordonates = (x, y);
-        Hitbox = new Rectangle(x, y, Sprite.Width, Sprite.Height);
-        somethingTosay = text != "";   
+        Hitbox = new Rectangle(x, y, Sprite.width, Sprite.height);
+        somethingTosay = text != "";  
+        
     }
 
     public override void Update()
     {
-        //UpdateAnimation();
-        if (!somethingTosay)
-            return;
-        if (is_triggered())
-        {
-           
-            if (!trigger)
-            {
-                
-                bubbleText = new BubbleText(Text, Hitbox, TriggerRange);
-                Level.currentLevel.addEntity(bubbleText);
-                trigger = true;
-            }
-
-        }
-        else 
-        {
-            trigger= false;
-            bubbleText = null;
-        }
+        UpdateAnimation();
+    
     }
 
+    
     protected override void UpdateAnimation()
     {
         if (trigger)

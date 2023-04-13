@@ -1,18 +1,27 @@
+using Raylib_cs;
+using Color = System.Drawing.Color;
+using Font = System.Drawing.Font;
+using Image = Raylib_cs.Image;
+using Rectangle = System.Drawing.Rectangle;
+
 namespace Moteur;
 
 public class Palette
 {
-    protected Dictionary<Color, Bitmap> ColorIndex;
+    protected Dictionary<Color, Texture2D> ColorIndex;
     private string filename;
     private int blocH;
+    private static Bitmap Alphabet = new Bitmap(Program.RootDirectory +"Assets/Textures/Alphabet.png");
+    
     public Palette(int blocH)
     {
+        
         this.blocH = blocH;
-        ColorIndex = new Dictionary<Color, Bitmap>();
-        filename = Form1.RootDirectory + @"Assets\BlocsImage\";
+        ColorIndex = new Dictionary<Color, Texture2D>();
+        filename = Program.RootDirectory + @"Assets\BlocsImage\";
     }
 
-    public Bitmap getImageByColor(Color color)
+    public Texture2D? getImageByColor(Color color)
     {
         if (color == Color.White)
             return null;
@@ -42,9 +51,10 @@ public class Palette
         string file = $"{color.R},{color.G},0.png";
         try
         {
-            Bitmap img = new Bitmap(filename +file);
-            img = new Bitmap(img, new Size(blocH  + Level.blocH / 50  , blocH+ Level.blocH / 50  ));
-            ColorIndex.Add(color,img);
+            Image img = Raylib.LoadImage(filename +file);
+            Raylib.ImageResize(ref img, blocH  + Level.blocH / 50  , blocH+ Level.blocH / 50  );
+            ColorIndex.Add(color,Raylib.LoadTextureFromImage(img));
+            Raylib.UnloadImage(img);
         }
         catch (Exception e)
         {
@@ -53,44 +63,64 @@ public class Palette
     }
 
     public Color simplify(Color color) => Color.FromArgb(color.A, color.R, color.G, 0);
-    public bool isOpaque(Bitmap img)
+    public bool isOpaque(Texture2D ? texture)
     {
-        if (img == null)
+        if (texture is null)
             return true;
-        for (int i = 0; i < img.Width; i+=3 )
-            for (int j = 0; j < img.Height; j+= 3)
-                if (img.GetPixel(i, j).A ==0)
-                    return false;
-        return true;
+        var img = Raylib.LoadImageFromTexture((Texture2D)texture );
+        if (img.width != null)
+            return true;
+        for (int i = 0; i < img.width; i+=3 )
+            for (int j = 0; j < img.height; j+= 3)
+                if (Raylib.GetImageColor(img, i, j).a <= 200)
+                {
+                    Raylib.UnloadImage(img);
+                    return true;
+                }
+        Raylib.UnloadImage(img);           
+        return false;
 
     }
-    public Bitmap turn(Bitmap img)
-    {
-        Bitmap ne = new Bitmap(img);
-        for (int i = 0; i < img.Width; i++)
-        {
-            for (int j = 0; j < img.Height; j++)
-            {
-                ne.SetPixel(j, i, img.GetPixel(img.Width -1- i, j));
-            }
-        }
-        return ne;
-    }
-    public Bitmap turnMultipleTime(Bitmap img, int n)
+   
+    public Texture2D turnMultipleTime(Texture2D img, int n)
     {
         if (n == 0)
             return img;
         n = n % 4;
-        Bitmap ne = img;
+        Image ne = Raylib.LoadImageFromTexture(img);
         for (int i = 0; i < n; i++)
         {
-            ne = turn(ne);
+            Raylib.ImageRotateCCW(ref ne);
         }
-        return ne;
+        var toRet =  Raylib.LoadTextureFromImage(ne);
+        Raylib.UnloadImage(ne);
+        return toRet;
     }
 
     public static Rectangle getRectFromBitmap(Bitmap img)
     {
         return new Rectangle(0, 0, img.Width, img.Height);
+    }
+
+    private static Bitmap getLineImage(String s ,int charSize = 10)
+    {
+     
+        Font font = new Font("Runescape UF", charSize);
+        Bitmap b = new Bitmap(charSize * s.Length,charSize);
+        using (var g = Graphics.FromImage(b))
+        {
+            g.DrawString(s,font,Brushes.Black, 0,0);
+            
+        }
+
+        return b;
+    }
+
+    public void Destroy()
+    {
+        foreach (var texture in ColorIndex.Values)
+        {
+            Raylib.UnloadTexture(texture);
+        }
     }
 }

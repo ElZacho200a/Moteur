@@ -1,55 +1,63 @@
-﻿namespace Moteur
+﻿using Raylib_cs;
+using static Raylib_cs.Raylib;
+using Image = Raylib_cs.Image;
+using Rectangle = System.Drawing.Rectangle;
+
+namespace Moteur
 {
     public class SpriteManager
     {
-        Bitmap[] Sprite;
+        Texture2D[] Sprite;
         public int Height , Width ;
         public byte cursor = 0;
         private String name;
         private string filename;
         private int h, w;
         private bool Symetric;
-        public SpriteManager(String filename , int h , int w , bool symetric  = true)
-        { 
-            Bitmap img = new Bitmap(filename);
-            this.filename = filename;
-            this.h = h;
-            this.w= w;
-            Symetric = symetric;
-            int nmbSprite = img.Width / w;
-                img = new Bitmap(img, new Size(img.Width * Level.blocH / 50, img.Height * Level.blocH / 50 ));
-                Height = img.Height;
-                Width = img.Width / nmbSprite ;
+        public  SpriteManager(String filename , int h , int w , bool symetric  = true)
+        {
+            unsafe
+            {
+                Image img = Raylib.LoadImage(filename);
+                this.filename = filename;
+                this.h = h;
+                this.w= w;
+                Symetric = symetric;
+                int nmbSprite = img.width / w;
+                ImageResize(ref img ,img.width * Level.blocH / 50, img.height * Level.blocH / 50 );
+                Height = img.height;
+                Width = img.width / nmbSprite ;
                 if(symetric)
-                Sprite = new Bitmap[img.Width  * 2/ Width];
+                    Sprite = new Texture2D[img.width  * 2/ Width];
                 else 
-                    Sprite = new Bitmap[img.Width / Width];
+                    Sprite = new Texture2D[img.width / Width];
                 name = Path.GetFileName(filename) + $"X{Sprite.Length / 2}";
           
 
-            fillSprite(img);
+                fillSprite(img);
+            }
         }
         public SpriteManager(String filename ,int nb_Animation, bool symetric  = true)
         { 
-            Bitmap img = new Bitmap(filename);
+            Image img = Raylib.LoadImage(filename);
             this.filename = filename;
-            this.h =  img.Height;
-            this.w= img.Width / nb_Animation;
+            this.h =  img.height;
+            this.w= img.width / nb_Animation;
             Symetric = symetric;
-            int nmbSprite = img.Width / w;
-            img = new Bitmap(img, new Size(img.Width * Level.blocH / 50, img.Height * Level.blocH / 50 ));
-            Height = img.Height;
-            Width = img.Width / nmbSprite ;
+            int nmbSprite = img.width / w;
+            ImageResize(ref img ,img.width * Level.blocH / 50, img.height * Level.blocH / 50 );
+            Height = img.height;
+            Width = img.width / nmbSprite ;
             if(symetric)
-                Sprite = new Bitmap[img.Width  * 2/ Width];
+                Sprite = new Texture2D[img.width  * 2/ Width];
             else 
-                Sprite = new Bitmap[img.Width / Width];
+                Sprite = new Texture2D[img.width / Width];
             name = Path.GetFileName(filename) + $"X{Sprite.Length / 2}";
           
 
             fillSprite(img);
         }
-        public Bitmap GetImage(byte toGet , int sens)
+        public Texture2D GetImage(byte toGet , int sens)
         {
             cursor = toGet;
             if (sens < 0)
@@ -58,13 +66,13 @@
             return Sprite[toGet];
         }
 
-        public Bitmap nextCursor()
+        public Texture2D nextCursor()
         {
             var img =  Sprite[cursor];
             cursor =(byte) ((cursor + 1) % Sprite.Length);
             return img;
         }
-        public Bitmap GetImage(byte toGet ) // Dans le cas où le Sprite n'est pas Symétrique
+        public Texture2D GetImage(byte toGet ) // Dans le cas où le Sprite n'est pas Symétrique
         {
             cursor = toGet;
             return Sprite[toGet];
@@ -73,7 +81,7 @@
         {
             return name;
         }
-        public void setSprite(Bitmap b)
+        public void setSprite(Texture2D b)
         {
             Sprite[cursor] = b;
         }
@@ -81,28 +89,43 @@
         {
            return new SpriteManager(filename, h, w);
         }
-        public void fillSprite(Bitmap img)
+        public  void fillSprite(Raylib_cs.Image img)
         {
            
-            Rectangle rect =  new Rectangle(0,0,Width,Height);
+            Raylib_cs.Rectangle rect =  new Raylib_cs.Rectangle(0,0,Width,Height);
 
             var len = Sprite.Length ;
             if (Symetric)
                 len /= 2;
             for (int i = 0; i < len; i++)
             {
-                Sprite[i] = img.Clone(rect , img.PixelFormat);
-                rect.X += Width; 
+                var support = Raylib.ImageCopy(img);
+                Raylib.ImageCrop(ref support ,rect);
+                Sprite[i] =  LoadTextureFromImage(support);
+                Raylib.UnloadImage(support);
+                rect.x += Width; 
             }
             if(!Symetric)
                 return;
-            img.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            Raylib.ImageFlipHorizontal(ref img);
+            
             
             for (int i = Sprite.Length / 2; i < Sprite.Length ; i++)
             {
-                rect.X -= Width;
-                Sprite[ i] = img.Clone(rect, img.PixelFormat);
+                rect.x -= Width;
+                var support = Raylib.ImageCopy(img);
+                Raylib.ImageCrop(ref support ,rect);
+                Sprite[i] =  LoadTextureFromImage(support);
+                Raylib.UnloadImage(support);
                 
+            }
+        }
+
+        public void Destroy()
+        {
+            foreach (var texture in Sprite)
+            {
+                Raylib.UnloadTexture(texture);
             }
         }
 

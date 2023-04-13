@@ -7,7 +7,7 @@ internal class ElRatz : LivingEntity
     {
         Coordonates = (x, y);
         Hitbox = new Rectangle(x,y,Level.blocH,Level.blocH);
-        spriteManager = new SpriteManager(Form1.RootDirectory + "Assets\\Sprite\\ElRatz.png", 50, 50);
+        spriteManager = new SpriteManager(Program.RootDirectory + "Assets\\Sprite\\ElRatz.png", 50, 50);
         Sprite = spriteManager.GetImage(0, sensX);
       
         Acceleration.ax = MaxSpeed;
@@ -22,8 +22,8 @@ internal class ElRatz : LivingEntity
         }
         UpdateAnimation();
         Acceleration.ax = MaxSpeed * sensX;
-
-        if (Camera.player.Hitbox.IntersectsWith(Hitbox))
+        foreach (var player in Level.Players)
+        if (player.Hitbox.IntersectsWith(Hitbox))
         {
             this.Life -= 1;
         }
