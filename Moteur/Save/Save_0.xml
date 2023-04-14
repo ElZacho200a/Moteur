@@ -37,7 +37,7 @@
     <Vy>10</Vy>
     <Ax>0</Ax>
     <Ay>0</Ay>
-    <CursorAnimation>1</CursorAnimation>
+    <CursorAnimation>2</CursorAnimation>
   </RawEntity>
   <RawEntity>
     <Argument>Des rats des rats partout...</Argument>
@@ -50,7 +50,7 @@
     <Vy>0</Vy>
     <Ax>0</Ax>
     <Ay>0</Ay>
-    <CursorAnimation>0</CursorAnimation>
+    <CursorAnimation>1</CursorAnimation>
   </RawEntity>
   <RawEntity>
     <Argument>La brume est de pire en pire depuis peu</Argument>
