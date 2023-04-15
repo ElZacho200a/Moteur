@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms.VisualStyles;
-
-namespace Moteur;
 using NAudio.Wave;
+namespace Moteur;
+
 
 public class SoundManager
 {
@@ -32,5 +32,29 @@ public class SoundManager
         waveout.Init(reader);
         
         playUntilEnd(waveout,reader);
+    }
+
+    public void doorSong()
+    {
+        Mp3FileReader reader =
+            new Mp3FileReader(path + "Door_opening.mp3");
+
+        WaveOut waveOut = new WaveOut();
+        
+        waveOut.Init(reader);
+        
+        playUntilEnd(waveOut,reader);
+    }
+
+    public void touchElectricitySong()
+    {
+        Mp3FileReader reader =
+            new Mp3FileReader(path + "Electricity.mp3");
+
+        WaveOut waveOut = new WaveOut();
+        
+        waveOut.Init(reader);
+        
+        playUntilEnd(waveOut,reader);
     }
 }
