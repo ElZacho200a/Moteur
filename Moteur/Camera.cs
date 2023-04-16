@@ -15,7 +15,7 @@ namespace Moteur
 {
     public class Camera 
     {
-        public static int blocH => (int)(Width / FOV);
+        public static int blocH => (int)(Math.Max(Height , Width)/ FOV);
         public static int FOV = 30;
         private byte frameCounter = 0;
         public  Player player;
@@ -166,6 +166,12 @@ namespace Moteur
                 Scope.Width = levelWidht;
             else
                 Scope.Width = Width;
+            var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
+            if (Scope.Height > levelHeight)
+                Scope.Height = levelHeight;
+            else
+                Scope.Height = Height;
+            
             Scope.X = player.Coordonates.x - Scope.Width / 2;
             Scope.Y = player[1];
         }
@@ -364,7 +370,7 @@ namespace Moteur
                     
                 //Dessin du Joueur
                 foreach (var player in Level.Players)
-                    if(isInScope(player.Hitbox))
+                    if(player.Hitbox.IntersectsWith(OptiDrawRect))
                      DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
                 
                 //

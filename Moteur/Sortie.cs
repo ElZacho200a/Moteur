@@ -19,6 +19,7 @@
 
         public override void Update()
         {
+            bool Triggered = false;
             foreach (var player in Level.Players)
             if (player.Hitbox.IntersectsWith(Hitbox))
             {
@@ -26,9 +27,9 @@
                 if (!Used)
                     LoadNextLevel();
                 Used = true;
-
+                Triggered = true;
             }
-            else
+           if(!Triggered)
             {
                 Used= false;
             }
