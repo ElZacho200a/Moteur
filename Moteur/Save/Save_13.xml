@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfRawEntity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RawEntity>
+    <Argument />
+    <Name>pigeon</Name>
+    <Essence>Moteur.Entites.ElRatz</Essence>
+    <X>4735</X>
+    <Y>1152</Y>
+    <Life1>10</Life1>
+    <Vx>-1.7610062893081764</Vx>
+    <Vy>1.476923076923077</Vy>
+    <Ax>-10</Ax>
+    <Ay>0.49230769230769234</Ay>
+    <CursorAnimation>0</CursorAnimation>
+  </RawEntity>
+</ArrayOfRawEntity>

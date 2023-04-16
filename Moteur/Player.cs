@@ -1,10 +1,12 @@
 ﻿using System.Drawing.Drawing2D;
+using System.Media;
 using Moteur.Entites;
 using Moteur.Items;
 using Raylib_cs;
 using Color = System.Drawing.Color;
 using Keys = System.Windows.Forms.Keys;
 using Rectangle = System.Drawing.Rectangle;
+using NAudio.Wave;
 
 namespace Moteur
 {
@@ -17,6 +19,7 @@ namespace Moteur
         private bool canshoot = false;
         public Camera Camera;
         private int index;
+        private SoundManager _soundManager = new SoundManager();
         public List<Item> Inventory
         {
             get => inventory;
@@ -191,18 +194,19 @@ namespace Moteur
         private bool DoubleJump = false;
         public void jump()
         {
-            
             // une vitesse négative est dirigée vers le haut tout du moins en Y
             if (IsCollided((Coordonates.x, Coordonates.y + 1)))
             {
                 Speed.vy = (-MaxSpeed - Math.Abs(Speed.vx) / 6);
                 DoubleJump = true;
+                _soundManager.jumpSong();
             }
             else if (DoubleJump)
             {
                 DoubleJump = false;
                 Speed.vy = (-MaxSpeed - Math.Abs(Speed.vx) / 6);
             }
+            
         }
 
         public bool shoot()
