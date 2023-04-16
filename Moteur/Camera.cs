@@ -279,7 +279,7 @@ namespace Moteur
            
             if(index == 0)
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
-         
+            DrawRectangleLines(0,0,Width,Height , Raylib_cs.Color.GOLD);
             Raylib.BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width*index  , -Scope.Y) , Vector2.Zero, 0,1));
             //Dessin des Blocs
                 //Teinte des Blocs
