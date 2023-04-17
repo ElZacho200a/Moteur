@@ -237,8 +237,16 @@ public class Level
         var BackGroundPath = RoomSave.SelectSingleNode("BackgroundPath").InnerText;
         BackGroundPath = Program.RootDirectory + "Assets" + BackGroundPath.Split("..")[1];
         Background = LoadImage(BackGroundPath);
-        var MusicName = RoomSave.SelectSingleNode("MusicPath").InnerText;
-        SoundManager.MusicLevel(MusicName);
+        try
+        {
+            var MusicName = RoomSave.SelectSingleNode("MusicPath").InnerText;
+            SoundManager.MusicLevel(MusicName);
+        }
+        catch (Exception e)
+        {
+          
+        }
+       
     }
 
     private void LoadFromRoomFile()
