@@ -5,15 +5,16 @@ namespace Moteur;
 
 public class SoundManager
 {
-    private string path = Directory.GetCurrentDirectory().Split("bin")[0] + @"Assets\Sounds\";
-
-    private void garbage(Mp3FileReader reader, WaveOut waveout)
+    private static string path = Directory.GetCurrentDirectory().Split("bin")[0] + @"Assets\Sounds\";
+    private static string ActualMusic = "";
+    private static (Mp3FileReader reader ,WaveOut waveOut)  LevelStream; 
+    private static void garbage(Mp3FileReader reader, WaveOut waveout)
     {
         waveout.Dispose();
         reader.Dispose();
     }
 
-    private void playUntilEnd(WaveOut waveOut, Mp3FileReader reader)
+    private  static void playUntilEnd(WaveOut waveOut, Mp3FileReader reader)
     {
         waveOut.PlaybackStopped += (sender, eventArgs) =>
         {
@@ -21,6 +22,21 @@ public class SoundManager
             garbage(reader, waveOut);
         };
         waveOut.Play();
+    }
+
+    public static void MusicLevel(string SongName)
+    {
+        if( SongName == "")
+            return;
+        if (LevelStream.reader == null || SongName != ActualMusic)
+        {
+            ActualMusic = SongName;
+            LevelStream.reader = new Mp3FileReader( path + SongName);
+            if(LevelStream.waveOut == null)
+                LevelStream.waveOut = new WaveOut();
+            LevelStream.waveOut.Init(LevelStream.reader);
+            LevelStream.waveOut.Play();
+        }
     }
     public void jumpSong()
     {
