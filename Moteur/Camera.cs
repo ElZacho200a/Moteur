@@ -15,7 +15,7 @@ namespace Moteur
 {
     public class Camera 
     {
-        public static int blocH => (int)(Math.Max(Height , Width)/ FOV);
+        public static int blocH => (int)(Width / FOV);
         public static int FOV = 30;
         private byte frameCounter = 0;
         public  Player player;
@@ -49,7 +49,7 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(0);
+            new Level(90);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -166,12 +166,6 @@ namespace Moteur
                 Scope.Width = levelWidht;
             else
                 Scope.Width = Width;
-            var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
-            if (Scope.Height > levelHeight)
-                Scope.Height = levelHeight;
-            else
-                Scope.Height = Height;
-            
             Scope.X = player.Coordonates.x - Scope.Width / 2;
             Scope.Y = player[1];
         }
@@ -271,6 +265,11 @@ namespace Moteur
             gameState = 2;
         }
 
+       public void ShowLifeBar(int pv)
+       {
+           
+       }
+
 
         private Bitmap back;
         public  void rayDraw(int index)
@@ -279,7 +278,7 @@ namespace Moteur
            
             if(index == 0)
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
-            DrawRectangleLines(0,0,Width,Height , Raylib_cs.Color.GOLD);
+         
             Raylib.BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width*index  , -Scope.Y) , Vector2.Zero, 0,1));
             //Dessin des Blocs
                 //Teinte des Blocs
@@ -370,7 +369,7 @@ namespace Moteur
                     
                 //Dessin du Joueur
                 foreach (var player in Level.Players)
-                    if(player.Hitbox.IntersectsWith(OptiDrawRect))
+                    if(isInScope(player.Hitbox))
                      DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
                 
                 //

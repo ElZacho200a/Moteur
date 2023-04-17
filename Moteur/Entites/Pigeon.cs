@@ -14,6 +14,7 @@
             Speed.vx = 10 * ((random.Next(2) == 1 ) ? -1 : 1 );
             Sprite = spriteManager.GetImage(0,sensX);
             this.Hitbox = new Rectangle(x, y, 50, 50);
+            type = Enum.EntityType.Pigeon;
         }
         public override void Update()
         {

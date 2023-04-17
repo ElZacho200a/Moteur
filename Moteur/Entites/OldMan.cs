@@ -14,6 +14,7 @@ internal class OldMan : PNJ
         Sprite = spriteManager.GetImage(0, sensX);
         Hitbox = new Rectangle(x, y, Sprite.width, Sprite.height);
         Camera.AddSubscriberTenTick(UpdateAnimation);
+        type = Enum.EntityType.OldMan;
     }
     
     
@@ -25,7 +26,7 @@ internal class OldMan : PNJ
         Coordonates = (x, y);
         Hitbox = new Rectangle(x, y, Sprite.width, Sprite.height);
         somethingTosay = text != "";  
-        
+        type = Enum.EntityType.OldMan;
     }
 
     public override void Update()

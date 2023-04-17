@@ -76,10 +76,9 @@ namespace Moteur
         public Player(Camera camera , int index)
         {
              Camera = camera;
-            this.index = index ;
+            this.index = index;
             inventory = new List<Item> { };
-            var path = index  > 0 ? @"Assets\Sprite\PlayerSprite.png" : @"Assets\Sprite\PlayerSprite1.png" ;
-            spriteManager = new SpriteManager(Program.RootDirectory +path , 100 , 50); 
+            spriteManager = new SpriteManager(Program.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
             LastPos = new Point(0, 0);
             light = 5;

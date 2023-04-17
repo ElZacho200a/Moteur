@@ -57,4 +57,14 @@ public class SoundManager
         
         playUntilEnd(waveOut,reader);
     }
+
+    public void BruitDeZombie()
+    {
+        Mp3FileReader reader = new Mp3FileReader(path + "Zombie");
+        WaveOut waveOut = new WaveOut();
+        
+        waveOut.Init(reader);
+        
+        playUntilEnd(waveOut,reader);
+    }
 }

@@ -4,7 +4,7 @@
     {
 
         public int nextLevel = Level.currentLevel.ID;
-         protected Point trigger;
+        protected Point trigger;
         bool Used = true;
         public bool LevelLoad = false;
        
@@ -14,7 +14,7 @@
             this.Coordonates = (x, y);
             var blocH = Level.blocH;
             Hitbox = new Rectangle(x, y, 50, 50);
-           trigger = new Point( x  + (blocH / 2) ,y + blocH/2 );
+            trigger = new Point( x  + (blocH / 2) ,y + blocH/2 );
         }
 
         public override void Update()

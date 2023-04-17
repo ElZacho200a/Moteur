@@ -8,6 +8,7 @@ internal abstract class PNJ:TriggerEntity
         Text = text;
         foreach (var player in Level.Players)
          player.AddSubscriber(say);
+        type = Enum.EntityType.PNJ;
     }
 
      ~PNJ()
