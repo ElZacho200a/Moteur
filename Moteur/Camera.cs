@@ -224,7 +224,7 @@ namespace Moteur
                     
                 }
             }
-            else
+            else if(index == 0)
             {
                 if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_D) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_A))
                 {
