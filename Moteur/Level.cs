@@ -237,6 +237,16 @@ public class Level
         var BackGroundPath = RoomSave.SelectSingleNode("BackgroundPath").InnerText;
         BackGroundPath = Program.RootDirectory + "Assets" + BackGroundPath.Split("..")[1];
         Background = LoadImage(BackGroundPath);
+        try
+        {
+            var MusicName = RoomSave.SelectSingleNode("MusicPath").InnerText;
+            SoundManager.MusicLevel(MusicName);
+        }
+        catch (Exception e)
+        {
+          
+        }
+       
     }
 
     private void LoadFromRoomFile()
@@ -290,7 +300,7 @@ public class Level
                     if (cam.isInScope(hit))
                     {
                         entity.Update();
-                        break;
+                       break;
                     }
                 }
                

@@ -49,7 +49,7 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(0);
+            new Level(200);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -102,7 +102,7 @@ namespace Moteur
 
         public  bool isInScope(Rectangle rect)
         {
-            if (Scope.X <= rect.X && rect.Right <= Scope.Width + Scope.X)
+            if (Scope.X <= rect.X && rect.X <= Scope.Width + Scope.X)
                 if (Scope.Y <= rect.Bottom && rect.Y <= Scope.Height + Scope.Y)
                     return true;
             return false;
@@ -224,7 +224,7 @@ namespace Moteur
                     
                 }
             }
-            else
+            else if(index == 0)
             {
                 if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_D) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_A))
                 {
