@@ -9,7 +9,7 @@
         private byte triggerRange =9;
         public Pigeon(int x , int y) {
             spriteManager = new SpriteManager(Program.RootDirectory + "Assets\\Sprite\\Pigeon.png", 50, 50);
-            
+            Coordonates = (x, y);
             Speed.vy = 10;
             Speed.vx = 10 * ((random.Next(2) == 1 ) ? -1 : 1 );
             Sprite = spriteManager.GetImage(0,sensX);
@@ -41,11 +41,10 @@
         }
         protected override bool Moove()
         {
-            //Coordonates.x += 
-           // Coordonates.y += 
+            
             Hitbox.X -= (int)Speed.vx; ;
             Hitbox.Y -=  (random.Next((int)(Speed.vy * 2))  + (int)Speed.vy ); 
-
+            Coordonates = (Hitbox.X, Hitbox.Y);
             return true;
         }
     }
