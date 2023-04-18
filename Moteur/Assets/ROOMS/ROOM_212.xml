@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
   <raws>
     <Entity>
-      <argument></argument>
+      <argument>Torch</argument>
       <name></name>
-      <type>Pigeon</type>
-      <x>20</x>
-      <y>30</y>
+      <type>Itemholder</type>
+      <x>7</x>
+      <y>17</y>
     </Entity>
   </raws>
   <isDark>false</isDark>
-  <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
+  <BackgroundPath>../Backgrounds/back_subway.png</BackgroundPath>
   <MusicPath></MusicPath>
 </RoomSave>
