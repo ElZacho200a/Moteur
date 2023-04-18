@@ -29,6 +29,8 @@
     <None Remove="Assets\Sprite\Squelette.png" />
     <None Remove="Save\Save_2.xml" />
     <None Remove="Assets\ROOMS\ROOM_13.ROOM" />
+    <None Remove="Save\Save_3.xml" />
+    <None Remove="Save\Save_0.xml" />
   </ItemGroup>
 
   <ItemGroup>
