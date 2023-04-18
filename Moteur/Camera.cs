@@ -49,7 +49,7 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(200);
+            new Level(0);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -205,6 +205,11 @@ namespace Moteur
                     }
                     var X = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_X);
                     player.Acceleration1 = ((double)(player.getMaxSpeed * X), player.Acceleration1.ay);
+                    if (player.isInWater())
+                    {
+                        var Y = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_Y);
+                        player.Speed1 = (player.Speed1.vx, (double)(player.getMaxSpeed * Y));
+                    }
                 }
                 else if (gameState == 1)
                 {
@@ -238,11 +243,11 @@ namespace Moteur
                     player.Acceleration1 = ((double)(0), player.Acceleration1.ay);
                 }
                
-                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_SPACE))
+                if(Raylib.IsKeyPressed(Raylib_cs.KeyboardKey.KEY_SPACE))
                 {
                     player.jump();
                 }
-                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_E))
+                if(Raylib.IsKeyPressed(Raylib_cs.KeyboardKey.KEY_E))
                 {
                     if(gameState == 0)
                         player.KeyUp();
@@ -372,6 +377,16 @@ namespace Moteur
                 foreach (var player in Level.Players)
                     if(player.Hitbox.IntersectsWith(OptiDrawRect))
                      DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
+                
+               
+                //Dessin de l'eau Devant le joueur
+
+                if (Level.currentLevel.WaterArea is not null)
+                {
+                  Level.currentLevel.WaterArea.draw();
+                    
+                }
+                
                 
                 //
                 //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu

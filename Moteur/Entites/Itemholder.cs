@@ -98,6 +98,7 @@
                     spriteManager.Width,
                     spriteManager.Height
                     );
+                Coordonates = (Hitbox.X, Hitbox.Y);
                 Sprite = spriteManager.GetImage(0);
 
                 Level.currentLevel.addEntity(this);

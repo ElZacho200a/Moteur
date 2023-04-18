@@ -67,7 +67,7 @@ public static class GameLoop
         Widht = Raylib.GetMonitorWidth(0);
         Heigt = Raylib.GetMonitorHeight(0);
         //back = new Bitmap(Widht, Height);
-        SetTargetFPS(120);
+        SetTargetFPS(60);
     }
     
     

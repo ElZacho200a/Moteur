@@ -22,9 +22,11 @@ public class Level
     private bool fullLoaded;
     public int ID;
     public VoidArea? VoidArea;
+    public WaterArea? WaterArea;
     protected Raylib_cs.Texture2D? [,]  levelMatrice;
     protected bool[,] backgroundNeedded;
     public static List<Player> Players;
+    
    
     public bool[,] BackgroundNeedded
     {
@@ -161,7 +163,14 @@ public class Level
                         getPalette.loadBloc(color);
                         entities.Add(new Porte(color.B, i * blocH, j * blocH,  (Texture2D)getPalette.getImageByColor(color)));
                     }
-
+                    break;
+                case 6 :
+                    if (this.WaterArea is null)
+                    {
+                        WaterArea = new WaterArea(rawLevel.Width, rawLevel.Height, this);
+                       
+                    }
+                    WaterArea[i, j] = true;
                     break;
             }
             //Setup des Opti Background

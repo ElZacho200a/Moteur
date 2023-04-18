@@ -30,10 +30,16 @@ public class SoundManager
             return;
         if (LevelStream.reader == null || SongName != ActualMusic)
         {
+            if (LevelStream.reader != null)
+            {
+                LevelStream.waveOut.Stop();
+                garbage(LevelStream.reader , LevelStream.waveOut);
+            }
+            
             ActualMusic = SongName;
             LevelStream.reader = new Mp3FileReader( path + SongName);
-            if(LevelStream.waveOut == null)
-                LevelStream.waveOut = new WaveOut();
+          
+            LevelStream.waveOut = new WaveOut();
             LevelStream.waveOut.Init(LevelStream.reader);
             LevelStream.waveOut.Play();
         }

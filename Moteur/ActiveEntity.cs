@@ -62,6 +62,11 @@ namespace Moteur
 
         }
 
+        public bool isInWater()
+        {
+            
+            return Level.currentLevel.WaterArea is not null  && Level.currentLevel.WaterArea.isCollidedWithEntity(this);
+        }
         public RawEntity CreateRawEntity()
         {
             return new RawEntity(this);
