@@ -280,8 +280,9 @@ namespace Moteur
         private Bitmap back;
         public  void rayDraw(int index)
         {
-          ;
-           
+          
+          
+            BeginScissorMode(index * Width , 0 ,Height, Width);
             if(index == 0)
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
             DrawRectangleLines(0,0,Width,Height , Raylib_cs.Color.GOLD);
@@ -383,7 +384,7 @@ namespace Moteur
 
                 if (Level.currentLevel.WaterArea is not null)
                 {
-                  Level.currentLevel.WaterArea.draw();
+                  Level.currentLevel.WaterArea.draw(this.getRectFromScope());
                     
                 }
                 
@@ -413,7 +414,7 @@ namespace Moteur
                    
                 }
                 EndMode2D();
-                 
+                 EndScissorMode();
         }
 
        
