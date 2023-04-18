@@ -9,5 +9,6 @@
     </Entity>
   </raws>
   <isDark>false</isDark>
-  <BackgroundPath>Background:Background:Background:../Backgrounds/City.png</BackgroundPath>
+  <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
+  <MusicPath>Lower Norfair (Ridleys Lair)[Super Metroid].mp3</MusicPath>
 </RoomSave>

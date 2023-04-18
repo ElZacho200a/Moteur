@@ -49,7 +49,8 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(90);
+            if(index == 0)
+                 new Level(0);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -197,6 +198,12 @@ namespace Moteur
                     {
                         gameState = 1;
                     }
+                    if (IsGamepadButtonPressed(index, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+                    {
+                        player.shoot();
+                    }
+                    
+                    
                     var X = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_X);
                     player.Acceleration1 = ((double)(player.getMaxSpeed * X), player.Acceleration1.ay);
                     if (player.isInWater())
@@ -204,6 +211,8 @@ namespace Moteur
                         var Y = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_Y);
                         player.Speed1 = (player.Speed1.vx, (double)(player.getMaxSpeed * Y));
                     }
+                    
+                    
                 }
                 else if (gameState == 1)
                 {

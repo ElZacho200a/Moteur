@@ -276,15 +276,18 @@ namespace Moteur
         {
             if (canshoot)
             {
+                var bullet = new Bullet(Coordonates.x, Coordonates.y , this);
+                Level.currentLevel.addEntity(bullet); // j'ajoute l'entite au bag
+                return true;
+                
+                /*
                 var balles = from balle in Inventory
                     where balle.GetType() == typeof(Bullets)
                     select balle;
                 if (balles.Any())
                 {
-                    var bullet = new Bullet(Coordonates.x, Coordonates.y , this);
-                    Level.currentLevel.addEntity(bullet); // j'ajoute l'entite au bag
-                    return true;
-                }
+                    
+                }*/
             }
 
             return false;

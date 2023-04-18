@@ -22,8 +22,8 @@
       <y>15</y>
     </Entity>
     <Entity>
-      <name></name>
       <argument></argument>
+      <name></name>
       <type>Zombie</type>
       <x>28</x>
       <y>16</y>

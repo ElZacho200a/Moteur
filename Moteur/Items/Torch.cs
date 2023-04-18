@@ -11,7 +11,7 @@ namespace Moteur.Items
         public override void OnCatch(int index)
         {
             base.OnCatch(index);
-           Level.Players[index].Light += 7;
+            Level.Players[index].Light += 7;
         }
 
         public override void OnUse()

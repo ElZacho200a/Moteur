@@ -17,7 +17,6 @@
     </Compile>
     <Compile Remove="InteractionEntity.cs" />
     <Compile Remove="Check Points.cs" />
-    <Compile Remove="Items\Torch.cs" />
     <Compile Remove="Interrupteur.cs" />
   </ItemGroup>
 
