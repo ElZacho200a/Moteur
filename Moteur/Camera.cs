@@ -282,7 +282,7 @@ namespace Moteur
         {
           
           
-            BeginScissorMode(index * Width , 0 ,Height, Width);
+            BeginScissorMode(index * Width , 0 , (int)(Width* 1.2) , Height);
             if(index == 0)
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
             DrawRectangleLines(0,0,Width,Height , Raylib_cs.Color.GOLD);
@@ -311,7 +311,7 @@ namespace Moteur
                     debX = 0;
                 if (debY < 0)
                     debY = 0;
-                var endX = debX + OptiDrawRect.Width / blocH  +1;
+                var endX = debX + OptiDrawRect.Width / blocH  +2;
                 if (endX >= blocs.GetLength(0))
                     endX = blocs.GetLength(0);
                 
