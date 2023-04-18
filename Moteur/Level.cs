@@ -300,7 +300,7 @@ public class Level
                     if (cam.isInScope(hit))
                     {
                         entity.Update();
-                        break;
+                       break;
                     }
                 }
                
