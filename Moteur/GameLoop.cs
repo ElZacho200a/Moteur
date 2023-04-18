@@ -52,6 +52,7 @@ public static class GameLoop
             for (int i = 0; i < Cameras.Length; i++)
             {
                 var camera = Cameras[i];
+                if(camera.gameState == 0)
                 camera.player.Update();
                 // ajustement de la cam 
                 camera.UpdateScope();
