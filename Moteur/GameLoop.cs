@@ -63,7 +63,7 @@ public static class GameLoop
     public static void init()
     {
         InitWindow(0,0 , "Test de la manette");
-       // ToggleFullscreen();
+        ToggleFullscreen();
         Widht = Raylib.GetMonitorWidth(0);
         Heigt = Raylib.GetMonitorHeight(0);
         //back = new Bitmap(Widht, Height);
