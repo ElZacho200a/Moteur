@@ -199,6 +199,11 @@ namespace Moteur
                     }
                     var X = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_X);
                     player.Acceleration1 = ((double)(player.getMaxSpeed * X), player.Acceleration1.ay);
+                    if (player.isInWater())
+                    {
+                        var Y = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_Y);
+                        player.Speed1 = (player.Speed1.vx, (double)(player.getMaxSpeed * Y));
+                    }
                 }
                 else if (gameState == 1)
                 {
@@ -232,11 +237,11 @@ namespace Moteur
                     player.Acceleration1 = ((double)(0), player.Acceleration1.ay);
                 }
                
-                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_SPACE))
+                if(Raylib.IsKeyPressed(Raylib_cs.KeyboardKey.KEY_SPACE))
                 {
                     player.jump();
                 }
-                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_E))
+                if(Raylib.IsKeyPressed(Raylib_cs.KeyboardKey.KEY_E))
                 {
                     if(gameState == 0)
                         player.KeyUp();
@@ -274,8 +279,9 @@ namespace Moteur
         private Bitmap back;
         public  void rayDraw(int index)
         {
-          ;
-           
+          
+          
+            BeginScissorMode(index * Width , 0 , (int)(Width* 1.2) , Height);
             if(index == 0)
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
          
@@ -304,7 +310,7 @@ namespace Moteur
                     debX = 0;
                 if (debY < 0)
                     debY = 0;
-                var endX = debX + OptiDrawRect.Width / blocH  +1;
+                var endX = debX + OptiDrawRect.Width / blocH  +2;
                 if (endX >= blocs.GetLength(0))
                     endX = blocs.GetLength(0);
                 
@@ -372,6 +378,16 @@ namespace Moteur
                     if(isInScope(player.Hitbox))
                      DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
                 
+               
+                //Dessin de l'eau Devant le joueur
+
+                if (Level.currentLevel.WaterArea is not null)
+                {
+                  Level.currentLevel.WaterArea.draw(this.getRectFromScope());
+                    
+                }
+                
+                
                 //
                 //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu
                 if (Level.currentLevel.Dark)
@@ -397,7 +413,7 @@ namespace Moteur
                    
                 }
                 EndMode2D();
-                 
+                 EndScissorMode();
         }
 
        

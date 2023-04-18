@@ -6,22 +6,26 @@ namespace Moteur;
 
 public class VoidArea 
 {
-    private bool[,] DangerousMatrice;
+    protected bool[,] DangerousMatrice;
     private List<Texture2D> DangerousBloc;
     private int time = 0 ;
     private List<Texture2D> BaseImages;
     public SpriteManager ELectricAnim;
     private int Bloch => Level.blocH;
-    private Level _level;
+    protected Level _level;
     public VoidArea(int w, int h, Level level)
     {
         _level = level;
         DangerousMatrice = new bool[w, h];
         DangerousBloc = new List<Texture2D>();
         BaseImages = new List<Texture2D>();
+       setupAnim();
+    }
+
+    protected virtual void  setupAnim()
+    {
         ELectricAnim = new SpriteManager(Program.RootDirectory + "Assets/Textures/ElecAnim.png" , 50 , 50 , false);
     }
-    
     public bool this[int i , int j ]
     {
         get
@@ -69,12 +73,13 @@ public class VoidArea
         }
     }
 
-    public void Destroy()
+    public virtual void Destroy()
     {
         foreach (var variaTexture2D in BaseImages)
         {
             Raylib.UnloadTexture(variaTexture2D);
         }
+        if(ELectricAnim != null)
         ELectricAnim.Destroy();
         foreach (var texture2D in DangerousBloc)
         {

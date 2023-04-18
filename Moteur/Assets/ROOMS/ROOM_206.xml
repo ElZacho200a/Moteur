@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><RoomSave>
+  <raws>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>20</x>
+      <y>30</y>
+    </Entity>
+  </raws>
+  <isDark>false</isDark>
+  <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
+  <MusicPath></MusicPath>
+</RoomSave>

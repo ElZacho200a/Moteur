@@ -4,7 +4,17 @@ namespace Moteur
     public abstract class LivingEntity : ActiveEntity
     {
         protected int life;
-        public virtual double Gravity => Level.blocH / 130.0; // Level.blocH / x -> x  ; Plus x  est grand plus la gravité est faible
+        public virtual double Gravity
+        {
+            get
+            {
+               
+                return Level.blocH / (isInWater() ? 500.0 : 130.0);
+               
+                // Level.blocH / x -> x  ; Plus x  est grand plus la gravité est faible
+            }
+        }
+
         /* public virtual double Gravity { get; set; } = 80/Level.blocH;*/ ////pour overrider pour modifier la gravite sans toucher celle des autres entites
         protected virtual int MaxSpeed() { return 10 ; }
 

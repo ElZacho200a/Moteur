@@ -12,13 +12,29 @@ namespace Moteur
 {
     public class Player : LivingEntity
     {
-        protected  new int MaxSpeed => Level.blocH/4;
+        protected  new int MaxSpeed
+        {
+            get { return Level.blocH / (isInWater() ? 8 : 4); }
+        }
+
+        public override double Gravity
+        {
+            get
+            {
+                if (isInWater())
+                    return 0;
+                else
+                return Level.blocH /  130.0;
+            }
+        }
+
         private Texture2D? darkFront;
         private Point LastPos;
         private List<Item> inventory;
         private bool canshoot = false;
         public Camera Camera;
         private int index;
+        private bool isInWaterPos => Hitbox.Height < Hitbox.Width;
         private SoundManager _soundManager = new SoundManager();
         public List<Item> Inventory
         {
@@ -76,9 +92,10 @@ namespace Moteur
         public Player(Camera camera , int index)
         {
              Camera = camera;
-            this.index = index;
+            this.index = index ;
             inventory = new List<Item> { };
-            spriteManager = new SpriteManager(Program.RootDirectory +@"Assets\Sprite\PlayerSprite.png", 100 , 50); 
+            var path = index  > 0 ? @"Assets\Sprite\PlayerSprite1.png" : @"Assets\Sprite\PlayerSprite.png" ;
+            spriteManager = new SpriteManager(Program.RootDirectory +path , 100 , 50); 
             Coordonates = (Level.blocH*2,Level.blocH*4);
             LastPos = new Point(0, 0);
             light = 5;
@@ -88,12 +105,41 @@ namespace Moteur
         }
         public override void Update()
         {
+           
+            if (!isInWaterPos && isInWater())
+            {
+                spriteManager.Destroy();
+                spriteManager = new SpriteManager(Program.RootDirectory +@"Assets\Sprite\SwimSprite.png" , 50 , 100);
+                Sprite = spriteManager.GetImage(0);
+                Coordonates= (this[0] , this[1] +Hitbox.Height / 2);
+                
+                Hitbox.Height = Sprite.height;
+                Hitbox.Width = Sprite.width;
+                
+            }else if(isInWaterPos && !isInWater())
+            {
+                spriteManager.Destroy();
+                var path = index  > 0 ? @"Assets\Sprite\PlayerSprite1.png" : @"Assets\Sprite\PlayerSprite.png" ;
+                spriteManager = new SpriteManager(Program.RootDirectory +path , 100 , 50);
+                Sprite = spriteManager.GetImage(0);   
+                Coordonates= (this[0] , this[1] -Hitbox.Height );
+                Hitbox.Height = Sprite.height;
+                Hitbox.Width = Sprite.width;
+            }
             Hitbox.X = Coordonates.x;
             Hitbox.Y = Coordonates.y;
+            try
+            {
             AdaptAnimation();
+            }
+            catch (Exception e)
+            {
+                
+            }
+           
             Moove();
-
-
+            
+            
             if (Speed.vy > 0 && Level.currentLevel.VoidArea.isCollidedWithEntity(this))
             {
                 Coordonates = (LastPos.X, LastPos.Y);
@@ -135,6 +181,9 @@ namespace Moteur
 
         private void AdaptAnimation()
         {
+            if(isInWaterPos)
+                return;
+                
             if (!IsCollided((Coordonates.x, Coordonates.y + 1))) // Equivalent de le joueur est sur le sol
             {
                 if (sensY > 0)
@@ -154,7 +203,21 @@ namespace Moteur
         }
         protected  override void UpdateAnimation()
         {
-            if (IsCollided((Coordonates.x, Coordonates.y + 1)))// Equivalent de le joueur est sur le sol
+
+            if (isInWaterPos)
+            {
+                if (((int)(Speed.vx)) * sensX < 3)
+                    Sprite = spriteManager.GetImage(0 , sensX);
+                else if (spriteManager.cursor == 0)
+                    Sprite = spriteManager.GetImage(1, sensX);
+                else if (spriteManager.cursor == 1 )
+                    Sprite = spriteManager.GetImage(2, sensX);
+                else
+                    Sprite = spriteManager.GetImage(0, sensX);
+                return;
+            }
+
+            if (IsCollided((Coordonates.x, Coordonates.y + 1)) )// Equivalent de le joueur est sur le sol
             {
                 if (((int)(Speed.vx)) * sensX < 3)
                     Sprite = spriteManager.GetImage(0 , sensX);
@@ -193,17 +256,18 @@ namespace Moteur
         private bool DoubleJump = false;
         public void jump()
         {
+            var max = Level.blocH / 4;
             // une vitesse négative est dirigée vers le haut tout du moins en Y
             if (IsCollided((Coordonates.x, Coordonates.y + 1)))
             {
-                Speed.vy = (-MaxSpeed - Math.Abs(Speed.vx) / 6);
+                Speed.vy = (-max - Math.Abs(Speed.vx) / 6);
                 DoubleJump = true;
                 _soundManager.jumpSong();
             }
             else if (DoubleJump)
             {
                 DoubleJump = false;
-                Speed.vy = (-MaxSpeed - Math.Abs(Speed.vx) / 6);
+                Speed.vy = (-max - Math.Abs(Speed.vx) / 6);
             }
             
         }
