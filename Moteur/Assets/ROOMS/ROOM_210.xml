@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
-  <raws/>
+  <raws>
+    <Entity>
+      <argument>Wagon</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>114</x>
+      <y>32</y>
+    </Entity>
+  </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/back_subway.png</BackgroundPath>
   <MusicPath></MusicPath>

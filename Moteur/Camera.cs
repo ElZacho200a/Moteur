@@ -49,7 +49,7 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(0);
+            new Level(200);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
