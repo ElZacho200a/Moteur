@@ -465,4 +465,14 @@ public class Level
     {
         return Background.width != null && Background.width != 0 ;
     }
+
+    public void IsZombie()
+    {
+        SoundManager soundManager = new SoundManager();
+        foreach (var entity in entities)
+        {
+            if (entity.GetType == Enum.EntityType.Zombie)
+                soundManager.BruitDeZombie();
+        }
+    }
 }

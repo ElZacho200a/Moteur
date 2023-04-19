@@ -23,7 +23,7 @@
         {
             Coordonates = (x, y);
             _itemName = name;
-            Type type = Type.GetType( "Moteur.Items." +name);
+            Type type = Type.GetType( "Moteur.Items." +_itemName);
             Item = (Item)Activator.CreateInstance(type);
             setup();
         }

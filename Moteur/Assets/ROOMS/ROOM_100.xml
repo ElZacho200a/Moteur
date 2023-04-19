@@ -21,6 +21,13 @@
       <x>7</x>
       <y>47</y>
     </Entity>
+    <Entity>
+      <argument>LancePierre</argument>
+      <name>LancePIerre</name>
+      <type>Itemholder</type>
+      <x>47</x>
+      <y>40</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Mount.png</BackgroundPath>

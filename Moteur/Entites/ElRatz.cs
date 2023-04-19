@@ -12,7 +12,8 @@ internal class ElRatz : LivingEntity
       
         Acceleration.ax = MaxSpeed;
         Life = 10;
-       }
+        type = Enum.EntityType.ElRatz;
+    }
 
     public override void Update()
     {

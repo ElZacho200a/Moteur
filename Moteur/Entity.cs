@@ -7,6 +7,7 @@
         protected bool isDead = false;
         public bool IsDead => isDead;
         public string name;
+        public Enum.EntityType type;
         public abstract void Update();
 
         public Point getCenter()
@@ -28,6 +29,11 @@
         public override string ToString()
         {
             return $"{this.GetType().Name}";
+        }
+
+        public Enum.EntityType GetType
+        {
+            get => type;
         }
 
         public int this[int i]{

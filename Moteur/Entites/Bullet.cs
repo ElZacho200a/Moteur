@@ -20,7 +20,8 @@ namespace Moteur.Entites
              // J'ai enlevé la gravité statique    
             Speed.vx = 30 * player.sensX;  // la vitesse est défini par le sens du player
             Acceleration.ax = 30 * player.sensX; // manque le sens j'y arrive pas jsuis con wallah 
-           
+            type = Enum.EntityType.Bullet;
+
         }
         public override double Gravity => 0;
         public override void Update()

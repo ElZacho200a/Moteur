@@ -52,6 +52,7 @@ public static class GameLoop
             for (int i = 0; i < Cameras.Length; i++)
             {
                 var camera = Cameras[i];
+                if(camera.gameState == 0)
                 camera.player.Update();
                 // ajustement de la cam 
                 camera.UpdateScope();
@@ -63,7 +64,7 @@ public static class GameLoop
     public static void init()
     {
         InitWindow(0,0 , "Test de la manette");
-       // ToggleFullscreen();
+        //ToggleFullscreen();
         Widht = Raylib.GetMonitorWidth(0);
         Heigt = Raylib.GetMonitorHeight(0);
         //back = new Bitmap(Widht, Height);

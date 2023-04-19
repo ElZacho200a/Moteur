@@ -15,6 +15,7 @@
             Life = 50;
             Sprite = spriteManager.GetImage(0, sensX);
             Acceleration.ax = (random.Next(3) == 1 ? 1 : -1) * MaxSpeed;
+            type = Enum.EntityType.Skeletton;
         }
 
         public override void Update()

@@ -16,6 +16,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Remove="InteractionEntity.cs" />
+    <Compile Remove="Check Points.cs" />
+    <Compile Remove="Interrupteur.cs" />
   </ItemGroup>
 
   <ItemGroup>
