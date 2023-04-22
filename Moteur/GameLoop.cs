@@ -35,7 +35,9 @@ public static class GameLoop
         for (int i = 0; i < Cameras.Length; i++)
         {
             var camera = Cameras[i];
+            BeginScissorMode(i * Widht / Cameras.Length , 0 , Widht / Cameras.Length  , Heigt);
            camera.rayDraw(i);
+           EndScissorMode();
         }
        // DrawRectangle(Widht/2  -50, 0 ,50, Heigt, Raylib_cs.Color.DARKBROWN);
         EndDrawing();
