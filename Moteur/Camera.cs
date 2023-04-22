@@ -15,7 +15,7 @@ namespace Moteur
 {
     public class Camera 
     {
-        public static int blocH => (int)(Math.Max(Height , Width)/ FOV);
+        public static int blocH => (int)(Width  * GameLoop.Cameras.Length / FOV);
         public static int FOV = 30;
         private byte frameCounter = 0;
         public  Player player;
@@ -49,7 +49,8 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(200);
+            if(index == 0)
+                 new Level(12);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -166,12 +167,6 @@ namespace Moteur
                 Scope.Width = levelWidht;
             else
                 Scope.Width = Width;
-            var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
-            if (Scope.Height > levelHeight)
-                Scope.Height = levelHeight;
-            else
-                Scope.Height = Height;
-            
             Scope.X = player.Coordonates.x - Scope.Width / 2;
             Scope.Y = player[1];
         }
@@ -203,6 +198,12 @@ namespace Moteur
                     {
                         gameState = 1;
                     }
+                    if (IsGamepadButtonPressed(index, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+                    {
+                        player.shoot();
+                    }
+                    
+                    
                     var X = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_X);
                     player.Acceleration1 = ((double)(player.getMaxSpeed * X), player.Acceleration1.ay);
                     if (player.isInWater())
@@ -210,6 +211,8 @@ namespace Moteur
                         var Y = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_Y);
                         player.Speed1 = (player.Speed1.vx, (double)(player.getMaxSpeed * Y));
                     }
+                    
+                    
                 }
                 else if (gameState == 1)
                 {
@@ -229,7 +232,7 @@ namespace Moteur
                     
                 }
             }
-            else if(index == 0)
+            else if(index == 1)
             {
                 if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_D) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_A))
                 {
@@ -276,16 +279,21 @@ namespace Moteur
             gameState = 2;
         }
 
+       public void ShowLifeBar(int pv)
+       {
+           
+       }
+
 
         private Bitmap back;
         public  void rayDraw(int index)
         {
           
           
-            BeginScissorMode(index * Width , 0 , (int)(Width* 1.2) , Height);
-            if(index == 0)
+           
+           
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
-            DrawRectangleLines(0,0,Width,Height , Raylib_cs.Color.GOLD);
+         
             Raylib.BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width*index  , -Scope.Y) , Vector2.Zero, 0,1));
             //Dessin des Blocs
                 //Teinte des Blocs
@@ -320,6 +328,10 @@ namespace Moteur
                     endY = blocs.GetLength(1) ;
                 var DangerousAnim = Level.currentLevel.VoidArea.ELectricAnim;
                 //Application des textures sur la fenêtre
+                BeginScissorMode(index * Width + OptiDrawRect.X  -Scope.X
+                    ,OptiDrawRect.Y -Scope.Y
+                    ,OptiDrawRect.Width
+                    ,OptiDrawRect.Height);
             for (int i = debX; i < endX; i++)
                 for (int j = debY; j < endY; j++)
                 {
@@ -376,7 +388,7 @@ namespace Moteur
                     
                 //Dessin du Joueur
                 foreach (var player in Level.Players)
-                    if(player.Hitbox.IntersectsWith(OptiDrawRect))
+                    if(isInScope(player.Hitbox))
                      DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
                 
                
@@ -389,6 +401,7 @@ namespace Moteur
                 }
                 
                 
+                 EndScissorMode();
                 //
                 //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu
                 if (Level.currentLevel.Dark)
@@ -396,9 +409,12 @@ namespace Moteur
                     var front = (Texture2D)player.DarkFront;
                     var p = player.getCenter();
                     p.Offset(-front.width / 2, -front.height / 2);
+                    BeginScissorMode(index * Width , 0, Width , Height);
                    DrawTexture(front,p.X,p.Y,Raylib_cs.Color.WHITE);
+                   EndScissorMode();
                 }
-
+                if(index == 1)
+               
                EndMode2D();
                Raylib.BeginMode2D(new Camera2D(new Vector2(Width*index  , 0) , Vector2.Zero, 0,1));
 
@@ -414,7 +430,7 @@ namespace Moteur
                    
                 }
                 EndMode2D();
-                 EndScissorMode();
+                
         }
 
        
