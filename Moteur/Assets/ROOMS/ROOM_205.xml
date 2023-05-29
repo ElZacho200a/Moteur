@@ -2,5 +2,5 @@
   <raws/>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Building.png</BackgroundPath>
-  <MusicPath></MusicPath>
+  <MusicPath>city.mp3</MusicPath>
 </RoomSave>
