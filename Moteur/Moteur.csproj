@@ -39,6 +39,7 @@
     <Folder Include="Assets\DecorativeSprite" />
     <Folder Include="Assets\Items_sprite\" />
     <Folder Include="Assets\Textures" />
+    <Folder Include="OnlineClass\Client" />
     <Folder Include="Save" />
   </ItemGroup>
 

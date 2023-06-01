@@ -33,8 +33,9 @@ namespace Moteur
         private List<Item> inventory;
         private bool canshoot = false;
         public Camera Camera;
-        private int index;
+        public int index;
         private bool isInWaterPos => Hitbox.Height < Hitbox.Width;
+      
         private SoundManager _soundManager = new SoundManager();
         public List<Item> Inventory
         {
@@ -103,6 +104,10 @@ namespace Moteur
            
             Camera.AddSubscriberTenTick(UpdateAnimation);
         }
+
+      
+
+
         public override void Update()
         {
            

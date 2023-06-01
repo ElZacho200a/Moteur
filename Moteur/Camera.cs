@@ -15,7 +15,7 @@ namespace Moteur
 {
     public class Camera 
     {
-        public static int blocH => (int)(Math.Max(Height , Width)/ FOV);
+        public static int blocH => (int)(Width * GameLoop.Cameras.Length / FOV);
         public static int FOV = 30;
         private byte frameCounter = 0;
         public  Player player;
@@ -49,7 +49,8 @@ namespace Moteur
             if (Level.Players is null)
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
-            new Level(200);
+            if(index == 0)
+                 new Level(0);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -166,12 +167,6 @@ namespace Moteur
                 Scope.Width = levelWidht;
             else
                 Scope.Width = Width;
-            var levelHeight = Level.currentLevel.getCollisonMatrice().GetLength(1) * Level.blocH;
-            if (Scope.Height > levelHeight)
-                Scope.Height = levelHeight;
-            else
-                Scope.Height = Height;
-            
             Scope.X = player.Coordonates.x - Scope.Width / 2;
             Scope.Y = player[1];
         }
@@ -203,6 +198,12 @@ namespace Moteur
                     {
                         gameState = 1;
                     }
+                    if (IsGamepadButtonPressed(index, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+                    {
+                        player.shoot();
+                    }
+                    
+                    
                     var X = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_X);
                     player.Acceleration1 = ((double)(player.getMaxSpeed * X), player.Acceleration1.ay);
                     if (player.isInWater())
@@ -210,6 +211,8 @@ namespace Moteur
                         var Y = GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_Y);
                         player.Speed1 = (player.Speed1.vx, (double)(player.getMaxSpeed * Y));
                     }
+                    
+                    
                 }
                 else if (gameState == 1)
                 {
@@ -276,34 +279,98 @@ namespace Moteur
             gameState = 2;
         }
 
+       public void ShowLifeBar(int pv)
+       {
+           
+       }
+
+       private Rectangle getOptiDrawRect()
+       {
+           Rectangle OptiDrawRect;
+           if (Level.currentLevel.Dark)
+               OptiDrawRect = player.getRayonRectangle(player.Light);
+           else
+           {
+               OptiDrawRect = getRectFromScope();
+               OptiDrawRect.Height += Level.blocH;
+           }
+
+           return OptiDrawRect;
+       }
 
         private Bitmap back;
         public  void rayDraw(int index)
         {
-          
-          
-            BeginScissorMode(index * Width , 0 , (int)(Width* 1.2) , Height);
-            if(index == 0)
-            Raylib.ClearBackground(Raylib_cs.Color.BLACK);
-            DrawRectangleLines(0,0,Width,Height , Raylib_cs.Color.GOLD);
-            Raylib.BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width*index  , -Scope.Y) , Vector2.Zero, 0,1));
+            BeginScissorMode(index * Width, 0, Width, Height);
+            ClearBackground(Raylib_cs.Color.BLACK);
+            BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width * index, -Scope.Y), Vector2.Zero, 0, 1));
+            var OptiDrawRect = getOptiDrawRect();
             //Dessin des Blocs
-                //Teinte des Blocs
-                var Tint = Raylib_cs.Color.WHITE;
+            DrawBlocs(OptiDrawRect);
+            // Dessin des Entités
+            DrawEntities(OptiDrawRect);
+            //Dessin du Joueur
+            DrawPlayer();
+            //Dessin de l'eau Devant le joueur
+            if (Level.currentLevel.WaterArea is not null) Level.currentLevel.WaterArea.draw(getRectFromScope());
+            EndScissorMode();
+            //Dessin des endroits sombres
+            DrawDark();
+            EndMode2D();
+            DrawUI(index);
+            DrawText(OnlinePass.RoomCode, 20, 30, 40, ColorAlpha(Raylib_cs.Color.BLACK, 100));
+        }
+
+        public void rayDraw(int index, Dictionary<string, List<string>> Entities, Dictionary<string, SpriteManager> Sprites)
+        {
+            BeginScissorMode(index * Width, 0, Width, Height);
+            ClearBackground(Raylib_cs.Color.BLACK);
+            BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width * index, -Scope.Y), Vector2.Zero, 0, 1));
+            var OptiDrawRect = getOptiDrawRect();
+            //Dessin des Blocs
+            DrawBlocs(OptiDrawRect);
+            // Dessin des Entités
+            foreach (var typeEnt in Entities.Keys)
+            {
+                if (!Sprites.ContainsKey(typeEnt))
+                {
+                    
+                    SpriteManager newManager;
+                    var d = typeEnt.Split("|");
+                    newManager = new SpriteManager(d[0], Convert.ToInt32(d[1]));
+                    Sprites.Add(typeEnt , newManager);
+                }
+
+                foreach (var ent  in Entities[typeEnt])
+                {
+                    var data = ent.Split("x");
+                    var Texture = Sprites[typeEnt].GetImage(Convert.ToByte(data[2]));
+                    DrawTexture(Texture ,Convert.ToInt32(data[0]) ,Convert.ToInt32(data[1]), Raylib_cs.Color.WHITE);
+                }
+              
+            }
+            //Dessin du Joueur
+            DrawPlayer();
+            //Dessin de l'eau Devant le joueur
+            if (Level.currentLevel.WaterArea is not null) Level.currentLevel.WaterArea.draw(getRectFromScope());
+            EndScissorMode();
+            //Dessin des endroits sombres
+            DrawDark();
+            EndMode2D();
+            DrawUI(index);
+            DrawText(OnlinePass.RoomCode, 20, 30, 40, ColorAlpha(Raylib_cs.Color.BLACK, 100));
+        }
+        protected void DrawBlocs( Rectangle OptiDrawRect)
+        {
+            var Tint = Raylib_cs.Color.WHITE;
                 //Récuperation des Données Utiles
             var blocs = Level.currentLevel.getLevelMatrice();
             var Opacitymap = Level.currentLevel.BackgroundNeedded;
             var backGroundBloc = Level.currentLevel.BackGroundMatrice;
             var Backbounds = (backGroundBloc.GetLength(0), backGroundBloc.GetLength(1));
                 //Setup des aires de Dessin
-             Rectangle OptiDrawRect;
-             if (Level.currentLevel.Dark)
-                 OptiDrawRect = player.getRayonRectangle(player.Light);
-             else
-             {
-                 OptiDrawRect = getRectFromScope();
-                 OptiDrawRect.Height += Level.blocH;
-             }   
+             
+            
                 //Setup des Informations de Dessins
                 var debX = OptiDrawRect.X / blocH;
                 var debY = OptiDrawRect.Y / blocH;
@@ -351,73 +418,64 @@ namespace Moteur
                         
                     }
                 }
-                // Dessin des Entités
-                foreach (var entity in Level.currentLevel.GetEntities())
-                {
-                    try
-                    {
-                        if (entity.Hitbox.IntersectsWith(OptiDrawRect) )
-                            if (entity is ActiveEntity)
-                            {
-                                var active = entity as ActiveEntity;
-                                if (active != null)
-                                    Raylib.DrawTexture(active.Sprite , active[0] , active[1],Raylib_cs.Color.WHITE);
-                            }
-                            else if (entity is Porte)
-                            {
-                                var porte = entity as Porte;
-                                Raylib.DrawTexture(porte.texture , porte[0] , porte[1],Raylib_cs.Color.WHITE);
-                            }
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-                    
-                //Dessin du Joueur
-                foreach (var player in Level.Players)
-                    if(player.Hitbox.IntersectsWith(OptiDrawRect))
-                     DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
-                
-               
-                //Dessin de l'eau Devant le joueur
-
-                if (Level.currentLevel.WaterArea is not null)
-                {
-                  Level.currentLevel.WaterArea.draw(this.getRectFromScope());
-                    
-                }
-                
-                
-                //
-                //Ajout sur l'écran en fonction des particularité de la Room ou de l'état du jeu
-                if (Level.currentLevel.Dark)
-                {
-                    var front = (Texture2D)player.DarkFront;
-                    var p = player.getCenter();
-                    p.Offset(-front.width / 2, -front.height / 2);
-                   DrawTexture(front,p.X,p.Y,Raylib_cs.Color.WHITE);
-                }
-
-               EndMode2D();
-               Raylib.BeginMode2D(new Camera2D(new Vector2(Width*index  , 0) , Vector2.Zero, 0,1));
-
-                if (gameState == 1)
-                {
-                    PauseMenu.Draw();
-                }else if (gameState == 2)
-                {
-                    if (dialogArea.ShowAndDraw())
-                    {
-                    
-                    }
-                   
-                }
-                EndMode2D();
-                 EndScissorMode();
         }
+        protected void DrawUI(int index)
+        {
+            Raylib.BeginMode2D(new Camera2D(new Vector2(Width*index  , 0) , Vector2.Zero, 0,1));
 
-       
+            if (gameState == 1)
+            {
+                PauseMenu.Draw();
+            }else if (gameState == 2)
+            {
+                if (dialogArea.ShowAndDraw())
+                {
+                    
+                }
+                   
+            }
+            EndMode2D();
+        }
+        protected void DrawDark()
+        {
+            if (Level.currentLevel.Dark)
+            {
+                var front = (Texture2D)player.DarkFront;
+                var p = player.getCenter();
+                p.Offset(-front.width / 2, -front.height / 2);
+                DrawTexture(front,p.X,p.Y,Raylib_cs.Color.WHITE);
+            }
+        }
+        protected void DrawPlayer()
+        {
+            foreach (var player in Level.Players)
+                if(isInScope(player.Hitbox))
+                    DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
+        }
+        protected void DrawEntities(Rectangle OptiDrawRect)
+        {
+            foreach (var entity in Level.currentLevel.GetEntities())
+            {
+                try
+                {
+                    if (entity.Hitbox.IntersectsWith(OptiDrawRect) )
+                        if (entity is ActiveEntity)
+                        {
+                            var active = entity as ActiveEntity;
+                            if (active != null)
+                                Raylib.DrawTexture(active.Sprite , active[0] , active[1],Raylib_cs.Color.WHITE);
+                        }
+                        else if (entity is Porte)
+                        {
+                            var porte = entity as Porte;
+                            Raylib.DrawTexture(porte.texture , porte[0] , porte[1],Raylib_cs.Color.WHITE);
+                        }
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
         
     }
     

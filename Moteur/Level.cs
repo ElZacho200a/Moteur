@@ -26,7 +26,7 @@ public class Level
     protected Raylib_cs.Texture2D? [,]  levelMatrice;
     protected bool[,] backgroundNeedded;
     public static List<Player> Players;
-    
+    public static bool EntityEnable = true;
    
     public bool[,] BackgroundNeedded
     {
@@ -34,18 +34,20 @@ public class Level
        
     }
 
-    public Level(int id)
+    public Level(int id  )
     {
         LevelLoaded++;
 
         ID = id;
         if (currentLevel == null)
             currentLevel = this;
-        setupMatrice(findFilenameByID(id));
+        setupMatrice(findFilenameByID(id) );
 
 
         fullLoaded = true;
     }
+
+   
 
     public Level(int id, Palette palette)
     {
@@ -101,7 +103,7 @@ public class Level
         return entities;
     }
 
-    private void setupMatrice(string filename)
+    private void setupMatrice(string filename )
     {
         var rawLevel = new Bitmap(Image.FromFile(filename));
         if (serializer == null)
@@ -120,20 +122,16 @@ public class Level
             player.ResetSprite();
         getPalette = new Palette(blocH);
 
+       
         try
         {
-            LoadFromXML();
+            LoadFromXML(EntityEnable);
         }
         catch (Exception e)
         {
-          LoadFromRoomFile();
+            if(EntityEnable)
+             LoadFromRoomFile();
         }
-      
-         
-        
-       
-
-
         VoidArea = new VoidArea(rawLevel.Width, rawLevel.Height , this);
 
         //Construction à partir de l'image ROOM_ID.png
@@ -156,12 +154,17 @@ public class Level
                 case 5:
                     if (color.G == 0)
                     {
+                        if(EntityEnable)
                         entities.Add(new Sortie(color.B, i * blocH, j * blocH));
                     }
                     else
                     {
                         getPalette.loadBloc(color);
-                        entities.Add(new Porte(color.B, i * blocH, j * blocH,  (Texture2D)getPalette.getImageByColor(color)));
+                        if (EntityEnable)
+                            entities.Add(new Porte(color.B, i * blocH, j * blocH,
+                                (Texture2D)getPalette.getImageByColor(color)));
+                        else
+                            levelMatrice[i, j] = (Texture2D)getPalette.getImageByColor(color);
                     }
                     break;
                 case 6 :
@@ -181,6 +184,9 @@ public class Level
             BackgroundMatrice = SliceImage(Background);
     }
 
+
+  
+    
     private Raylib_cs.Texture2D?[,] SliceImage(Raylib_cs.Image backImage)
     {
       
@@ -208,12 +214,13 @@ public class Level
         return imgMatrice;
     }
 
-    private void LoadFromXML()
+    private void LoadFromXML(bool EntityEnable)
     {
         var filename = findXMLFilenamebyID(ID);
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(filename);
         var rawEntities = xmlDocument.GetElementsByTagName("Entity");
+        if(EntityEnable)
         if (!File.Exists(Program.RootDirectory + $"Save/Save_{ID}.xml"))
         {
             
@@ -233,12 +240,7 @@ public class Level
                 {
                   
                 }
-                   
-                
-             
-               
-               
-               
+          
         }
 
         var RoomSave = xmlDocument.SelectSingleNode("RoomSave");
@@ -337,6 +339,7 @@ public class Level
     public void destroy()
     {
         //Sauvegarde Des entités 
+        if(EntityEnable)
               SaveEntities();
         //Effacement des Object Potentiellement Persistant
 

@@ -16,11 +16,13 @@ namespace Moteur
         protected bool Catched = false;
         protected int Count = 1;
         protected string description = "Ceci est un item et quelqu'un à oublié de faire sa description shaaaammme";
+        public string filename;
         
 
         protected Item() 
         {
             Image = Raylib.LoadImage(Program.RootDirectory + $"Assets/Items_sprite/{this.GetType().Name}.png");
+            filename = $"/Items_sprite/{this.GetType().Name}.png";
         }
         public Texture2D GetImage()
         {

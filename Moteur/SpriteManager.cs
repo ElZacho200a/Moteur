@@ -14,6 +14,7 @@ namespace Moteur
         private string filename;
         private int h, w;
         private bool Symetric;
+        public int Lenght => Sprite is null ? 0:Sprite.Length;
         public  SpriteManager(String filename , int h , int w , bool symetric  = true)
         {
             unsafe
@@ -57,6 +58,12 @@ namespace Moteur
 
             fillSprite(img);
         }
+
+        public string GetFileName()
+        {
+            return filename;
+        }
+        
         public Texture2D GetImage(byte toGet , int sens)
         {
             cursor = toGet;

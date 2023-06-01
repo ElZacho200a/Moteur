@@ -91,7 +91,17 @@ namespace Moteur
                 if (collidedEntity.Hitbox.IntersectsWith(toCheck))
                     return true;
             }
-            
+
+            if (false && this is Player)
+            {
+                var me = this as Player;
+                foreach (var player in Level.Players)
+                {
+                if(player.index != me.index)
+                    if (toCheck.IntersectsWith(player.Hitbox))
+                        return true;
+                }
+            }
             
             // Check de sortie de Bounds
             if(Coord.y+Hitbox.Height >blocH * CollisionMatrice.GetLength(1) )

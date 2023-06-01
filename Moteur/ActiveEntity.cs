@@ -30,6 +30,13 @@ namespace Moteur
             }
         }
 
+        public virtual string GetSpriteManagerAtt()
+        {
+            if(spriteManager != null)
+                return spriteManager.GetFileName().Split("Assets")[1]+"|"+spriteManager.Lenght;
+            return "";
+        }
+        
         protected (double vx, double vy) Speed;
         protected (double ax, double ay) Acceleration;
         public int sensX => Speed.vx > 0 ? 1 : -1;
@@ -53,6 +60,12 @@ namespace Moteur
             set => Acceleration = value;
         }
 
+        public byte getCurrentSprite()
+        {
+            
+            return spriteManager is null ? (byte)(0) :spriteManager.cursor;
+            
+        }
         public bool isInLightRadius(int i, int j)
         {
             i *= Level.blocH;

@@ -11,6 +11,12 @@
             get => _itemName;
            
         }
+
+        public override string GetSpriteManagerAtt()
+        {
+            return Item.filename + "|1";
+        }
+
         public override string getArgument => _itemName;
         public Itemholder(int x , int y, Item item) : base()
         { 
