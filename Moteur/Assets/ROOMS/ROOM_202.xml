@@ -38,5 +38,5 @@
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
-  <MusicPath></MusicPath>
+  <MusicPath>city.mp3</MusicPath>
 </RoomSave>

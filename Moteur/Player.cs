@@ -323,19 +323,19 @@ namespace Moteur
         
         private Texture2D GenerateDarkFront()
         {
-            var neededDecal = (4 * Level.blocH);
+            var neededDecal = (0 * Level.blocH);
 
             var transparent = new Raylib_cs.Color(50, 40, 0, 100);
             var rect = getRayonRectangle(Light);
-            rect.Width =  (int)(rect.Width * 2);
-            rect.Height =  (int)(rect.Height * 2);
+            rect.Width =  (int)(rect.Width );
+            rect.Height =  (int)(rect.Height );
             RenderTexture2D texture = Raylib.LoadRenderTexture(rect.Width, rect.Height);
             Raylib.BeginTextureMode(texture);
             Raylib.ClearBackground(Raylib_cs.Color.BLACK);
             Raylib.DrawCircleGradient(
                 rect.Width/2,
                 rect.Height/2, 
-                Math.Max(rect.Width/2, rect.Height/2) - Light * Level.blocH, 
+                Math.Max(rect.Width/2, rect.Height/2), 
                 transparent, 
                 Raylib_cs.Color.BLACK);
             Raylib.EndTextureMode();

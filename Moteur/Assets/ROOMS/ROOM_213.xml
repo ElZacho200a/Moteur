@@ -2,5 +2,5 @@
   <raws/>
   <isDark>true</isDark>
   <BackgroundPath>../Backgrounds/back_crypte.png</BackgroundPath>
-  <MusicPath></MusicPath>
+  <MusicPath>crypte.mp3</MusicPath>
 </RoomSave>

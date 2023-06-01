@@ -2,4 +2,5 @@
   <raws/>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Mount.png</BackgroundPath>
+  <MusicPath>forest.mp3</MusicPath>
 </RoomSave>
