@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
-  <raws/>
+  <raws>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>15</x>
+      <y>20</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>15</x>
+      <y>32</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>11</x>
+      <y>51</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>14</x>
+      <y>58</y>
+    </Entity>
+  </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Building.png</BackgroundPath>
   <MusicPath>city.mp3</MusicPath>

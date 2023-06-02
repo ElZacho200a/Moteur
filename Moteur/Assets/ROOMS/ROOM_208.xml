@@ -21,6 +21,20 @@
       <x>27</x>
       <y>24</y>
     </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>19</x>
+      <y>30</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>10</x>
+      <y>24</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>

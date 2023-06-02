@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
   <raws>
     <Entity>
-      <argument>Torch</argument>
+      <argument></argument>
       <name></name>
-      <type>Itemholder</type>
-      <x>6</x>
+      <type>ElRatz</type>
+      <x>17</x>
+      <y>15</y>
+    </Entity>
+    <Entity>
+      <type>Pigeon</type>
+      <x>1</x>
+      <y>15</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>7</x>
       <y>15</y>
     </Entity>
   </raws>

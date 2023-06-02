@@ -14,6 +14,27 @@
       <x>32</x>
       <y>30</y>
     </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>7</x>
+      <y>30</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>22</x>
+      <y>30</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>13</x>
+      <y>30</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>

@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
-  <raws/>
+  <raws>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>17</x>
+      <y>7</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>30</x>
+      <y>7</y>
+    </Entity>
+  </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
   <MusicPath>city.mp3</MusicPath>
