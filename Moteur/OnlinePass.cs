@@ -42,6 +42,7 @@ public  static class OnlinePass
 
      private static void setupRoom()
      {
+         Ask("" , false);
          NetworkStream stream = client.GetStream();
          int bytesRead = stream.Read(buffer, 0, buffer.Length);
          string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
@@ -72,19 +73,29 @@ public  static class OnlinePass
      }
 
 
-     public static string Ask(string request)
+     public static string Ask(string request , bool response = true)
      {
          if (client == null)
              return "No Serv Connected";
          byte[] requestData = Encoding.ASCII.GetBytes(request);
 
+         try
+         {
+
+         
          // Obtenir le flux réseau du client
          NetworkStream stream = client.GetStream();
 
          // Envoyer la requête au serveur
          stream.Write(requestData, 0, requestData.Length);
-
+         if(response)
          return GetResponse();
+         return "";
+         }
+         catch (Exception e)
+         {
+             return "";
+         }
      }
 
      private static string GetResponse()

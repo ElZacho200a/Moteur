@@ -50,7 +50,7 @@ namespace Moteur
                 Level.Players = new List<Player>();
             Level.Players.Add(player);
             if(index == 0)
-                 new Level(0);
+                 new Level(12);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -245,7 +245,20 @@ namespace Moteur
                 {
                     player.Acceleration1 = ((double)(0), player.Acceleration1.ay);
                 }
-               
+                if(Level.Players[index].isInWater())
+                if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_S) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_Z))
+                {
+                    if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_Z))
+                        player.Speed1 = (player.Speed1.vx , (double)(player.getMaxSpeed * -1));
+                    else
+                        player.Speed1 = (player.Speed1.vx , (double)(player.getMaxSpeed * 1));
+                   
+                }
+                else
+                {
+                    player.Speed1 = (player.Speed1.vx , 0);
+                }
+                
                 if(Raylib.IsKeyPressed(Raylib_cs.KeyboardKey.KEY_SPACE))
                 {
                     player.jump();
@@ -263,7 +276,7 @@ namespace Moteur
                         }
                     }
                 }
-                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_ESCAPE))
+                if(Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_TAB))
                 {
                     if(gameState == 0 )
                         gameState = 1;
@@ -303,9 +316,12 @@ namespace Moteur
         {
             BeginScissorMode(index * Width, 0, Width, Height);
             ClearBackground(Raylib_cs.Color.BLACK);
-            BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width * index, -Scope.Y), Vector2.Zero, 0, 1));
             var OptiDrawRect = getOptiDrawRect();
+           
+            BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width * index, -Scope.Y), Vector2.Zero, 0, 1));
+            
             //Dessin des Blocs
+            
             DrawBlocs(OptiDrawRect);
             // Dessin des Entités
             DrawEntities(OptiDrawRect);
@@ -314,11 +330,12 @@ namespace Moteur
             //Dessin de l'eau Devant le joueur
             if (Level.currentLevel.WaterArea is not null) Level.currentLevel.WaterArea.draw(getRectFromScope());
             EndScissorMode();
+            EndScissorMode();
             //Dessin des endroits sombres
             DrawDark();
             EndMode2D();
             DrawUI(index);
-            DrawText(OnlinePass.RoomCode, 20, 30, 40, ColorAlpha(Raylib_cs.Color.BLACK, 100));
+            DrawText(OnlinePass.RoomCode, 20, 30, 40, ColorAlpha(Raylib_cs.Color.RAYWHITE, 100));
         }
 
         public void rayDraw(int index, Dictionary<string, List<string>> Entities, Dictionary<string, SpriteManager> Sprites)
@@ -362,6 +379,8 @@ namespace Moteur
         }
         protected void DrawBlocs( Rectangle OptiDrawRect)
         {
+            
+               
             var Tint = Raylib_cs.Color.WHITE;
                 //Récuperation des Données Utiles
             var blocs = Level.currentLevel.getLevelMatrice();
@@ -372,21 +391,22 @@ namespace Moteur
              
             
                 //Setup des Informations de Dessins
-                var debX = OptiDrawRect.X / blocH;
-                var debY = OptiDrawRect.Y / blocH;
+                var debX = OptiDrawRect.X / blocH ;
+                var debY = OptiDrawRect.Y / blocH ;
                 if (debX < 0)
                     debX = 0;
                 if (debY < 0)
                     debY = 0;
-                var endX = debX + OptiDrawRect.Width / blocH  +2;
-                if (endX >= blocs.GetLength(0))
+                var endX = (OptiDrawRect.X + OptiDrawRect.Width) / blocH  +1;
+                if (endX > blocs.GetLength(0))
                     endX = blocs.GetLength(0);
                 
-                var endY = debY + OptiDrawRect.Height / blocH  +1 ;
-                if (endY >= blocs.GetLength(1))
+                var endY = (OptiDrawRect.Y + OptiDrawRect.Height) / blocH  +1 ;
+                if (endY > blocs.GetLength(1))
                     endY = blocs.GetLength(1) ;
                 var DangerousAnim = Level.currentLevel.VoidArea.ELectricAnim;
                 //Application des textures sur la fenêtre
+            BeginScissorMode(OptiDrawRect.X  - Scope.X,OptiDrawRect.Y - Scope.Y, OptiDrawRect.Width , OptiDrawRect.Height);
             for (int i = debX; i < endX; i++)
                 for (int j = debY; j < endY; j++)
                 {
@@ -417,7 +437,10 @@ namespace Moteur
                     {
                         
                     }
+                   
                 }
+            EndScissorMode();
+           
         }
         protected void DrawUI(int index)
         {

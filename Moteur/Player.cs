@@ -326,7 +326,7 @@ namespace Moteur
             var neededDecal = (0 * Level.blocH);
 
             var transparent = new Raylib_cs.Color(50, 40, 0, 100);
-            var rect = getRayonRectangle(Light);
+            var rect = getRayonRectangle((int)(Light ));
             rect.Width =  (int)(rect.Width );
             rect.Height =  (int)(rect.Height );
             RenderTexture2D texture = Raylib.LoadRenderTexture(rect.Width, rect.Height);
