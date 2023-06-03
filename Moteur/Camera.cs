@@ -32,7 +32,7 @@ namespace Moteur
             return Scope;
         }
 
-        public Camera(int Widht, int Heigt , int index) : base()
+        public Camera(int Widht, int Heigt , int index  , (int x , int y ) Ppos ,int level = 0 ) : base()
         {
             rawFront = new Bitmap(Widht,
                 Heigt); // Une image Noir de la \n taille de l'écran permettant d'opti \nles rendu en mode Dark
@@ -46,11 +46,12 @@ namespace Moteur
 
 
             player = new Player(this , index);
+            player.Coordonates = Ppos;
             if (Level.Players is null)
                 Level.Players = new List<Player>();
+            if (Level.currentLevel is null)
+                Level.currentLevel = new Level(level);
             Level.Players.Add(player);
-            if(index == 0)
-                 new Level(12);
             PauseMenu = new PauseMenu(Width * 4 / 5, Height * 4 / 5 , player);
             dialogArea = new DialogArea(Width, Height);
             ResetScope();
@@ -246,9 +247,9 @@ namespace Moteur
                     player.Acceleration1 = ((double)(0), player.Acceleration1.ay);
                 }
                 if(Level.Players[index].isInWater())
-                if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_S) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_Z))
+                if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_S) || Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_W))
                 {
-                    if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_Z))
+                    if (Raylib.IsKeyDown(Raylib_cs.KeyboardKey.KEY_W))
                         player.Speed1 = (player.Speed1.vx , (double)(player.getMaxSpeed * -1));
                     else
                         player.Speed1 = (player.Speed1.vx , (double)(player.getMaxSpeed * 1));
@@ -317,7 +318,7 @@ namespace Moteur
             BeginScissorMode(index * Width, 0, Width, Height);
             ClearBackground(Raylib_cs.Color.BLACK);
             var OptiDrawRect = getOptiDrawRect();
-           
+            BeginScissorMode(OptiDrawRect.X  - Scope.X,OptiDrawRect.Y - Scope.Y, OptiDrawRect.Width , OptiDrawRect.Height);
             BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width * index, -Scope.Y), Vector2.Zero, 0, 1));
             
             //Dessin des Blocs
@@ -406,7 +407,7 @@ namespace Moteur
                     endY = blocs.GetLength(1) ;
                 var DangerousAnim = Level.currentLevel.VoidArea.ELectricAnim;
                 //Application des textures sur la fenêtre
-            BeginScissorMode(OptiDrawRect.X  - Scope.X,OptiDrawRect.Y - Scope.Y, OptiDrawRect.Width , OptiDrawRect.Height);
+           
             for (int i = debX; i < endX; i++)
                 for (int j = debY; j < endY; j++)
                 {
@@ -439,7 +440,7 @@ namespace Moteur
                     }
                    
                 }
-            EndScissorMode();
+           
            
         }
         protected void DrawUI(int index)

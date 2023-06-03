@@ -2,6 +2,8 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml;
+using System.Xml.Serialization;
 using NAudio.CoreAudioApi;
 
 namespace Moteur;
@@ -24,14 +26,18 @@ public static class GameLoop
         
         if (nbPlayer == 0)
             throw new ArgumentException("Il ne peut y avoir 0 joueurs");
+        var save = LoadSave();
+        
+        
         init();
          Cameras = new Camera[nbPlayer];
         // Setup des Caméras
         for (int i = 0; i < nbPlayer; i++)
         {
-            Cameras[i] = new Camera((int)(Widht / nbPlayer) , Heigt , i);
+            Cameras[i] = new Camera((int)(Widht / nbPlayer) , Heigt , i ,save.Item2, save.level);
         }
-
+       
+        
         Loop loop = LocalLoop;
         switch (Role)
         {
@@ -50,9 +56,51 @@ public static class GameLoop
         {
             loop();
         }
-
+        SaveGame();
     }
 
+    public  struct gameSave
+    {
+        public int level;
+        public (int x , int y ) playerPos;
+    }
+    public static void SaveGame()
+    {
+        
+        var save = new gameSave() { level = Level.currentLevel.ID, playerPos = Level.Players[0].Coordonates };
+        var serializer = new XmlSerializer(typeof(gameSave));
+        try
+        {
+           // if(!File.Exists(Program.RootDirectory + $"Save/PlayerSave.xml"))
+                
+            using (StreamWriter writer = new StreamWriter(Program.RootDirectory + $"Save/PlayerSave.xml"))
+                serializer.Serialize(writer, save);
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
+
+    public static (int level, (int x , int y)) LoadSave()
+    {
+        var filename = Program.RootDirectory + $"Save/PlayerSave.xml";
+        if (!File.Exists(filename))
+            return (0, (200, 200));
+        var xmlDocument = new XmlDocument();
+        xmlDocument.Load(filename);
+        var serializer = new XmlSerializer(typeof(gameSave));
+        var saveGame = xmlDocument.SelectSingleNode("gameSave");
+        var level = Convert.ToInt32(saveGame.SelectSingleNode("level").InnerText);
+        var pos = saveGame.SelectSingleNode("playerPos");
+        var x = Convert.ToInt32(pos.SelectSingleNode("Item1").InnerText);
+        var y = Convert.ToInt32(pos.SelectSingleNode("Item2").InnerText);
+        
+        return (level, (x, y));
+
+    }
+    
+    
     private static void LocalLoop()
     {
       

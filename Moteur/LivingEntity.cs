@@ -18,6 +18,13 @@ namespace Moteur
         /* public virtual double Gravity { get; set; } = 80/Level.blocH;*/ ////pour overrider pour modifier la gravite sans toucher celle des autres entites
         protected virtual int MaxSpeed() { return 10 ; }
 
+        public bool isOnGround()
+        {
+            var x = this[0] / Level.blocH;
+            var y = Hitbox.Bottom / Level.blocH;
+            var CollisionMatrice = Level.currentLevel.getCollisonMatrice();
+            return CollisionMatrice[x, y];
+        }
 
         protected override bool Moove()
         {
@@ -109,6 +116,8 @@ namespace Moteur
             if (Coord.x < 0 )
                 return true;
             if(Coord.x + Hitbox.Width > blocH * CollisionMatrice.GetLength(0))
+                return true;
+            if (Coord.y < 0)
                 return true;
            
             // Mise à l'échelle de la Hitbox par rapport à la grille de collisions

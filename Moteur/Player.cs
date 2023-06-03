@@ -28,6 +28,7 @@ namespace Moteur
             }
         }
 
+        public bool hasSaved = true;
         private Texture2D? darkFront;
         private Point LastPos;
         private List<Item> inventory;
@@ -147,10 +148,21 @@ namespace Moteur
             
             if (Speed.vy > 0 && Level.currentLevel.VoidArea.isCollidedWithEntity(this))
             {
-                Coordonates = (LastPos.X, LastPos.Y);
-                Camera.ResetScope();
+               die();
             }
+           
         }
+
+
+        public void die()
+        {
+            (int a , (int x , int y ) Ppos ) = GameLoop.LoadSave();
+            Speed = (0, 0);
+            Acceleration = (0, 0);
+            Coordonates = Ppos;
+            Camera.ResetScope();
+        }
+        
         public void KeyPressed(int sens)
         {
             Acceleration.ax = sens * MaxSpeed;
@@ -230,15 +242,16 @@ namespace Moteur
                     Sprite = spriteManager.GetImage((byte)(spriteManager.cursor +1), sensX);
                 else
                     Sprite = spriteManager.GetImage(1, sensX);
+                if (!hasSaved)
+                {
+                    GameLoop.SaveGame();
+                    hasSaved = true;
+                }
                     
               
             }
 
-            if (IsCollided((Coordonates.x, Coordonates.y + 1)))
-            {
-                
-                LastPos =  new Point(Hitbox.Location.X, Hitbox.Location.Y);
-            }
+            
                 
         }
         public void ResetSprite()
