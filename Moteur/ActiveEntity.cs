@@ -63,8 +63,14 @@ namespace Moteur
         public byte getCurrentSprite()
         {
             
-            return spriteManager is null ? (byte)(0) :spriteManager.cursor;
+            return spriteManager is null ? (byte)(0) :spriteManager.RealCursor;
             
+        }
+
+        public string getForOnlineData()
+        {
+            var s = getCurrentSprite();
+            return s + "x" + this[0] + "x" + this[1];
         }
         public bool isInLightRadius(int i, int j)
         {

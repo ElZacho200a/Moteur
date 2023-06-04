@@ -37,10 +37,11 @@ public class Level
     public Level(int id  )
     {
         LevelLoaded++;
-
+        
         ID = id;
         if (currentLevel == null)
             currentLevel = this;
+       
         setupMatrice(findFilenameByID(id) );
 
 

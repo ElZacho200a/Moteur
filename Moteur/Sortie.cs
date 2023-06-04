@@ -21,7 +21,7 @@
         {
             bool Triggered = false;
             foreach (var player in Level.Players)
-            if (player.Hitbox.IntersectsWith(Hitbox))
+            if (player.Hitbox.IntersectsWith(Hitbox) )
             {
                 
                 if (!Used)
@@ -50,6 +50,7 @@
             
             var nLevel = new Level(nextLevel );
             Type t = this.GetType();
+            Level.Players[0].hasSaved = false;
             foreach (var entity in nLevel.GetEntities())
             {
                 if(entity.GetType() == t )
@@ -70,6 +71,8 @@
                         {
                             player.Coordonates = (sortie.Coordonates.x,
                                 sortie.Coordonates.y + Level.blocH - player.Hitbox.Height);
+                            if (player[1] < 0 )
+                                player.Coordonates.y += Level.blocH;
                             player.Hitbox.Location = new Point(player[0], player[1]);
                             player.Camera.ResetScope();
                         }
