@@ -25,6 +25,7 @@ namespace Moteur
         public  PauseMenu PauseMenu;
         private DialogArea dialogArea;
         public int gameState = 0;
+        
        
 
         public  (int X, int Y, int Width, int Height) GetScope()
