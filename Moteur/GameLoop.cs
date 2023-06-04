@@ -133,16 +133,19 @@ public static class GameLoop
     
     private static void drawCamera(Dictionary<string, List<string>>Entities)
     {
-        BeginDrawing();
+       
         for (int i = 0; i < Cameras.Length; i++)
         {
+            BeginDrawing();
             var camera = Cameras[i];
             if( i != 0)
                 Raylib.DrawRectangle(Widht / 2 - 25 , 0 , 50 , Heigt , Raylib_cs.Color.GOLD);
            
             camera.rayDraw(i , Entities , Managers);
+           
+            EndDrawing();
         }
-        EndDrawing();
+        
     }
     private static void UpdateScope()
     {
@@ -250,7 +253,9 @@ public static class GameLoop
 
     public static  void HostInit()
     {
+        
         OnlinePass.start();
+        
     }
     
 }

@@ -25,6 +25,7 @@ public  static class OnlinePass
         try
         {
             client.Connect(servIP, Port);
+            
         }
         catch (Exception e)
         {
@@ -37,7 +38,11 @@ public  static class OnlinePass
         if (RoomCode != "")
             Ask(RoomCode);
         else
-            setupRoom();
+        {
+            Ask("YO");
+             setupRoom();
+        }
+           
     }
 
      private static void setupRoom()
