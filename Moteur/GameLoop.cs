@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
+using Moteur.OnlineClass.Serveur;
 using NAudio.CoreAudioApi;
 
 namespace Moteur;
@@ -20,7 +21,7 @@ public static class GameLoop
     private static Dictionary<string, SpriteManager> Managers;
     private delegate void Loop();
 
-    public static string Role = "Local";
+    public static string Role = "Host";
     public static void start(uint nbPlayer)
     {
         
@@ -172,7 +173,8 @@ public static class GameLoop
 
     public static void ClientInit()
     {
-
+        OnlinePass.RoomCode = "";
+        OnlinePass.start();
         Managers = new Dictionary<string, SpriteManager>();
     }
     public static void ClientLoop()
@@ -187,7 +189,7 @@ public static class GameLoop
             Level.currentLevel = new Level(Convert.ToInt32(level) );
         }
 
-        var Sentities = OnlinePass.Ask("Entities");
+        var Sentities = OnlinePass.Ask(Level.Players[0].getForOnlineData());
         var Entities = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(Sentities);
        drawCamera(Entities);
 
@@ -197,7 +199,16 @@ public static class GameLoop
     {
 
         var dictEnt = new Dictionary<string, List<string>>();
-        foreach (var entity in Level.currentLevel.GetEntities().Where(ent => ent is ActiveEntity).Select(ent => ent as ActiveEntity))
+        var d = Level.currentLevel.GetEntities().
+                Where(ent => ent is ActiveEntity).
+                Select(ent => ent as ActiveEntity)
+                .ToList();
+        foreach (var player in Level.Players)
+        {
+            d.Add(player as ActiveEntity);
+        }
+        
+        foreach (var entity in d)
         {
             var att = entity.GetSpriteManagerAtt();
             if(att == "")
@@ -211,7 +222,27 @@ public static class GameLoop
 
 
         var f = JsonSerializer.Serialize(dictEnt);
-        OnlinePass.Ask(f);
+        
+        var players  = OnlinePass.Ask(f);
+        try
+        {
+            List<string> onPlayers = JsonSerializer.Deserialize<List<string>>(players);
+            for (int i = 0; i < onPlayers.Count; i++)
+            {
+                if (i > OnlinePass.OnlinePlayers.Count)
+                    OnlinePass.OnlinePlayers.Add(new OnlinePlayer(null , i));
+                OnlinePass.OnlinePlayers[i].setState(onPlayers[i]);
+            }
+            for(int i = 0 ; i < OnlinePass.OnlinePlayers.Count - onPlayers.Count; i++)
+                OnlinePass.OnlinePlayers.RemoveAt(OnlinePass.OnlinePlayers.Count -1);
+        }
+        catch (Exception e)
+        {
+           
+        }
+        
+        
+
         LocalLoop();
         
 
@@ -219,7 +250,7 @@ public static class GameLoop
 
     public static  void HostInit()
     {
-        
+        OnlinePass.start();
     }
     
 }

@@ -475,6 +475,11 @@ namespace Moteur
             foreach (var player in Level.Players)
                 if(isInScope(player.Hitbox))
                     DrawTexture(player.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
+            foreach (var onlinePlayer in OnlinePass.OnlinePlayers)
+                if(isInScope(onlinePlayer.Hitbox))
+                    DrawTexture(onlinePlayer.Sprite , player[0] , player[1], Raylib_cs.Color.WHITE);
+                
+            
         }
         protected void DrawEntities(Rectangle OptiDrawRect)
         {

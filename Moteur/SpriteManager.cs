@@ -14,6 +14,7 @@ namespace Moteur
         private string filename;
         private int h, w;
         private bool Symetric;
+        public byte RealCursor = 0;
         public int Lenght => Sprite is null ? 0:Sprite.Length;
         public  SpriteManager(String filename , int h , int w , bool symetric  = true)
         {
@@ -69,7 +70,7 @@ namespace Moteur
             cursor = toGet;
             if (sens < 0)
                 toGet += (byte)(Sprite.Length / 2 );
-            
+            RealCursor = toGet;
             return Sprite[toGet];
         }
 
