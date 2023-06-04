@@ -7,6 +7,13 @@
       <x>10</x>
       <y>78</y>
     </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>13</x>
+      <y>50</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Building.png</BackgroundPath>

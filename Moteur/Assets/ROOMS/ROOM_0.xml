@@ -17,13 +17,6 @@
     <Entity>
       <argument></argument>
       <name></name>
-      <type>ElRatz</type>
-      <x>19</x>
-      <y>15</y>
-    </Entity>
-    <Entity>
-      <argument></argument>
-      <name></name>
       <type>Pigeon</type>
       <x>13</x>
       <y>15</y>
