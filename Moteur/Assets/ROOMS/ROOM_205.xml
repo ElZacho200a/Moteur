@@ -21,6 +21,13 @@
       <x>13</x>
       <y>56</y>
     </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>21</x>
+      <y>45</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Building.png</BackgroundPath>

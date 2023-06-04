@@ -110,6 +110,20 @@
       <x>168</x>
       <y>55</y>
     </Entity>
+    <Entity>
+      <argument>SeaWeed</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>98</x>
+      <y>40</y>
+    </Entity>
+    <Entity>
+      <argument>SeaWeed</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>107</x>
+      <y>56</y>
+    </Entity>
   </raws>
   <isDark>true</isDark>
   <BackgroundPath>../Backgrounds/2,49,0.png</BackgroundPath>

@@ -28,6 +28,27 @@
       <x>14</x>
       <y>58</y>
     </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>19</x>
+      <y>45</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>20</x>
+      <y>22</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>20</x>
+      <y>6</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Building.png</BackgroundPath>

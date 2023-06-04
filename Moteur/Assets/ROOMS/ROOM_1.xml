@@ -19,6 +19,13 @@
       <x>7</x>
       <y>15</y>
     </Entity>
+    <Entity>
+      <argument>MetroEntrance</argument>
+      <name>MetroEntrance</name>
+      <type>DecorativeEntity</type>
+      <x>28</x>
+      <y>13</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>

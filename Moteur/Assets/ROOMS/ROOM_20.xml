@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
-  <raws/>
+  <raws>
+    <Entity>
+      <argument>Bush</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>20</x>
+      <y>35</y>
+    </Entity>
+  </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Mount.png</BackgroundPath>
   <MusicPath>mount.mp3</MusicPath>
