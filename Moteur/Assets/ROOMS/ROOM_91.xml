@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><RoomSave>
+  <raws>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Zombie</type>
+      <x>26</x>
+      <y>16</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Zombie</type>
+      <x>28</x>
+      <y>16</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>9</x>
+      <y>15</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name>Torch</name>
+      <type>Sans titre</type>
+      <x>4</x>
+      <y>15</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name>Bullet</name>
+      <type>Sans titre</type>
+      <x>21</x>
+      <y>14</y>
+    </Entity>
+    <Entity>
+      <argument>Torch</argument>
+      <name></name>
+      <type>Itemholder</type>
+      <x>1</x>
+      <y>16</y>
+    </Entity>
+    <Entity>
+      <argument>lancePierre</argument>
+      <name></name>
+      <type>Itemholder</type>
+      <x>15</x>
+      <y>13</y>
+    </Entity>
+  </raws>
+  <isDark>false</isDark>
+  <BackgroundPath></BackgroundPath>
+</RoomSave>
