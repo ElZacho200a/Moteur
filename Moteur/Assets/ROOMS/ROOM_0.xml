@@ -49,6 +49,13 @@
       <x>19</x>
       <y>14</y>
     </Entity>
+    <Entity>
+      <argument>z</argument>
+      <name>z</name>
+      <type>BorneArcade</type>
+      <x>17</x>
+      <y>14</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
