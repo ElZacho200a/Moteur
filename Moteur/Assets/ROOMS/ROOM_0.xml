@@ -36,9 +36,16 @@
       <y>14</y>
     </Entity>
     <Entity>
-      <argument>acac</argument>
-      <name>bite</name>
-      <type>BorneArcade</type>
+      <argument>Fountain</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>11</x>
+      <y>14</y>
+    </Entity>
+    <Entity>
+      <argument>Fountain</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
       <x>19</x>
       <y>14</y>
     </Entity>

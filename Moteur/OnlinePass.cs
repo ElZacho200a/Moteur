@@ -8,7 +8,7 @@ namespace Moteur;
 public  static class OnlinePass
 {
      static bool Host = true;
-    public static string servIP = "127.0.0.1";
+    public static string servIP = "192.168.1.39";
     public static int Port = 8888;
      static  byte[] buffer = new byte[4096];
      public static string RoomCode = "";

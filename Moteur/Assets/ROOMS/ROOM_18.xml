@@ -119,6 +119,34 @@
       <x>193</x>
       <y>34</y>
     </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>201</x>
+      <y>21</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>Pigeon</type>
+      <x>185</x>
+      <y>34</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>146</x>
+      <y>24</y>
+    </Entity>
+    <Entity>
+      <argument></argument>
+      <name></name>
+      <type>ElRatz</type>
+      <x>84</x>
+      <y>28</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Mount.png</BackgroundPath>

@@ -21,6 +21,27 @@
       <x>20</x>
       <y>21</y>
     </Entity>
+    <Entity>
+      <argument>Lader</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>142</x>
+      <y>5</y>
+    </Entity>
+    <Entity>
+      <argument>Lader</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>144</x>
+      <y>10</y>
+    </Entity>
+    <Entity>
+      <argument>Lader</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>58</x>
+      <y>20</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Metro.png</BackgroundPath>

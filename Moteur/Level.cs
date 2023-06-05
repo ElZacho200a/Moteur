@@ -127,9 +127,11 @@ public class Level
         try
         {
             LoadFromXML(EntityEnable);
+            
         }
         catch (Exception e)
         {
+            
             if(EntityEnable)
              LoadFromRoomFile();
         }
@@ -224,9 +226,18 @@ public class Level
         if(EntityEnable)
         if (!File.Exists(Program.RootDirectory + $"Save/Save_{ID}.xml"))
         {
-            
+
+            try
+            {
             foreach (XmlNode rawEntity in rawEntities)
                 entities.Add(getEntityFromXML(rawEntity));
+            }
+            catch (Exception e)
+            {
+               
+             
+            }
+           
         }
         else
         {
@@ -407,17 +418,26 @@ public class Level
     //ElRatz|748!517!:
     private Entity getEntityFromXML(XmlNode node)
     {
-        var t = Type.GetType("Moteur.Entites." + node.SelectSingleNode("type").InnerText);
-        var argumentList = new List<object>();
-        argumentList.Add(int.Parse(node.SelectSingleNode("x").InnerText) * blocH);
-        argumentList.Add(int.Parse(node.SelectSingleNode("y").InnerText) * blocH);
-        var argSup = node.SelectSingleNode("argument").InnerText;
-        if (argSup != "")
-            argumentList.Add(argSup);
+        try
+        {
+            var t = Type.GetType("Moteur.Entites." + node.SelectSingleNode("type").InnerText);
+            var argumentList = new List<object>();
+            argumentList.Add(int.Parse(node.SelectSingleNode("x").InnerText) * blocH);
+            argumentList.Add(int.Parse(node.SelectSingleNode("y").InnerText) * blocH);
+            var argSup = node.SelectSingleNode("argument").InnerText;
+            if (argSup != "")
+                argumentList.Add(argSup);
 
-        var entity = Activator.CreateInstance(t, argumentList.ToArray()) as Entity;
-        entity.name = node.SelectSingleNode("name").InnerText;
-        return entity;
+            var entity = Activator.CreateInstance(t, argumentList.ToArray()) as Entity;
+            entity.name = node.SelectSingleNode("name").InnerText;
+            return entity;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+       
     }
 
     private Entity getEncodedEntity(string line)
