@@ -24,7 +24,7 @@ namespace Moteur
                 if (isInWater())
                     return 0;
                 else
-                return Level.blocH /  130.0;
+                    return Level.blocH / 130.0;
             }
         }
 

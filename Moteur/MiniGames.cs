@@ -31,7 +31,8 @@ public class MiniGames
     public void GAMING()
     {
         // Chemin vers le programme à exécuter
-        string cheminProgramme = @"C:\Users\berna\OneDrive\Bureau\Epita\PROJET S2\miniGame\miniGame\miniGame\bin\Debug\net7.0\miniGame.exe";
+        var root = Directory.GetCurrentDirectory().Split("Moteur");
+        string cheminProgramme = root[0] + @"miniGame\miniGame\miniGame\bin\Debug\net7.0\miniGame.exe";
 
         // Créer un processus pour exécuter le programme
         Process processus = new Process();
