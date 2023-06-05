@@ -17,7 +17,7 @@ internal abstract class PNJ:TriggerEntity
             player.DelSubscriber(say);
     }
     public override string getArgument => Text;
-    protected void say(int index)
+    protected virtual void say(int index)
     {
         if(Level.Players[index].Hitbox.IntersectsWith(Hitbox))
             Level.Players[index].Camera.ShowDialog(Text);

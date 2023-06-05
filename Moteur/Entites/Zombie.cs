@@ -19,7 +19,7 @@ namespace Moteur.Entites
             spriteManager = new SpriteManager(Program.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
             Coordonates = (x, y);
             Hitbox = new Rectangle(x, y, spriteManager.Width  , spriteManager.Height); // J'ai modif , le rect doit prendre x,y en premier arg
-            Life = 50;
+            Life = 20;
             Sprite = spriteManager.GetImage(0, sensX);
             name = "Zombie";
             Acceleration.ax = (random.Next(2) == 1 ? 1 : -1) * MaxSpeed;
@@ -62,6 +62,7 @@ namespace Moteur.Entites
             foreach (var player in Level.Players)
             if (player.Hitbox.IntersectsWith(this.Hitbox))
             {
+                player.die();
                 Speed.vx = 0;
                 Acceleration.ay = 0;
                 PutOnground(Coordonates);
