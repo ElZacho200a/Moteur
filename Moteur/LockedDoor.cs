@@ -6,11 +6,11 @@ namespace Moteur;
 internal class LockedDoor : Porte
 {
     private Item _key;
-    public LockedDoor(int nextLevel, int x, int y, Texture2D Texture, Keys keys) : base(nextLevel, x, y, Texture)
+    public LockedDoor(int nextLevel, int x, int y, Texture2D Texture) : base(nextLevel, x, y, Texture)
     {
         texture = Texture;
+        
         //Camera.player.AddSubscriber(HandleEvent);
-        _key = keys;
     }
     private void HandleEvent()
     {
