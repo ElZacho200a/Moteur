@@ -1,7 +1,8 @@
 ﻿namespace Moteur.Entites;
 
-public class anemone : LivingEntity
+public class anemone : ActiveEntity
 {
+    private int time = 0;
     public anemone(int x, int y)
     {
         Coordonates = (x, y);
@@ -10,22 +11,18 @@ public class anemone : LivingEntity
     }
     public override void Update()
     {
-        UpdateAnimation();
+        time = (time + 1) % 20; 
+        if(time == 0)
+            Sprite = spriteManager.nextCursor();
+    }
+
+    protected override bool Moove()
+    {
+        return false;
     }
 
     protected override void UpdateAnimation()
     {
-        if (spriteManager.cursor == 0)
-        {
-            Sprite = spriteManager.GetImage(1, sensX);
-        }
-        if (spriteManager.cursor == 1)
-        {
-            Sprite = spriteManager.GetImage(2, sensX);
-        }
-        if (spriteManager.cursor == 2)
-        {
-            Sprite = spriteManager.GetImage(0, sensX);
-        }
+        return;
     }
 }

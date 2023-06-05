@@ -3,6 +3,8 @@
 public class Algue : LivingEntity
 {
     protected new int MaxSpeed => 0;
+
+    private int time = 0;
     public Algue(int x, int y)
     {
         Coordonates = (x, y);
@@ -14,22 +16,18 @@ public class Algue : LivingEntity
 
     public override void Update()
     {
-        UpdateAnimation();
+        time = (time + 1) % 20; 
+        if(time == 0)
+            Sprite = spriteManager.nextCursor();
+    }
+
+    protected override bool Moove()
+    {
+        return false;
     }
 
     protected override void UpdateAnimation()
     {
-        if (spriteManager.cursor == 0)
-            Sprite = spriteManager.GetImage(1, sensX);
-        if (spriteManager.cursor == 1)
-            Sprite = spriteManager.GetImage(2, sensX);
-        if (spriteManager.cursor == 2)
-            Sprite = spriteManager.GetImage(3, sensX);
-        if (spriteManager.cursor == 3)
-            Sprite = spriteManager.GetImage(4, sensX);
-        if (spriteManager.cursor == 4)
-            Sprite = spriteManager.GetImage(5, sensX);
-        if (spriteManager.cursor == 5)
-            Sprite = spriteManager.GetImage(0, sensX);
+        return;
     }
 }
