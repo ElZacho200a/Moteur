@@ -7,7 +7,7 @@ namespace Moteur
         public static Camera Camera;
         public static void Main(string[] args)
         {
-            uint x = 0;
+            uint x = 1;
             if (args.Length > 0)
                 x = UInt32.Parse(args[0]);
             var currentDirectory = Directory.GetCurrentDirectory();

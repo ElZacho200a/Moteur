@@ -280,14 +280,30 @@ namespace Moteur
             {
                 Speed.vy = (-max - Math.Abs(Speed.vx) / 6);
                 DoubleJump = true;
-                _soundManager.jumpSong();
+             
+            }
+           
+            else if (IsCollided((this[0] + (int)Speed.vx, Coordonates.y + (int)Speed.vy)) &&
+                     (Raylib.GetGamepadAxisMovement(index, GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0 ? 1 : -1) != sensX &&
+                      sensX != 0)
+                   
+            {
+                
+                    Speed.vy = (-max - Math.Abs(Speed.vx) / 6);
+               
+               
+
             }
             else if (DoubleJump)
             {
                 DoubleJump = false;
                 Speed.vy = (-max - Math.Abs(Speed.vx) / 6);
             }
-            
+            else
+            {
+                return;
+            }
+            _soundManager.jumpSong();
         }
 
         public bool shoot()

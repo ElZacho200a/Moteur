@@ -21,6 +21,8 @@ internal class Porte :Sortie
     public override void Destroy()
     {
         Raylib.UnloadTexture(texture);
+        foreach (var player in Level.Players)
+            player.DelSubscriber(HandleEvent);
     }
 
     private void HandleEvent(int index)

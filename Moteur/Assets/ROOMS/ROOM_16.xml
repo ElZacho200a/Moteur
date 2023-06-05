@@ -85,6 +85,8 @@
       <y>53</y>
     </Entity>
     <Entity>
+      <argument></argument>
+      <name></name>
       <type>SeaWeed</type>
       <x>141</x>
       <y>53</y>

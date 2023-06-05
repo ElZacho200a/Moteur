@@ -21,7 +21,7 @@ public static class GameLoop
     private static Dictionary<string, SpriteManager> Managers;
     private delegate void Loop();
 
-    public static string Role = "Host";
+    public static string Role = "Local";
     public static void start(uint nbPlayer)
     {
         
