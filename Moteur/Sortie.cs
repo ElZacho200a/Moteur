@@ -5,6 +5,7 @@
 
         public int nextLevel = Level.currentLevel.ID;
         protected Point trigger;
+        private Type type;
         bool Used = true;
         public bool LevelLoad = false;
        

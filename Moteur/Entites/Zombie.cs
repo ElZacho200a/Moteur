@@ -5,11 +5,16 @@ namespace Moteur.Entites
 {
     internal class Zombie : TriggerEntity
     {
+        private Graphics graphics;
         Random random = new Random();
         protected new int MaxSpeed => 3;
+        int X;
+        int Y;
        
         public Zombie(int x, int y) : base (15) // 15 est la Trigger Range 
         {
+            X = x;
+            Y = y;
             type = Enum.EntityType.Zombie;
             spriteManager = new SpriteManager(Program.RootDirectory + @"Assets\Sprite\Zombie.png", 72, 50);
             Coordonates = (x, y);
@@ -22,7 +27,7 @@ namespace Moteur.Entites
 
         public override void Update()
         {
-            //DessinerBarreDeVie(Coordonates);
+            /*DessinerBarreDeVie(graphics, X, Y, 20, 5, Life*100/50);*/
             if (this.Life <= 0)
             {
                 isDead = true;
@@ -62,8 +67,8 @@ namespace Moteur.Entites
                 PutOnground(Coordonates);
             }
         }
+        
 
-       
         protected override void UpdateAnimation()
         {
             Hitbox.X = Coordonates.x;

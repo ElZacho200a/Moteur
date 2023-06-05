@@ -1,17 +1,14 @@
 ﻿namespace Moteur.Entites;
 
-public class Algue : LivingEntity
+public class Fontaine : LivingEntity
 {
-    protected new int MaxSpeed => 0;
-    public Algue(int x, int y)
+    public Fontaine(int x, int y)
     {
         Coordonates = (x, y);
-        spriteManager = new SpriteManager(Program.RootDirectory + "Assets\\Sprite\\Algue.png", 50, 50);
-        Sprite = spriteManager.GetImage(1, sensX);
-        Acceleration.ax = MaxSpeed;
-        Life = 10;
+        spriteManager = new SpriteManager(Program.RootDirectory + "Assets\\Sprite\\anemone.png", 50, 50);
+        Sprite = spriteManager.GetImage(0, sensX);
+        Hitbox = new Rectangle(x,y, spriteManager.Width, spriteManager.Height);
     }
-
     public override void Update()
     {
         UpdateAnimation();
@@ -20,16 +17,19 @@ public class Algue : LivingEntity
     protected override void UpdateAnimation()
     {
         if (spriteManager.cursor == 0)
+        {
             Sprite = spriteManager.GetImage(1, sensX);
+        }
         if (spriteManager.cursor == 1)
+        {
             Sprite = spriteManager.GetImage(2, sensX);
+        }
         if (spriteManager.cursor == 2)
+        {
             Sprite = spriteManager.GetImage(3, sensX);
+        }
+
         if (spriteManager.cursor == 3)
-            Sprite = spriteManager.GetImage(4, sensX);
-        if (spriteManager.cursor == 4)
-            Sprite = spriteManager.GetImage(5, sensX);
-        if (spriteManager.cursor == 5)
             Sprite = spriteManager.GetImage(0, sensX);
     }
 }

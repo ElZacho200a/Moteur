@@ -11,11 +11,11 @@ internal class Porte :Sortie
         texture = Texture;
         foreach (var player in Level.Players)
          player.AddSubscriber(HandleEvent);
-            
-        
-      
-        
-        
+
+
+
+
+
     }
 
     public override void Destroy()
