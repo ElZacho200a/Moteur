@@ -25,6 +25,7 @@ namespace Moteur
         public  PauseMenu PauseMenu;
         private DialogArea dialogArea;
         public int gameState = 0;
+          
        
 
         public  (int X, int Y, int Width, int Height) GetScope()
@@ -318,7 +319,7 @@ namespace Moteur
             BeginScissorMode(index * Width, 0, Width, Height);
             ClearBackground(Raylib_cs.Color.BLACK);
             var OptiDrawRect = getOptiDrawRect();
-            BeginScissorMode(OptiDrawRect.X  - Scope.X,OptiDrawRect.Y - Scope.Y, OptiDrawRect.Width , OptiDrawRect.Height);
+            BeginScissorMode(OptiDrawRect.X  - Scope.X  +(index * Width),OptiDrawRect.Y - Scope.Y, OptiDrawRect.Width , OptiDrawRect.Height);
             BeginMode2D(new Camera2D(new Vector2(-Scope.X + Width * index, -Scope.Y), Vector2.Zero, 0, 1));
             
             //Dessin des Blocs
@@ -332,6 +333,7 @@ namespace Moteur
             if (Level.currentLevel.WaterArea is not null) Level.currentLevel.WaterArea.draw(getRectFromScope());
             EndScissorMode();
             EndScissorMode();
+          
             //Dessin des endroits sombres
             DrawDark();
             EndMode2D();

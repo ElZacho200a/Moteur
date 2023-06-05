@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><RoomSave>
-  <raws/>
+  <raws>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>25</x>
+      <y>15</y>
+    </Entity>
+  </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/Building.png</BackgroundPath>
   <MusicPath>city.mp3</MusicPath>

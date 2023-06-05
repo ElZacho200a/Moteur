@@ -14,7 +14,7 @@ namespace Moteur
             RootDirectory = currentDirectory.Split("bin")[0];
             var size = Screen.AllScreens[0].Bounds;
             // défini le nombre de joueurs
-            GameLoop.start(1);
+            GameLoop.start(2);
         }
  
     }

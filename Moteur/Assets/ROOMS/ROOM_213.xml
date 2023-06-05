@@ -32,13 +32,6 @@
       <argument></argument>
       <name></name>
       <type>Zombie</type>
-      <x>10</x>
-      <y>28</y>
-    </Entity>
-    <Entity>
-      <argument></argument>
-      <name></name>
-      <type>Zombie</type>
       <x>74</x>
       <y>28</y>
     </Entity>
@@ -62,6 +55,55 @@
       <type>Zombie</type>
       <x>70</x>
       <y>23</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>18</x>
+      <y>6</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>54</x>
+      <y>1</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name>SpiderWeb</name>
+      <type>DecorativeEntity</type>
+      <x>18</x>
+      <y>31</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>64</x>
+      <y>36</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>89</x>
+      <y>16</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>94</x>
+      <y>41</y>
+    </Entity>
+    <Entity>
+      <argument>SpiderWeb</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>44</x>
+      <y>26</y>
     </Entity>
   </raws>
   <isDark>true</isDark>
