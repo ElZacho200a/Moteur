@@ -3,13 +3,6 @@
     <Entity>
       <argument></argument>
       <name></name>
-      <type>Pigeon</type>
-      <x>2</x>
-      <y>15</y>
-    </Entity>
-    <Entity>
-      <argument></argument>
-      <name></name>
       <type>ElRatz</type>
       <x>22</x>
       <y>15</y>

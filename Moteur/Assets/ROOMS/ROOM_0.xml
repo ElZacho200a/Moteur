@@ -35,6 +35,20 @@
       <x>23</x>
       <y>14</y>
     </Entity>
+    <Entity>
+      <argument>Fountain</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>11</x>
+      <y>14</y>
+    </Entity>
+    <Entity>
+      <argument>Fountain</argument>
+      <name></name>
+      <type>DecorativeEntity</type>
+      <x>19</x>
+      <y>14</y>
+    </Entity>
   </raws>
   <isDark>false</isDark>
   <BackgroundPath>../Backgrounds/City.png</BackgroundPath>
